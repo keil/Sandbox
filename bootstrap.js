@@ -39,6 +39,12 @@ function out(i) {
 var a = new SandboxEnvironment(this);
 var b = new SandboxEnvironment(this);
 
+// TODO
+// 1) a.x sollte mir das x in a ausgeben
+// 2) a.flush(x)/ a.commit .. 
+// zu 1) this muss als proxy uebergeben werden
+// zu 2) gemeinesames global object mit read and wtire scope
+//
 
 //var f = function() {}
 
