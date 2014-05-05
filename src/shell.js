@@ -42,9 +42,9 @@
   // base source files
   var base = ['out.js','debugger.js','treat.js','treat.system.js','treat.base.js','treat.config.js'];
   // core api
-  var core = ['core/treat.violation.js','core/treat.sandbox.js','core/treat.logic.js','core/treat.callback.js','core/treat.map.js','core/treat.contract.js','treat.convenience.js','core/treat.assert.js'];
+  var core = ['core/treat.violation.js','core/treat.sandbox.js'];
   // convenience api
-  var convenience = ['treat.convenience.js'];
+//  var convenience = ['treat.convenience.js'];
 
   function loadSource(files, base) {
     if(load) for(var i=0; i<files.length; i++) {
@@ -81,16 +81,6 @@
   // var out = new TreatJSShellOut(print);
   // _.out(undefined);
 
-  var unit = new TreatJSDebuggerUnit();
- // _.debug(unit);
-//
-this.assertError = unit.assertError;
-this.assertNoError = unit.assertNoError;
 
-this.assertViolation = unit.assertViolation;
-this.assertNoViolation = unit.assertNoViolation;
-
-this.assertBlame = unit.assertBlame;
-this.assertNoBlame = unit.assertNoBlame;
 
 })(load, print);

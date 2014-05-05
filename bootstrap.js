@@ -13,17 +13,72 @@
  * http://www.informatik.uni-freiburg.de/~keilr/
  */
 load("src/shell.js");
-load("test/contracts.js");
 
-function run(file) {
-  print("\n\n\n##########\n# " + file + "\n");
-  load(file);
+var x = 0;
+var y = 0;
+var z = 0;
+
+function f (i) {
+  x=x+1;
+  y=y+1;
+  out(i);
 }
 
+function g (i) {
+  y=y+1;
+  z=z+1;
+  out(i);
+}
 
-run("test/contract/basecontracts.js");
-run("test/contract/functioncontracts.js");
+function out(i) {
+  print("x@" + i + ": " + x);
+  print("y@" + i + ": " + y);
+  print("z@" + i + ": " +  z);
+}
 
+var a = new SandboxEnvironment(this);
+var b = new SandboxEnvironment(this);
+
+
+//var f = function() {}
+
+//f();
+//g();
+
+ff = a.bind(f);
+ff("a");
+ff("a");
+ff("a");
+a.bind(out);
+
+gg = b.bind(g);
+gg("b");
+gg("b");
+gg("b");
+b.bind(out);
+
+print("\n--\n");
+out("global");
+out("a");
+out("b");
+
+//gg = b.bind(g);
+//gg();
+
+
+
+
+
+/*
+   function run(file) {
+   print("\n\n\n##########\n# " + file + "\n");
+   load(file);
+   }
+
+
+   run("test/contract/basecontracts.js");
+   run("test/contract/functioncontracts.js");
+   */
 //run("test/contract/objectcontracts.js");
 
 //run("test/contract/andcontract.js");

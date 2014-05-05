@@ -12,11 +12,30 @@
  * Author Matthias Keil
  * http://www.informatik.uni-freiburg.de/~keilr/
  */
-(function(_) {
+//(function(_) {
+//
 
-  var error = _.error;
-  var violation = _.violation;
+function SandboxEnvironment(global) {
+  if(!(this instanceof SandboxEnvironment)) return new SandboxEnvironment(global);
 
+  // TODO
+  // 
+
+  var scope = {};
+
+  function error(msg, file, line) {
+         print("Error (" + file + ":" + line + "):\n" + msg);
+      if(_.Config.stackTrace) print(new Error().stack);
+      quit();
+  }
+
+  function violation(msg, file, line) {
+      print("Violation: (" + file + ":" + line + "):\n" + msg);
+      if(_.Config.stackTrace) print(new Error().stack);
+      quit();
+  }
+
+ 
   /** log(msg)
    * @param msg String message
    */ 
@@ -116,22 +135,44 @@
     };
     this.has = function(target, name) {
       log("[[has]]", name);
+      // TODO
       if(!(name in target)) violation("Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber);
       else return (name in target);
     };
     this.hasOwn = function(target, name) {
       log("[[hasOwn]]", name);
+
+      // TODO
       if(!(name in target)) violation("Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber);
       else return ({}).hasOwnProperty.call(target, name); 
     };
     this.get = function(target, name, receiver) {
       log("[[get]]", name);
-      if(!(name in target)) violation("Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber);
+
+       if (name in scope) {
+        return  wrap(scope[name], global);
+      } else if(name in target) {
+        if( _.Config.nativePassThrough) {
+          // pass-through of native functions
+          if(isNativeFunction(target[name])) {
+            return target[name];
+          }
+          else return wrap(target[name], global);
+        } else {
+          return wrap(target[name], global);
+        }
+
+      } else {
+        violation("Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber); 
+      }
+      
+      
+//      if(!(name in target)) violation("Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber);
 
       // pass-through of Contract System
-      if(name=="$") return target[name];
+      // if(name=="$") return target[name];
 
-      if( _.Config.nativePassThrough) {
+/*      if( _.Config.nativePassThrough) {
         // pass-through of native functions
         if(isNativeFunction(target[name])) {
           return target[name];
@@ -140,11 +181,13 @@
       } else {
         return wrap(target[name], global);
       }
+*/
     };
     this.set = function(target, name, value, receiver) {
       log("[[set]]", name);
       // NOTE: no write access allowed
-      violation("Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber);
+      //violation("XXXX Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber);
+      return (scope[name]=value);
       //otherwise use this code:
       //if(!(name in target)) violation("Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber);
       //else return target[name] = value;
@@ -337,7 +380,7 @@
    * @return Function
    */
   function bindFunction(fun, globalArg, thisArg, argsArray) {
-    globalArg = (globalArg!=undefined) ? globalArg : new Object();
+    globalArg = (globalArg!=undefined) ? globalArg : global;
     thisArg = (thisArg!=undefined) ? thisArg : globalArg;
     argsArray = (argsArray!=undefined) ? argsArray : new Array();
 
@@ -358,9 +401,9 @@
    * Core Functions
    */
 
-  __define("eval", evalFunction, _);
-  __define("bind", bindFunction, _);
-  __define("wrap", wrap, _);
+  __define("eval", evalFunction, this);
+  __define("bind", bindFunction, this);
+  __define("wrap", wrap, this);
 
   // _    _  _      _   _         ___             _   _          
   //(_)__| \| |__ _| |_(_)_ _____| __|  _ _ _  __| |_(_)___ _ _  
@@ -395,6 +438,6 @@
     }
   }
 
-  __define("isNativeFunction", isNativeFunction, _);
+  __define("isNativeFunction", isNativeFunction, this);
 
-})(_);
+};
