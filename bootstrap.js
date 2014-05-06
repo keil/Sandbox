@@ -14,6 +14,7 @@
  */
 load("src/shell.js");
 
+
 var x = 0;
 var y = 0;
 var z = 0;
@@ -61,12 +62,14 @@ gg = b.bind(g);
 gg("b");
 gg("b");
 gg("b");
-b.bind(out);
+b.bind(out, this);
 
 print("\n--\n");
 out("global");
 out("a");
 out("b");
+
+
 
 //gg = b.bind(g);
 //gg();
@@ -103,6 +106,9 @@ out("b");
 // run("test/sandbox/bind.js"); // ok
 
 // run("test/miscellaneous/logic.js"); // ok
+
+
+//load("src/sandbox.js");
 
 quit();
 

@@ -21,7 +21,7 @@ function SandboxEnvironment(global) {
   // TODO
   // 
 
-  var scope = {};
+  //var scope = {};
 
   function error(msg, file, line) {
          print("Error (" + file + ":" + line + "):\n" + msg);
@@ -34,7 +34,6 @@ function SandboxEnvironment(global) {
       if(_.Config.stackTrace) print(new Error().stack);
       quit();
   }
-
  
   /** log(msg)
    * @param msg String message
@@ -87,6 +86,7 @@ function SandboxEnvironment(global) {
    * @param, the sandboxs global object
    */
   function Membrabe(global) {
+    var scope = {};
     this.getOwnPropertyDescriptor = function(target, name) {
       log("[[getOwnPropertyDescriptor]]", name);
       var desc = Object.getOwnPropertyDescriptor(target, name);
