@@ -47,6 +47,21 @@ var b = new SandboxEnvironment(this);
 // zu 2) gemeinesames global object mit read and wtire scope
 //
 
+// Plan:
+// 
+// Classe out 
+// * log
+//
+// Class Configure
+// decomile
+// native function pass throught
+//
+// Class Verbose
+// sandbox
+// 
+//
+
+
 //var f = function() {}
 
 //f();
@@ -56,18 +71,18 @@ ff = a.bind(f);
 ff("a");
 ff("a");
 ff("a");
-a.bind(out);
+outa = a.bind(out);
 
 gg = b.bind(g);
 gg("b");
 gg("b");
 gg("b");
-b.bind(out, this);
+outb = b.bind(out, this);
 
 print("\n--\n");
 out("global");
-out("a");
-out("b");
+outa("a");
+outb("b");
 
 
 
