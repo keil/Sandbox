@@ -136,6 +136,12 @@ delete o.a;
 print(o.a);
 print(a in o);
 
+
+var a = new Set();
+a.add("x");
+
+print("### " + (a.has("x")));
+
 quit();
 
 

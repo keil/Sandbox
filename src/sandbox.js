@@ -100,7 +100,7 @@ ShellOut.prototype = new Out();
    decompile=true
    });
    */
-
+// TODO: to stricng function
 
 function Sandbox(params) {
   if(!(this instanceof Sandbox)) return new Sandbox(params);
@@ -122,6 +122,12 @@ function Sandbox(params) {
    * (default: true)
    */
   var membrane = configure("membrane", true);
+
+  /*
+   * Native Function pass-through
+   * (default: true)
+   */
+  var nativepassthrough = configure("nativepassthrough", true);
 
   /*
    * Output
@@ -160,6 +166,24 @@ function Sandbox(params) {
     if(verbose) {
       out.membrane("$."+command+" (@"+this.id+")");
     }
+  }
+
+  // _    _  _      _   _         ___             _   _          
+  //(_)__| \| |__ _| |_(_)_ _____| __|  _ _ _  __| |_(_)___ _ _  
+  //| (_-< .` / _` |  _| \ V / -_) _| || | ' \/ _|  _| / _ \ ' \ 
+  //|_/__/_|\_\__,_|\__|_|\_/\___|_| \_,_|_||_\__|\__|_\___/_||_|
+
+  var FunctionPrototypeToString = Function.prototype.toString;
+
+  /** isNative(fun)
+   * Checks whether the given function is a native function or not.
+   *
+   * @param fuc Function Object
+   * @return true, if fun is a native function, false otherwise
+   */
+  function isNative(fun) {
+    if(!(fuc instanceof Function)) return false;
+    else return (FunctionPrototypeToString.apply(func).indexOf('[native code]') > -1);
   }
 
   //__ __ ___ _ __ _ _ __ 
@@ -211,8 +235,60 @@ function Sandbox(params) {
      */
     var scope = {};
 
+    /*
+     * List of effected properties
+     */
+    var properties = new Set();
+
+    function affected(property) {
+      return properties.has(property);
+    }
+
+    function unaffected(property) {
+      return !affected(property);
+    }
+
+    function touch(target, name) {
+      if(unaffected(name)) {
+        scope[name]=target[name];
+        properties.add(name);
+      }
+    }
+
+//  ___                     _   _             
+// / _ \ _ __  ___ _ _ __ _| |_(_)___ _ _  ___
+//| (_) | '_ \/ -_) '_/ _` |  _| / _ \ ' \(_-<
+// \___/| .__/\___|_| \__,_|\__|_\___/_||_/__/
+//      |_|                                   
+
+    function doHas() {
+    }
+
+    function doGet(target, name) {
+      return (affected(name)) ? scope[name] : target[name];
+    }
+
+    function doSet(target, name, value) {
+      touch(target, name);
+      return (scope[name]=value);
+    }
+
+    function doDelete(target, name) {
+      touch(target, name);
+      return (delete scope[name]);
+    }
+
+
+
+// Handler Traps
+
   //  function()
 
+// _____                 
+//|_   _| _ __ _ _ __ ___
+//  | || '_/ _` | '_ (_-<
+//  |_||_| \__,_| .__/__/
+//              |_|      
 
     this.getOwnPropertyDescriptor = function(target, name) {
       logc("getOwnPropertyDescriptor(" + name + ")");
@@ -241,8 +317,10 @@ function Sandbox(params) {
     this.deleteProperty = function(target, name) {
       logc("deleteProperty(" + name + ")");
 
-      // TODO, implement delete
-      return delete target[name];
+      return doDelete(target, name);
+
+      // TODOX, implement delete
+      //return delete target[name];
     };
     this.freeze = function(target) {
       logc("freeze()");
@@ -291,23 +369,18 @@ function Sandbox(params) {
     this.get = function(target, name, receiver) {
       logc("get(" + name + ")");
 
-      // TODO, switch target
-      if (name in scope) {
-        return  wrap(scope[name], global);
-      } else if(name in target) {
-        if( _.Config.nativePassThrough) {
-          // pass-through of native functions
-          if(isNativeFunction(target[name])) {
-            return target[name];
-          }
-          else return wrap(target[name], global);
-        } else {
-          return wrap(target[name], global);
-        }
+      var value = doGet(target, name);
 
-      } else {
-        violation("Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber); 
+      // Native Function pass-through
+      if(nativepassthrough) {
+       if(isNative(value)) {
+          return value;
+        }
       }
+
+      return wrap(value, global);
+      
+
 
 
       //      if(!(name in target)) violation("Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber);
@@ -328,9 +401,11 @@ function Sandbox(params) {
     };
     this.set = function(target, name, value, receiver) {
       logc("set(" + name + ")");
-      
-      // TODO, test if property is writable
-      return (scope[name]=value);
+     
+      return doSet(target, name, value);
+
+      // XTODO, test if property is writable
+      //return (scope[name]=value);
     };
     this.enumerate = function(target) {
       logc("enumerate()");
