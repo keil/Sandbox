@@ -138,18 +138,84 @@ function Sandbox(params) {
     return (param in (params===undefined ? {} : params)) ? params[param] : value;
   };
 
+  // _           
+  //| |___  __ _ 
+  //| / _ \/ _` |
+  //|_\___/\__, |
+  //       |___/ 
+
+  /** log(msg)
+   * @param msg String message
+   */ 
+  function log(msg) {
+    if(verbose) {
+      out.membrane(msg);
+    }
+  }
+
+  /** logc(msg)
+   * @param msg String message
+   */ 
+  function logc(command) {
+    if(verbose) {
+      out.membrane("$."+command+" (@"+this.id+")");
+    }
+  }
+
+  //__ __ ___ _ __ _ _ __ 
+  //\ V  V / '_/ _` | '_ \
+  // \_/\_/|_| \__,_| .__/
+  //                |_|   
+
+  var cache = new WeakMap();
+
+  /** wrap(target)
+   *
+   * Wraps a target object.
+   *
+   * @param target Object
+   * @param global, list of allowed properties
+   * @return Membrane Reference/ Proxy 
+   */
+  function wrap(target, global) { 
+    logc("wrap");
+
+    // If target is a primitive value, then return target
+    if (target !== Object(target)) {
+      return target;
+    }
+
+
+    if(cache.contains(target)) {
+      return cache.get(target);
+    } else { 
+      var membraneHandler = new Membrabe(global);
+      var proxy = new Proxy(target, membraneHandler);
+
+      cache.put(target, proxy);
+
+      return proxy;
+    }
+  }
+
+
+
+
+
+
 
 
 
   this.bind = function() {};
 }
+
 // ___               _ _               ___ ___  
 /// __| __ _ _ _  __| | |__  _____ __ |_ _|   \ 
 //\__ \/ _` | ' \/ _` | '_ \/ _ \ \ /  | || |) |
 //|___/\__,_|_||_\__,_|_.__/\___/_\_\ |___|___/ 
 Object.defineProperty(Sandbox.prototype, "id", {
   get: (function() {
-    var str = "sbx-";
+    var str = "SBX";
     var i = 0;
     return function() {
       i = i+1;
@@ -158,6 +224,7 @@ Object.defineProperty(Sandbox.prototype, "id", {
   })(),
   enumerable: false
 });
+
 // _       ___ _       _           
 //| |_ ___/ __| |_ _ _(_)_ _  __ _ 
 //|  _/ _ \__ \  _| '_| | ' \/ _` |
