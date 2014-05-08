@@ -125,6 +125,17 @@ outb("b");
 
 //load("src/sandbox.js");
 
+var o = {};
+
+print(o.a);
+print(a in o);
+o.a=5;
+print(o.a);
+print(a in o);
+delete o.a;
+print(o.a);
+print(a in o);
+
 quit();
 
 

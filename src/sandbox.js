@@ -173,8 +173,8 @@ function Sandbox(params) {
    * wrap(target)
    * Wraps a target object.
    *
-   * @param target Object
-   * @param global Object
+   * @param target The Target Object.
+   * @param global The current Global Object.
    * @return JavaScript Proxy 
    */
   function wrap(target, global) { 
@@ -201,75 +201,98 @@ function Sandbox(params) {
   //|_|  |_\___|_|_|_|_.__/_| \__,_|_||_\___|
 
   /** Membrabe(global)
-   * Implements a membrane to evaluate functions in a sandbox
+   * Implements a sandbox membrane.
    *
-   * @param, the sandboxs global object
+   * @param global The current Global Object.
    */
   function Membrabe(global) {
+    /* 
+     * Write scope.
+     */
     var scope = {};
+
+  //  function()
+
+
     this.getOwnPropertyDescriptor = function(target, name) {
-      log("[[getOwnPropertyDescriptor]]", name);
+      logc("getOwnPropertyDescriptor(" + name + ")");
+
+      // TODO switch target
       var desc = Object.getOwnPropertyDescriptor(target, name);
       if (desc !== undefined) desc.value = wrap(desc, global);
       return desc;
     };
     this.getOwnPropertyNames = function(target) {
-      log("[[getOwnPropertyNames]]", name);
+      logc("getOwnPropertyNames(" + name + ")");
+
+      // TODO merge property names
       return Object.getOwnPropertyNames(target);
     };
     this.getPrototypeOf = function(target) {
-      log("[[getPrototypeOf]]", name);
+      logc("getPrototypeOf()");
+
       return Object.getPrototypeOf(target)
     };
     this.defineProperty = function(target, name, desc) {
-      log("[[defineProperty]]", name);
-      return Object.defineProperty(target, name, desc);
+      logc("defineProperty(" + name + ")");
+
+      return Object.defineProperty(scope, name, desc);
     };
     this.deleteProperty = function(target, name) {
-      log("[[deleteProperty]]", name);
+      logc("deleteProperty(" + name + ")");
+
+      // TODO, implement delete
       return delete target[name];
     };
     this.freeze = function(target) {
-      log("[[freeze]]", name);
+      logc("freeze()");
+
       return Object.freeze(target);
     };
     this.seal = function(target) {
-      log("[[seal]]", name);
+      logc("seal()");
+
       return Object.seal(target);
     };
     this.preventExtensions = function(target) {
-      log("[[preventExtensions]]", name);
+      logc("preventExtensions()");
+
       return Object.preventExtensions(target);
     };
     this.isFrozen = function(target) {
-      log("[[isFrozen]]", name);
+      logc("isFrozen()");
+
       return Object.isFrozen(target);
     };
     this.isSealed = function(target) {
-      log("[[isSealed]]", name);
+      logc("isSealed()");
+
       return Object.isSealed(target);
     };
     this.isExtensible = function(target) {
-      log("[[isExtensible]]", name);
+      logc("isExtensible()");
+
       return Object.isExtensible(target);
     };
     this.has = function(target, name) {
-      log("[[has]]", name);
-      // TODO
+      logc("has(" + name + ")");
+
+      // TODO switch target
       if(!(name in target)) violation("Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber);
       else return (name in target);
     };
     this.hasOwn = function(target, name) {
-      log("[[hasOwn]]", name);
+      logc("hasOwn(" + name + ")");
 
-      // TODO
+      // TODO switch target
       if(!(name in target)) violation("Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber);
       else return ({}).hasOwnProperty.call(target, name); 
     };
     this.get = function(target, name, receiver) {
-      log("[[get]]", name);
+      logc("get(" + name + ")");
 
-       if (name in scope) {
+      // TODO, switch target
+      if (name in scope) {
         return  wrap(scope[name], global);
       } else if(name in target) {
         if( _.Config.nativePassThrough) {
@@ -285,51 +308,67 @@ function Sandbox(params) {
       } else {
         violation("Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber); 
       }
-      
-      
-//      if(!(name in target)) violation("Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber);
+
+
+      //      if(!(name in target)) violation("Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber);
 
       // pass-through of Contract System
       // if(name=="$") return target[name];
 
-/*      if( _.Config.nativePassThrough) {
-        // pass-through of native functions
-        if(isNativeFunction(target[name])) {
-          return target[name];
-        }
-        else return wrap(target[name], global);
-      } else {
-        return wrap(target[name], global);
+      /*      if( _.Config.nativePassThrough) {
+      // pass-through of native functions
+      if(isNativeFunction(target[name])) {
+      return target[name];
       }
-*/
+      else return wrap(target[name], global);
+      } else {
+      return wrap(target[name], global);
+      }
+      */
     };
     this.set = function(target, name, value, receiver) {
-      log("[[set]]", name);
-      // NOTE: no write access allowed
-      //violation("XXXX Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber);
+      logc("set(" + name + ")");
+      
+      // TODO, test if property is writable
       return (scope[name]=value);
-      //otherwise use this code:
-      //if(!(name in target)) violation("Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber);
-      //else return target[name] = value;
     };
     this.enumerate = function(target) {
-      log("[[enumerate]]", name);
+      logc("enumerate()");
+
+      // TODO merge property names
       var result = [];
       for (var name in target) {
         result.push(name);
       };
       return result;
     };
+    this.iterate = function(target) {
+      logc("iterate()");
+
+      // TODO merge property names
+      var result = [];
+      for (var name in target) {
+        result.push(name);
+      };
+      return result;
+    };
+
     this.keys = function(target) {
-      log("[[keys]]");
+      logc("keys()");
+
+      // TODO merge property names
       return Object.keys(target);
     };
     this.apply = function(target, thisArg, argsArray) {
-      log("[[apply]]");
+      logc("apply()");
+
+      // TODO implement apply
       return evalFunction(target, global, thisArg, argsArray);
     };
     this.construct = function(target, argsArray) {
-      log("[[construct]]");
+      logc("construct()");
+
+      // TODO implement construct
       return evalNew(target, global, this, argsArray);
     };
   };
