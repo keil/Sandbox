@@ -12,19 +12,8 @@ function ShellOut() {
   if(!(this instanceof ShellOut)) return new ShellOut();
   else Out.call(this);
 
-  var verbose = {
-    membrane:false,
-    transactions:false
-  };
-
-  this.configure = function(params) {
-    for(arg in verbose) {
-      if(params[arg]) verbose[arg]=params[arg];
-    }
-  }
-
   /** Padding Information
-   */
+  */
   var idWidth = 30;
   var fstWidth = 100;
   var sndWidth = 20;
@@ -67,10 +56,8 @@ function ShellOut() {
   //|_|_|_\___|_|_|_|_.__/_| \__,_|_||_\___|
 
   this.membrane = function(msg) {
-    if(verbose.membrane) {
-      __out(head("[Membrane]") + msg);
-      __blank();
-    }
+    __out(head("[Membrane]") + msg);
+    __blank();
   };
 
   // _                             _   _             
@@ -79,10 +66,8 @@ function ShellOut() {
   // \__|_| \__,_|_||_/__/\__,_\__|\__|_\___/_||_/__/
 
   this.transactions = function(msg) {
-    if(verbose.transactions) {
-      __out(head("[Transaction]") + msg);
-      __blank();
-    }
+    __out(head("[Transaction]") + msg);
+    __blank();
   };
 }
 ShellOut.prototype = new Out();
@@ -108,13 +93,13 @@ ShellOut.prototype = new Out();
  */
 
 /*
-var sbx = new Sandbox({
-  verbose={
-    membrabe:true
-  },
-  decompile=true
-});
-*/
+   var sbx = new Sandbox({
+   verbose={
+   membrabe:true
+   },
+   decompile=true
+   });
+   */
 
 
 function Sandbox(params) {
@@ -137,6 +122,12 @@ function Sandbox(params) {
    * (default: true)
    */
   var membrane = configure("membrane", true);
+
+  /*
+   * Output
+   * (default:null);
+   */
+  var out = configure("out", new Out());
 
   //              __ _                   
   // __ ___ _ _  / _(_)__ _ _  _ _ _ ___ 
