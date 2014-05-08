@@ -107,33 +107,77 @@ ShellOut.prototype = new Out();
  *
  */
 
+/*
+var sbx = new Sandbox({
+  verbose={
+    membrabe:true
+  },
+  decompile=true
+});
+*/
+
+
+function Sandbox(params) {
+  if(!(this instanceof Sandbox)) return new Sandbox(params);
+
+  /** 
+   * Verbose Mode
+   * (default: false)
+   */
+  var verbose = configure("verbose", false);
+
+  /*
+   * Decompile
+   * (default: true)
+   */
+  var decompile = configure("decompile", true);
+
+  /*
+   * Membrane
+   * (default: true)
+   */
+  var membrane = configure("membrane", true);
+
+  //              __ _                   
+  // __ ___ _ _  / _(_)__ _ _  _ _ _ ___ 
+  /// _/ _ \ ' \|  _| / _` | || | '_/ -_)
+  //\__\___/_||_|_| |_\__, |\_,_|_| \___|
+  //                  |___/              
+  function configure(param, value) {
+    return (param in (params===undefined ? {} : params)) ? params[param] : value;
+  };
 
 
 
-function Sandbox(out, verbose, configuration, evluation) {
-  if(!(this instanceof Sandbox)) return new Sandbox(out, verbose, configuration, evluation);
 
-var uid = this.getSbxId();
-
-this.id = uid;
-
-  // TODO, is
-  //
-
-this.bind = function() {};
-      // TODO defualt
-
-
+  this.bind = function() {};
+}
+// ___               _ _               ___ ___  
+/// __| __ _ _ _  __| | |__  _____ __ |_ _|   \ 
+//\__ \/ _` | ' \/ _` | '_ \/ _ \ \ /  | || |) |
+//|___/\__,_|_||_\__,_|_.__/\___/_\_\ |___|___/ 
+Object.defineProperty(Sandbox.prototype, "id", {
+  get: (function() {
+    var str = "sbx-";
+    var i = 0;
+    return function() {
+      i = i+1;
+      return (str+(padding_left(String(i), "0", 3)));
     }
+  })(),
+  enumerable: false
+});
+// _       ___ _       _           
+//| |_ ___/ __| |_ _ _(_)_ _  __ _ 
+//|  _/ _ \__ \  _| '_| | ' \/ _` |
+// \__\___/___/\__|_| |_|_||_\__, |
+//                           |___/ 
+Sandbox.prototype.toString = function() {
+  return "[[Sandbox#" + this.id + "]]";
+}
 
-Sandbox.prototype.getSbxId = (function() {
-  var str = "sbx-";
-  var i = 0;
-  return function() {
-    i = i+1;
-    return (str+(padding_left(String(i), "0", 3)));
-  }
-})();
+
+
 
 //(new Out()).id;
 
@@ -141,10 +185,12 @@ var sbx = new Sandbox();
 sbx.bind();
 sbx.bind();
 print("###1" + sbx.id);
+print(sbx);
 
-var sbx2 = new Sandbox();
+var sbx2 = new Sandbox({});
 sbx2.bind();
 sbx2.bind();
 print("###2" + sbx2.id);
+print(sbx2);
 
 
