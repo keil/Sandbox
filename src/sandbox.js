@@ -209,7 +209,14 @@ function Sandbox(params) {
       return target;
     }
 
-    // if target is already wrapped, return cached proxy
+    // Native Function pass-through
+    if((target  instanceof Function) && nativepassthrough) {
+      if(isNative(target)) {
+        return target;
+      }
+    }
+
+    // If target is already wrapped, return cached proxy
     if(cache.has(target)) {
       return cache.get(target);
     } else {
@@ -261,10 +268,18 @@ function Sandbox(params) {
 // \___/| .__/\___|_| \__,_|\__|_\___/_||_/__/
 //      |_|                                   
 
-    function doHas() {
+    function doHas(target, name) {
+// TODO, not correct because of prototype values
+      return (affected(name)) ? (name in scope) : (name in target);
+    }
+
+
+    function doHasOwn(target, name) {
+      return (affected(name)) ? Object.prototype.hasOwnProperty.call(scope, name) : Object.prototype.hasOwnProperty.call(target, name);
     }
 
     function doGet(target, name) {
+      // TODO, not correct because of prototype values
       return (affected(name)) ? scope[name] : target[name];
     }
 
@@ -274,6 +289,8 @@ function Sandbox(params) {
     }
 
     function doDelete(target, name) {
+      // TODO, not correct because of prototype values
+
       touch(target, name);
       return (delete scope[name]);
     }
@@ -355,9 +372,11 @@ function Sandbox(params) {
     this.has = function(target, name) {
       logc("has(" + name + ")");
 
-      // TODO switch target
-      if(!(name in target)) violation("Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber);
-      else return (name in target);
+      return doHas(target, name);
+
+      // XTODO switch target
+      //if(!(name in target)) violation("Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber);
+      //else return (name in target);
     };
     this.hasOwn = function(target, name) {
       logc("hasOwn(" + name + ")");
@@ -369,35 +388,7 @@ function Sandbox(params) {
     this.get = function(target, name, receiver) {
       logc("get(" + name + ")");
 
-      var value = doGet(target, name);
-
-      // Native Function pass-through
-      if(nativepassthrough) {
-       if(isNative(value)) {
-          return value;
-        }
-      }
-
-      return wrap(value, global);
-      
-
-
-
-      //      if(!(name in target)) violation("Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber);
-
-      // pass-through of Contract System
-      // if(name=="$") return target[name];
-
-      /*      if( _.Config.nativePassThrough) {
-      // pass-through of native functions
-      if(isNativeFunction(target[name])) {
-      return target[name];
-      }
-      else return wrap(target[name], global);
-      } else {
-      return wrap(target[name], global);
-      }
-      */
+     return wrap(doGet(target, name));
     };
     this.set = function(target, name, value, receiver) {
       logc("set(" + name + ")");

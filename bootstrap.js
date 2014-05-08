@@ -124,7 +124,7 @@ outb("b");
 
 
 //load("src/sandbox.js");
-
+/*
 var o = {};
 
 print(o.a);
@@ -136,11 +136,36 @@ delete o.a;
 print(o.a);
 print(a in o);
 
+*/
 
+
+function A() {
+this.x=4711;
+}
+
+function B() {
+  this.x=4712;
+}
+B.prototype = new A();
+
+var b = new B();
+
+print("! " + b.x);
+//delete b.x;
+print("! " + b.x);
+
+print("x" in b);
+print(Object.prototype.hasOwnProperty.call(b,"x"));
+
+if(!Object.prototype.hasOwnProperty.call(b,"x")) {
+}
+
+/*
 var a = new Set();
 a.add("x");
 
 print("### " + (a.has("x")));
+*/
 
 quit();
 
