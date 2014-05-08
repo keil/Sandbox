@@ -13,7 +13,7 @@
  * http://www.informatik.uni-freiburg.de/~keilr/
  */
 load("src/shell.js");
-
+load("src/sandbox.js");
 
 var x = 0;
 var y = 0;

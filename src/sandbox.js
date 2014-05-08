@@ -1,341 +1,168 @@
-/*
- * TreatJS: Higher-Order Contracts for JavaScript 
- * http://proglang.informatik.uni-freiburg.de/treatjs/
- *
- * Copyright (c) 2014, Proglang, University of Freiburg.
- * http://proglang.informatik.uni-freiburg.de/treatjs/
- * All rights reserved.
- *
- * Released under the MIT license
- * http://proglang.informatik.uni-freiburg.de/treatjs/license
- *
- * Author Matthias Keil
- * http://www.informatik.uni-freiburg.de/~keilr/
- */
 
-function Sandbox() {
+function Configuration(params) {
+  if(!(this instanceof Configuration)) return new Configuration(params);
 
-  /** Membrabe(global)
-   * Implements a membrane to evaluate functions in a sandbox
-   *
-   * @param, the sandboxs global object
-   */
-  function Membrabe(global) {
-    this.getOwnPropertyDescriptor = function(target, name) {
-      log("[[getOwnPropertyDescriptor]]", name);
-      var desc = Object.getOwnPropertyDescriptor(target, name);
-      if (desc !== undefined) desc.value = wrap(desc, global);
-      return desc;
-    };
-    this.getOwnPropertyNames = function(target) {
-      log("[[getOwnPropertyNames]]", name);
-      return Object.getOwnPropertyNames(target);
-    };
-    this.getPrototypeOf = function(target) {
-      log("[[getPrototypeOf]]", name);
-      return Object.getPrototypeOf(target)
-    };
-    this.defineProperty = function(target, name, desc) {
-      log("[[defineProperty]]", name);
-      return Object.defineProperty(target, name, desc);
-    };
-    this.deleteProperty = function(target, name) {
-      log("[[deleteProperty]]", name);
-      return delete target[name];
-    };
-    this.freeze = function(target) {
-      log("[[freeze]]", name);
-      return Object.freeze(target);
-    };
-    this.seal = function(target) {
-      log("[[seal]]", name);
-      return Object.seal(target);
-    };
-    this.preventExtensions = function(target) {
-      log("[[preventExtensions]]", name);
-      return Object.preventExtensions(target);
-    };
-    this.isFrozen = function(target) {
-      log("[[isFrozen]]", name);
-      return Object.isFrozen(target);
-    };
-    this.isSealed = function(target) {
-      log("[[isSealed]]", name);
-      return Object.isSealed(target);
-    };
-    this.isExtensible = function(target) {
-      log("[[isExtensible]]", name);
-      return Object.isExtensible(target);
-    };
-    this.has = function(target, name) {
-      log("[[has]]", name);
-      // TODO
-      if(!(name in target)) violation("Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber);
-      else return (name in target);
-    };
-    this.hasOwn = function(target, name) {
-      log("[[hasOwn]]", name);
+  //                      _   _                      _    
+  // _ __  __ _ _________| |_| |_  _ _ ___ _  _ __ _| |_  
+  //| '_ \/ _` (_-<_-<___|  _| ' \| '_/ _ \ || / _` | ' \ 
+  //| .__/\__,_/__/__/    \__|_||_|_| \___/\_,_\__, |_||_|
+  //|_|                                        |___/      
 
-      // TODO
-      if(!(name in target)) violation("Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber);
-      else return ({}).hasOwnProperty.call(target, name); 
-    };
-    this.get = function(target, name, receiver) {
-      log("[[get]]", name);
+  var passthrough = (params["passthrough"]) ? true : false;
 
-      if (name in scope) {
-        return  wrap(scope[name], global);
-      } else if(name in target) {
-        if( _.Config.nativePassThrough) {
-          // pass-through of native functions
-          if(isNativeFunction(target[name])) {
-            return target[name];
-          }
-          else return wrap(target[name], global);
-        } else {
-          return wrap(target[name], global);
-        }
+  Object.defineProperty(this, "passthrough", {
+    get: function () { return passthrough; },
+    enumerable: true
+  });
+}
 
-      } else {
-        violation("Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber); 
-      }
+function Evaluation(params) {
+  if(!(this instanceof Evaluation)) return new Evaluation(params);
 
+  //    _                       _ _     
+  // __| |___ __ ___ _ __  _ __(_) |___ 
+  /// _` / -_) _/ _ \ '  \| '_ \ | / -_)
+  //\__,_\___\__\___/_|_|_| .__/_|_\___|
+  //                      |_|           
 
-      //      if(!(name in target)) violation("Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber);
+  var decompile = (params["decompile"]) ? true : false;
 
-      // pass-through of Contract System
-      // if(name=="$") return target[name];
+  Object.defineProperty(this, "decompile", {
+    get: function () { return decompile; },
+    enumerable: true
+  });
 
-      /*      if( _.Config.nativePassThrough) {
-      // pass-through of native functions
-      if(isNativeFunction(target[name])) {
-      return target[name];
-      }
-      else return wrap(target[name], global);
-      } else {
-      return wrap(target[name], global);
-      }
-      */
-    };
-    this.set = function(target, name, value, receiver) {
-      log("[[set]]", name);
-      // NOTE: no write access allowed
-      //violation("XXXX Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber);
-      return (scope[name]=value);
-      //otherwise use this code:
-      //if(!(name in target)) violation("Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber);
-      //else return target[name] = value;
-    };
-    this.enumerate = function(target) {
-      log("[[enumerate]]", name);
-      var result = [];
-      for (var name in target) {
-        result.push(name);
-      };
-      return result;
-    };
-    this.keys = function(target) {
-      log("[[keys]]");
-      return Object.keys(target);
-    };
-    this.apply = function(target, thisArg, argsArray) {
-      log("[[apply]]");
-      return evalFunction(target, global, thisArg, argsArray);
-    };
-    this.construct = function(target, argsArray) {
-      log("[[construct]]");
-      return evalNew(target, global, this, argsArray);
-    };
-  };
+  //                 _                      
+  // _ __  ___ _ __ | |__ _ _ __ _ _ _  ___ 
+  //| '  \/ -_) '  \| '_ \ '_/ _` | ' \/ -_)
+  //|_|_|_\___|_|_|_|_.__/_| \__,_|_||_\___|
 
+  var membrane = (params["membrane"]) ? true : false;
 
-  function wrap(target, global) { 
-    log("[[wrap]]");
+  Object.defineProperty(this, "membrane", {
+    get: function () { return membrane; },
+    enumerable: true
+  });
+}
 
-    // IF target is primitive value, return target
-    if (target !== Object(target)) {
-      return target;
-    }
+function Verbose(params) {
+  if(!(this instanceof Verbose)) return new Verbose(params);
 
-    if(cache.contains(target)) {
-      return cache.get(target);
-    } else { 
-      var membraneHandler = new Membrabe(global);
-      var proxy = new Proxy(target, membraneHandler);
+  //                 _                      
+  // _ __  ___ _ __ | |__ _ _ __ _ _ _  ___ 
+  //| '  \/ -_) '  \| '_ \ '_/ _` | ' \/ -_)
+  //|_|_|_\___|_|_|_|_.__/_| \__,_|_||_\___|
 
-      cache.put(target, proxy);
+  var membrane = (params["membrane"]) ? true : false;
 
-      return proxy;
-    }
-  }
+  Object.defineProperty(this, "membrane", {
+    get: function () { return membrane; },
+    enumerable: true
+  });
+
+  // _                             _   _             
+  //| |_ _ _ __ _ _ _  ___ __ _ __| |_(_)___ _ _  ___
+  //|  _| '_/ _` | ' \(_-</ _` / _|  _| / _ \ ' \(_-<
+  // \__|_| \__,_|_||_/__/\__,_\__|\__|_\___/_||_/__/
+
+  var transactions = (params["transactions"]) ? true : false;
+
+  Object.defineProperty(this, "transactions", {
+    get: function () { return transactions; },
+    enumerable: true
+  });
 }
 
 
 
-
-function Sandbox(global) {
-  if(!(this instanceof Sandbox)) return new Sandbox(global);
-
-  // TODO
-  // 
-
-  var scope = {};
+function Out() {
+  this.membrane = function(msg) {};
+  this.transactions = function(msg) {};
+}
 
 
+function ShellOut() {
+  if(!(this instanceof ShellOut)) return new ShellOut();
+  else Out.call(this);
 
+  // TODO: set verbose configutarion
+  //
+  var idWidth = 30;
+  var fstWidth = 100;
+  var sndWidth = 20;
+  var seperator = ".";
 
+  /** Standard Output
+  */
+  function out(string) {
+    putstr(padding_right(string + " ", seperator, fstWidth));
+  }
 
-  function decompile() {
+  /** Sub-Standard Output
+  */
+  function subout(string) {
+    putstr(padding_right("... " + string + " ", seperator, fstWidth));
+  }
+
+  /** BLANK Output
+  */
+  function blank() {
+    putstr(padding_left(seperator, seperator, sndWidth));
+    putstr("\n");
+  }
+
+  /** Notice Output
+  */
+  function notice(string) {
+    putstr(padding_right("... " + string + " ", seperator, fstWidth+sndWidth));
+    putstr("\n");
+  }
+
+   /** Head Output
+  */
+  function head(id) {
+    return padding_right(id + " ", ".", idWidth)
   }
 
 
 
 
 
-  this.bind = function() {
+  this.membrane = function(msg) {
+    if(verbose.membrane) {
+      __out(head("[Membrane]") + msg);
+      __blank();
+    }
   };
 
-  this.apply = function() {
+  this.transactions = function(msg) {
+    if(verbose.membrane) {
+      __out(head("[Transaction]") + msg);
+      __blank();
+    }
   };
-
-  this.call = function() {
-  };
-
 }
-
-
-function Environment(target) {
-  if(!(this instanceof Environment)) return new Environment(target);
-
-  // todo
-  function log(arg) {print(arg);}
-  function violation(arg) {print(arg);}
-
-  var scope = {};
-
-  function Handler() {
-    this.getOwnPropertyDescriptor = function(target, name) {
-      log("[[getOwnPropertyDescriptor]]", name);
-      var desc = Object.getOwnPropertyDescriptor(target, name);
-      if (desc !== undefined) desc.value = wrap(desc, global);
-      return desc;
-    };
-    this.getOwnPropertyNames = function(target) {
-      log("[[getOwnPropertyNames]]", name);
-      return Object.getOwnPropertyNames(target);
-    };
-    this.getPrototypeOf = function(target) {
-      log("[[getPrototypeOf]]", name);
-      return Object.getPrototypeOf(target)
-    };
-    this.defineProperty = function(target, name, desc) {
-      log("[[defineProperty]]", name);
-      return Object.defineProperty(target, name, desc);
-    };
-    this.deleteProperty = function(target, name) {
-      log("[[deleteProperty]]", name);
-      return delete target[name];
-    };
-    this.freeze = function(target) {
-      log("[[freeze]]", name);
-      return Object.freeze(target);
-    };
-    this.seal = function(target) {
-      log("[[seal]]", name);
-      return Object.seal(target);
-    };
-    this.preventExtensions = function(target) {
-      log("[[preventExtensions]]", name);
-      return Object.preventExtensions(target);
-    };
-    this.isFrozen = function(target) {
-      log("[[isFrozen]]", name);
-      return Object.isFrozen(target);
-    };
-    this.isSealed = function(target) {
-      log("[[isSealed]]", name);
-      return Object.isSealed(target);
-    };
-    this.isExtensible = function(target) {
-      log("[[isExtensible]]", name);
-      return Object.isExtensible(target);
-    };
-    this.has = function(target, name) {
-      log("[[has]]", name);
-      // TODO
-      if(!(name in target)) violation("Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber);
-      else return (name in target);
-    };
-    this.hasOwn = function(target, name) {
-      log("[[hasOwn]]", name);
-
-      // TODO
-      if(!(name in target)) violation("Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber);
-      else return ({}).hasOwnProperty.call(target, name); 
-    };
-    this.get = function(target, name, receiver) {
-      log("[[get]]", name);
-
-      if (name in scope) {
-        return  wrap(scope[name], global);
-      } else if(name in target) {
-        if( _.Config.nativePassThrough) {
-          // pass-through of native functions
-          if(isNativeFunction(target[name])) {
-            return target[name];
-          }
-          else return wrap(target[name], global);
-        } else {
-          return wrap(target[name], global);
-        }
-
-      } else {
-        violation("Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber); 
-      }
-
-
-      //      if(!(name in target)) violation("Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber);
-
-      // pass-through of Contract System
-      // if(name=="$") return target[name];
-
-      /*      if( _.Config.nativePassThrough) {
-      // pass-through of native functions
-      if(isNativeFunction(target[name])) {
-      return target[name];
-      }
-      else return wrap(target[name], global);
-      } else {
-      return wrap(target[name], global);
-      }
-      */
-    };
-    this.set = function(target, name, value, receiver) {
-      log("[[set]]", name);
-      // NOTE: no write access allowed
-      //violation("XXXX Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber);
-      return (scope[name]=value);
-      //otherwise use this code:
-      //if(!(name in target)) violation("Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber);
-      //else return target[name] = value;
-    };
-    this.enumerate = function(target) {
-      log("[[enumerate]]", name);
-      var result = [];
-      for (var name in target) {
-        result.push(name);
-      };
-      return result;
-    };
-    this.keys = function(target) {
-      log("[[keys]]");
-      return Object.keys(target);
-    };
-  };
-
-  print("XX" + target.a);
-  return new Proxy(target, new Handler(target));
-}
+ShellOut.prototype = new Out();
 
 
 
+
+
+
+
+function Sandbox(
+    configuration, 
+    verbose,
+    log
+    ) {
+
+      // TODO defualt
+
+
+
+
+    }
+
+
+
+var sbx = new Sandbox({membrane:true;}, {});
