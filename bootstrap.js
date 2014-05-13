@@ -67,6 +67,8 @@ var b = new SandboxEnvironment(this);
 //f();
 //g();
 
+/*
+
 ff = a.bind(f);
 ff("a");
 ff("a");
@@ -84,13 +86,46 @@ out("global");
 outa("a");
 outb("b");
 
-
+*/
 
 //gg = b.bind(g);
 //gg();
 
 
+function Testcase(func, fixture, name) {
 
+  function run() {
+    var sbx = new SandboxEnvironment(fixture);
+    var sbxFun = sbx.bind(func);
+
+
+//    var runA = sbxFun();
+    var runA = sbx.bind(func).apply({}, ["sbx"])
+    var runB = func.apply({}, ["exen"]);
+
+
+    print("# " + name + " - " + (runA===runB));
+
+    // PRINT OUTPUT is false
+  
+  }
+
+
+  this.run = run; 
+
+
+}
+
+
+var testcase = new Testcase(f, {x:0, y:0, z:0, out:out, print:print} , "Function F");
+
+print("  -----  ");
+
+testcase.run();
+//testcase.run();
+out("global");
+
+print("  -----  ");
 
 
 /*
@@ -160,12 +195,68 @@ print(Object.prototype.hasOwnProperty.call(b,"x"));
 if(!Object.prototype.hasOwnProperty.call(b,"x")) {
 }
 
+
 /*
 var a = new Set();
 a.add("x");
 
 print("### " + (a.has("x")));
 */
+
+/*
+new Tetscase(   print);
+*/
+
+function TestcaseX(func, name) {
+
+  function run() {
+    var sbx = new SandboxEnvironment(this);
+    var sbxFun = sbx.bind(func);
+
+
+//    var runA = sbxFun();
+    var runA = sbx.bind(func).apply(this, {})
+    var runB = func.apply(this, {});
+
+
+    print("# " + name + " - " + (runA===runB));
+
+    // PRINT OUTPUT is false
+  
+  }
+
+
+  this.run = run; 
+
+
+}
+
+
+var testcase = new Testcase((function() {
+  return true;
+}), "True");
+
+testcase.run();
+
+//testcase.run();
+
+
+/*
+function () {
+  var object = {a:undefined, b:"b", c:{}};
+
+  out()
+}
+
+*/
+
+// Idee
+// eine Function definieren und #
+// dessen output einmal in der normalen ausgaben und einmal in einer proxy ausgabe vergleichen
+
+
+
+
 
 quit();
 
