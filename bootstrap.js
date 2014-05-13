@@ -101,7 +101,7 @@ function Testcase(func, fixture, name) {
 
 //    var runA = sbxFun();
     var runA = sbx.bind(func).apply({}, ["sbx"])
-    var runB = func.apply({}, ["exen"]);
+    with(fixture){ var runB = func.apply({}, ["exen"]) };
 
 
     print("# " + name + " - " + (runA===runB));
@@ -122,10 +122,13 @@ var testcase = new Testcase(f, {x:0, y:0, z:0, out:out, print:print} , "Function
 print("  -----  ");
 
 testcase.run();
-//testcase.run();
+testcase.run();
 out("global");
 
 print("  -----  ");
+
+
+
 
 
 /*
