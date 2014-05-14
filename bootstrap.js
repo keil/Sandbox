@@ -151,26 +151,26 @@ print(typeof undefined);
 
 
 
-
+var global = {print:print};
 var test = (function() {
 
-  var vara = 4711;
-  var varb = 4712;
+  this.vara = 4711;
+  this.varb = 4712;
 
   return function() {
-    var tmp = varb;
-    varb = vara;
-    vara = tmp;
-    print("vara is ... " + vara);
+    var tmp = this.varb;
+    this.varb = this.vara;
+    this.vara = tmp;
+    print("vara is ... " + this.vara);
   }
-})();
-var X = new Testcase(test, "This is a Test ... ");
+}).apply(global);
+var X = new Testcase(test, global, "This is a Test ... ");
 X.run();
 
 
 
 
-
+load('test/testcase.js');
 
 
 

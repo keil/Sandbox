@@ -39,7 +39,7 @@ function SandboxEnvironment(global) {
    * @param msg String message
    */ 
   function log(msg, target) {
-    if(_.Config.Verbose.sandbox) {
+    if(true || _.Config.Verbose.sandbox) {
       __out(padding_right(msg + " ", ".", 30) + ((target!=undefined)?" "+target:""));
       __blank();
     }
@@ -61,7 +61,7 @@ function SandboxEnvironment(global) {
    * @return Membrane Reference/ Proxy 
    */
   function wrap(target, global) { 
-    log("[[wrap]]");
+    log("[[wrap]] ");
 
     // IF target is primitive value, return target
     if (target !== Object(target)) {

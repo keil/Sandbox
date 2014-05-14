@@ -202,7 +202,7 @@ function Sandbox(params) {
    * @return JavaScript Proxy 
    */
   function wrap(target, global) { 
-    logc("wrap");
+    logc("wrap(" + target + ")");
 
     // If target is a primitive value, then return target
     if (target !== Object(target)) {
