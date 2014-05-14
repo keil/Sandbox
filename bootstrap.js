@@ -131,14 +131,12 @@ print("  -----  ");
 
 (function() {
 
-var g = {xx:1000};
 var testcase2 = new Testcase((function() {
 
-  this.a = 10;
+  var a = 40000;
 
   return function() {
-    var m = (typeof this.xx=="undefined") ? 3 : this.xx;
-    var n = (typeof this.a=="undefined") ? 7 : this.a;
+    var n = (typeof a=="undefined") ? 7 : a;
     return (m); //+n);
   }
 
@@ -149,7 +147,33 @@ testcase2.run();
 
 print(typeof undefined);
 
+});
+
+
+
+
+var test = (function() {
+
+  var vara = 4711;
+  var varb = 4712;
+
+  return function() {
+    var tmp = varb;
+    varb = vara;
+    vara = tmp;
+    print("vara is ... " + vara);
+  }
 })();
+var X = new Testcase(test, "This is a Test ... ");
+X.run();
+
+
+
+
+
+
+
+
 
 // TODO, if a value does not exist return undefined insted of termination
 
