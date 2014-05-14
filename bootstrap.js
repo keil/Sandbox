@@ -101,23 +101,24 @@ function Testcase(func, fixture, name) {
 
 //    var runA = sbxFun();
     var runA = sbx.bind(func).apply({}, ["sbx"])
-    with(fixture){ var runB = func.apply({}, ["exen"]) };
+    var runB = func.apply({}, ["exen"]);
 
 
     print("# " + name + " - " + (runA===runB));
-
+if((runA!==runB)) {
+    print("A) " + runA);
+    print("B) " + runB);
     // PRINT OUTPUT is false
+}
   
   }
 
 
   this.run = run; 
-
-
 }
 
 
-var testcase = new Testcase(f, {x:0, y:0, z:0, out:out, print:print} , "Function F");
+var testcase = new Testcase(f, this, "Function F");
 
 print("  -----  ");
 
@@ -128,7 +129,29 @@ out("global");
 print("  -----  ");
 
 
+(function() {
 
+var g = {xx:1000};
+var testcase2 = new Testcase((function() {
+
+  this.a = 10;
+
+  return function() {
+    var m = (typeof this.xx=="undefined") ? 3 : this.xx;
+    var n = (typeof this.a=="undefined") ? 7 : this.a;
+    return (m); //+n);
+  }
+
+   
+
+}).apply(g,[]), g, "Function Outside");
+testcase2.run();
+
+print(typeof undefined);
+
+})();
+
+// TODO, if a value does not exist return undefined insted of termination
 
 
 /*
@@ -175,7 +198,7 @@ print(o.a);
 print(a in o);
 
 */
-
+/*
 
 function A() {
 this.x=4711;
@@ -197,7 +220,7 @@ print(Object.prototype.hasOwnProperty.call(b,"x"));
 
 if(!Object.prototype.hasOwnProperty.call(b,"x")) {
 }
-
+*/
 
 /*
 var a = new Set();
@@ -209,7 +232,7 @@ print("### " + (a.has("x")));
 /*
 new Tetscase(   print);
 */
-
+/*
 function TestcaseX(func, name) {
 
   function run() {
@@ -240,7 +263,7 @@ var testcase = new Testcase((function() {
 }), "True");
 
 testcase.run();
-
+*/
 //testcase.run();
 
 
