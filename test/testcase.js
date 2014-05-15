@@ -20,15 +20,16 @@ function Testcase(fun, globalArg, thisArg, argsArray, name) {
     var sbx = new SandboxEnvironment(globalArg);
 
     var outcomeA = sbx.eval(fun, globalArg, thisArg, argsArray)
-      var outcomeB = func.apply(thisArg, argsArray);
+      var outcomeB = fun.apply(thisArg, argsArray);
 
     var result = (outcomeA===outcomeB);
 
     // TODO decoupling of print
-    print("# " + name + " ... " + result);
+    print("# " + name + " .. " + result);
+    // TODO output only if false
     if(true || !result) {
-      print("A) " + outcomeA);
-      print("B) " + outcomeB);
+      print(" .. Sandbox: " + outcomeA);
+      print(" .. Normal:  " + outcomeB);
     } 
   }
 

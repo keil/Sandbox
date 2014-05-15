@@ -15,6 +15,8 @@
 load("src/shell.js");
 load("src/sandbox.js");
 
+load('test/testcase.js');
+load('test/test.js');
 
 /**
 var x = 0;
@@ -172,7 +174,7 @@ X.run();
 
 */
 
-load('test/testcase.js');
+
 
 
 
@@ -310,7 +312,7 @@ function () {
 
 
 
-quit();
+//quit();
 
 
 
@@ -340,8 +342,6 @@ quit();
 
 
 //var $ = _ ;
-run("test/contract/basecontracts.js");
-run("test/contract/functioncontracts.js");
 
 /*
    print("\n * TreatJS Properties\n")
@@ -631,4 +631,4 @@ print("&&&&& " + v);
 
 */
 
-quit();
+//quit();

@@ -18,6 +18,4 @@
 //| '  \/ -_) '  \| '_ \/ _` | '_| ' \/ -_)
 //|_|_|_\___|_|_|_|_.__/\__,_|_| |_||_\___|
 
-//load("test/membrane/object.create.js");
-//load("test/membrane/object.defineproperty.js");
-load("test/membrane/object.in.js");
+load("test/membrane/membrane.js");
