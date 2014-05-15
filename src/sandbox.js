@@ -511,12 +511,16 @@ function Sandbox(params) {
   //      |_|  |_|     |__/ 
 
   __define("apply", function(fun, globalArg, thisArg, argsArray) {
-    globalArg = (globalArg!==undefined) ? globalArg : new Object();
-    thisArg = (thisArg!==undefined) ? thisArg : globalArg;
-    argsArray = (argsArray!==undefined) ? argsArray : new Array();
 
-    // TODO, is it required to wrap the return value ?
-    return evaluate(fun, globalArg, thisArg, argsArray);
+    if(!(fun instanceof Function))
+    throw new TypeError("No function object.");
+
+  globalArg = (globalArg!==undefined) ? globalArg : new Object();
+  thisArg = (thisArg!==undefined) ? thisArg : globalArg;
+  argsArray = (argsArray!==undefined) ? argsArray : new Array();
+
+  // TODO, is it required to wrap the return value ?
+  return evaluate(fun, globalArg, thisArg, argsArray);
   }, this);
 
   //  ___      _ _ 
@@ -525,11 +529,15 @@ function Sandbox(params) {
   // \___\__,_|_|_|
 
   __define("call", function(fun, globalArg, thisArg) {
-    globalArg = (globalArg!==undefined) ? globalArg : new Object();
-    thisArg = (thisArg!==undefined) ? thisArg : globalArg;
 
-    // TODO, is it required to wrap the return value ?
-    return evaluate(fun, globalArg, thisArg, arguments);
+    if(!(fun instanceof Function))
+    throw new TypeError("No function object.");
+
+  globalArg = (globalArg!==undefined) ? globalArg : new Object();
+  thisArg = (thisArg!==undefined) ? thisArg : globalArg;
+
+  // TODO, is it required to wrap the return value ?
+  return evaluate(fun, globalArg, thisArg, arguments);
   }, this);
 
   // ___ _         _ 
@@ -538,12 +546,16 @@ function Sandbox(params) {
   //|___/_|_||_\__,_|
 
   __define("bind", function(fun, globalArg, thisArg, argsArray) {
-    globalArg = (globalArg!==undefined) ? globalArg : new Object();
-    thisArg = (thisArg!==undefined) ? thisArg : globalArg;
-    argsArray = (argsArray!==undefined) ? argsArray : new Array();
 
-    // TODO, is it required to wrap the return value ?
-    return bind(fun, globalArg, thisArg, argsArray);
+    if(!(fun instanceof Function))
+    throw new TypeError("No function object.");
+
+  globalArg = (globalArg!==undefined) ? globalArg : new Object();
+  thisArg = (thisArg!==undefined) ? thisArg : globalArg;
+  argsArray = (argsArray!==undefined) ? argsArray : new Array();
+
+  // TODO, is it required to wrap the return value ?
+  return bind(fun, globalArg, thisArg, argsArray);
   }, this);
 }
 
