@@ -13,40 +13,6 @@
  * http://www.informatik.uni-freiburg.de/~keilr/
  */
 
-
-
-/*
- * out
- *
- * verbose
- * - membrane
- * - transactions
- *
- * configuration
- * - nativepassthrough
- *
- * evaluation
- * - decompile
- * - membrane
- *
- *
- *
- *
- */
-
-/*
-   var sbx = new Sandbox({
-   verbose={
-   membrabe:true
-   },
-   decompile=true
-   });
-   */
-// TODO: to stricng function
-
-// return type errores iontead of ...
-
-
 /** JavaScript Sandbox
  * @param params Object
  *
@@ -134,11 +100,6 @@ function Sandbox(params) {
     }
   }
 
-  // TODO
-  function error(cmd, msg) {
-    __out__.error("$."+cmd+"("+((arg!==undefined) ? arg : "")+")"+" @"+this.id+"");
-  }
-
   // _    _  _      _   _         ___             _   _          
   //(_)__| \| |__ _| |_(_)_ _____| __|  _ _ _  __| |_(_)___ _ _  
   //| (_-< .` / _` |  _| \ V / -_) _| || | ' \/ _|  _| / _ \ ' \ 
@@ -175,27 +136,32 @@ function Sandbox(params) {
   function wrap(target, global) { 
     logc("wrap", target);
 
+    if(target===undefined)
+      throw new ReferenceError("Target is undefined.");
+    if(global===undefined)
+      throw new ReferenceError("Global is undefined.");
+
     // If target is a primitive value, then return target
     if (target !== Object(target)) {
       return target;
     }
 
-    // TODO
+    // Membrane ? 
     if(!(__membrane__))
       return target;
 
     // Native Function pass-through
-    if((target  instanceof Function) && __nativepassthrough__) {
+    if((target instanceof Function) && __nativepassthrough__) {
       if(isNative(target)) {
         return target;
       }
     }
 
-    // If target is already wrapped, return cached proxy
+    // If target already wrapped, return cached proxy
     if(cache.has(target)) {
       return cache.get(target);
     } else {
-      var proxy = new Proxy(target, new Membrane());
+      var proxy = new Proxy(target, new Membrane(global));
       cache.set(target, proxy);
       return proxy;
     }
@@ -211,7 +177,11 @@ function Sandbox(params) {
    *
    * @param global The current Global Object.
    */
-  function Membrabe(global) {
+  function Membrane(global) {
+
+    if(!(global instanceof Object))
+      throw new TypeError("global");
+
     /* 
      * Write scope.
      */
@@ -270,12 +240,6 @@ function Sandbox(params) {
       return (delete scope[name]);
     }
 
-
-
-    // Handler Traps
-
-    //  function()
-
     // _____                 
     //|_   _| _ __ _ _ __ ___
     //  | || '_/ _` | '_ (_-<
@@ -311,7 +275,7 @@ function Sandbox(params) {
 
       return doDelete(target, name);
 
-      // TODOX, implement delete
+      // TODO, implement delete
       //return delete target[name];
     };
     this.freeze = function(target) {
@@ -349,7 +313,7 @@ function Sandbox(params) {
 
       return doHas(target, name);
 
-      // XTODO switch target
+      // TODO switch target
       //if(!(name in target)) violation("Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber);
       //else return (name in target);
     };
@@ -363,7 +327,7 @@ function Sandbox(params) {
     this.get = function(target, name, receiver) {
       logc("get", name);
 
-      return wrap(doGet(target, name));
+      return wrap(doGet(target, name), global);
     };
     this.set = function(target, name, value, receiver) {
       logc("set", name);
@@ -404,13 +368,13 @@ function Sandbox(params) {
       logc("apply");
 
       // TODO implement apply
-      return evalFunction(target, global, thisArg, argsArray);
+      return evalaluate(target, global, thisArg, argsArray);
     };
     this.construct = function(target, argsArray) {
       logc("construct");
 
       // TODO implement construct
-      return evalNew(target, global, this, argsArray);
+      return construct(target, global, this, argsArray);
     };
   };
 
@@ -420,16 +384,27 @@ function Sandbox(params) {
   //\__,_\___\__\___/_|_|_| .__/_|_\___|
   //                      |_|           
 
+  // TODO
+  // Implement a decompile cache.
+  // This could look as follows:
+  //
+  // WeakMap: Function -> Global -> Sbxed
 
-  // TODO, decompile cache ?
-
+  /** decompile
+   * Decompiles functions.
+   * @param fun JavaScript Function
+   * @param env The current Global Object
+   * @return JavaScript Function
+   */
   function decompile(fun, env) {
     logc("decompile");
 
     if(!(fun instanceof Function))
-      error("decompile", "No Function Object");
+      throw new TypeError("fun");
+    if(!(enf instanceof Object))
+      throw new TypeError("env");
 
-    // TODO
+    // Decompile ?
     if(!(__decompile__))
       return fun;
 
@@ -439,69 +414,94 @@ function Sandbox(params) {
     return sbxed;
   }
 
-
+  /** evaluate
+   * Evaluates the given function.
+   * @param fun JavaScript Function
+   * @param globalArg The current Global Object
+   * @param thisArg The current this Object
+   * @param argsArray The Function arguments
+   * @return Any
+   */
   function evaluate(fun, globalArg, thisArg, argsArray) {
     logc("evaluate");
 
     if(!(globalArg instanceof Object))
-      error("evaluate", "No Global Object");
+      throw new TypeError("globalArg");
     if(!(thisArg instanceof Object))
-      error("evaluate", "No This Object");
+      throw new TypeError("thisArg");
     if(!(argsArray instanceof Array))
-      error("evaluate", "Not Arguments Array");
+      throw new TypeError("argsArray");
 
     // sandboxed function
-    var sbxed = decompile(fun, wrap(globalArg));
+    var sbxed = decompile(fun, wrap(globalArg, globalArg));
     // apply constructor function
-    var val = sbxed.apply(wrap(thisArgs), wrap(argsArray));
+    var val = sbxed.apply(wrap(thisArgs, globalArg), wrap(argsArray, globalArg));
     // return val
     return val;
+
+    // TODO
+    // Is it required to wrap the return?
   }
 
+  /** Construct
+   * Evaluates the given constructor.
+   * @param fun JavaScript Function
+   * @param globalArg The current Global Object
+   * @param argsArray The Function arguments
+   * @return Object
+   */
   function construct(fun, globalArg, argsArray) {
     logc("construct");
 
     if(!(globalArg instanceof Object))
-      error("evaluate", "No Global Object");
+      throw new TypeError("globalArg");
     if(!(argsArray instanceof Array))
-      error("evaluate", "Not Arguments Array");
+      throw new TypeError("argsArray");
 
     // sandboxed function
-    var sbxed = decompile(fun, wrap(globalArg));
+    var sbxed = decompile(fun, wrap(globalArg, globalArg));
     // new this reference
     var thisArg = Object.create(secureFun.prototype);
     // apply function
-    var val = sbxed.apply(wrap(thisArgs), wrap(argsArray));
+    var val = sbxed.apply(wrap(thisArgs, globalArg), wrap(argsArray, globalArg));
     // return thisArg | val
     return (val instanceof Object) ? val : thisArg;
+
+    // TODO
+    // Is it required to wrap the return?
   }
 
-  // TODO, wrao requires the glibal arg
-
-  // todo
-  //__membrane in wrap
-  //__decompile in ceocmpile
-
+  /** bind
+   * Binds the given function in the sandbox.
+   * @param fun JavaScript Function
+   * @param globalArg The current Global Object
+   * @param thisArg The current this Object
+   * @param argsArray The Function arguments
+   * @return Any
+   */
   function bind(fun, globalArg, thisArg, argsArray) {
     logc("bind");
 
     if(!(globalArg instanceof Object))
-      error("evaluate", "No Global Object");
+      throw new TypeError("globalArg");
     if(!(thisArg instanceof Object))
-      error("evaluate", "No This Object");
+      throw new TypeError("thisArg");
     if(!(argsArray instanceof Array))
-      error("evaluate", "Not Arguments Array");
+      throw new TypeError("argsArray");
 
     // sandboxed function
-    var sbxed = decompile(fun, wrap(globalArg));
+    var sbxed = decompile(fun, wrap(globalArg, globalArg));
     // bind thisArg
-    var bound = sbxed.bind(wrap(thisArgs));
+    var bound = sbxed.bind(wrap(thisArgs, globalArg));
     // bind arguments
     for(var arg in argsArray) {
       bound = bound.bind(null, arg);
     }
     // return bound function
     return bound;
+
+    // TODO
+    // Is it required to wrap the return?
   }
 
   //   _             _      
