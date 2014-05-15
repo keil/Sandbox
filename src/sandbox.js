@@ -56,8 +56,8 @@ function ShellOut() {
   //|_|_|_\___|_|_|_|_.__/_| \__,_|_||_\___|
 
   this.membrane = function(msg) {
-    __out(head("[Membrane]") + msg);
-    __blank();
+    out(head("[Membrane]") + msg);
+    blank();
   };
 
   // _                             _   _             
@@ -66,9 +66,21 @@ function ShellOut() {
   // \__|_| \__,_|_||_/__/\__,_\__|\__|_\___/_||_/__/
 
   this.transactions = function(msg) {
-    __out(head("[Transaction]") + msg);
-    __blank();
+    out(head("[Transaction]") + msg);
+    blank();
   };
+
+
+  // TODO
+
+  this.error = function(msg) {
+      subout("Error");
+      blank();
+      notice(msg);
+  }
+
+
+
 }
 ShellOut.prototype = new Out();
 
@@ -109,31 +121,31 @@ function Sandbox(params) {
    * Verbose Mode
    * (default: false)
    */
-  var verbose = configure("verbose", false);
+  var __verbose__ = configure("verbose", false);
 
   /*
    * Decompile
    * (default: true)
    */
-  var decompile = configure("decompile", true);
+  var __decompile__ = configure("decompile", true);
 
   /*
    * Membrane
    * (default: true)
    */
-  var membrane = configure("membrane", true);
+  var __membrane__ = configure("membrane", true);
 
   /*
    * Native Function pass-through
    * (default: true)
    */
-  var nativepassthrough = configure("nativepassthrough", true);
+  var __nativepassthrough__ = configure("nativepassthrough", true);
 
   /*
    * Output
    * (default:null);
    */
-  var out = configure("out", new Out());
+  var __out__ = configure("out", new Out());
 
   //              __ _                   
   // __ ___ _ _  / _(_)__ _ _  _ _ _ ___ 
@@ -154,18 +166,23 @@ function Sandbox(params) {
    * @param msg String message
    */ 
   function log(msg) {
-    if(verbose) {
-      out.membrane(msg);
+    if(__verbose__) {
+      __out__.membrane(msg);
     }
   }
 
   /** logc(msg)
    * @param msg String message
    */ 
-  function logc(command, arg) {
-    if(verbose) {
-      out.membrane("$."+command+"("+((arg!==undefined) ? arg : "")+")"+" @"+this.id+"");
+  function logc(cmd, arg) {
+    if(__verbose__) {
+      __out__.membrane("$."+cmd+"("+((arg!==undefined) ? arg : "")+")"+" @"+this.id+"");
     }
+  }
+
+  // TODO
+  function error(cmd, msg) {
+    __out__.error("$."+cmd+"("+((arg!==undefined) ? arg : "")+")"+" @"+this.id+"");
   }
 
   // _    _  _      _   _         ___             _   _          
@@ -209,8 +226,12 @@ function Sandbox(params) {
       return target;
     }
 
+    // TODO
+    if(!(__membrane__))
+      return target;
+
     // Native Function pass-through
-    if((target  instanceof Function) && nativepassthrough) {
+    if((target  instanceof Function) && __nativepassthrough__) {
       if(isNative(target)) {
         return target;
       }
@@ -439,15 +460,125 @@ function Sandbox(params) {
     };
   };
 
+  //    _                       _ _     
+  // __| |___ __ ___ _ __  _ __(_) |___ 
+  /// _` / -_) _/ _ \ '  \| '_ \ | / -_)
+  //\__,_\___\__\___/_|_|_| .__/_|_\___|
+  //                      |_|           
+
+
+  // TODO, decompile cache ?
+
+  function decompile(fun, env) {
+    logc("decompile");
+
+    if(!(fun instanceof Function))
+      error("decompile", "No Function Object");
+
+    // TODO
+    if(!(__decompile))
+      return fun;
+
+    var body = "(" + fun.toString() + ")"; 
+    var sbxed = eval("(function() { with(env) { return " + body + " }})();");
+
+    return sbxed;
+  }
+
+
+  function evaluate(fun, globalArg, thisArg, argsArray) {
+    logc("evaluate");
+
+    if(!(globalArg instanceof Object))
+       error("evaluate", "No Global Object");
+    if(!(thisArg instanceof Object))
+       error("evaluate", "No This Object");
+    if(!(argsArray instanceof Array))
+       error("evaluate", "Not Arguments Array");
+
+    // sandboxed function
+    var sbxed = decmpile(fun, wrap(globalArg));
+    // apply constructor function
+    var val = sbxed.apply(wrap(thisArgs), wrap(argsArray));
+    // return val
+    return val;
+  }
+
+  function construct(fun, globalArg, argsArray) {
+    logc("construct");
+
+    if(!(globalArg instanceof Object))
+      error("evaluate", "No Global Object");
+    if(!(argsArray instanceof Array))
+      error("evaluate", "Not Arguments Array");
+
+    // sandboxed function
+    var sbxed = decmpile(fun, wrap(globalArg));
+    // new this reference
+    var thisArg = Object.create(secureFun.prototype);
+    // apply function
+    var val = sbxed.apply(wrap(thisArgs), wrap(argsArray));
+    // return thisArg | val
+    return (val instanceof Object) ? val : thisArg;
+  }
+
+  // TODO, wrao requires the glibal arg
+
+  // todo
+  //__membrane in wrap
+  //__decompile in ceocmpile
+
+  function bind(fun, globalArg, thisArg, argsArray) {
+     logc("bind");
+
+    if(!(globalArg instanceof Object))
+       error("evaluate", "No Global Object");
+    if(!(thisArg instanceof Object))
+       error("evaluate", "No This Object");
+    if(!(argsArray instanceof Array))
+       error("evaluate", "Not Arguments Array");
+
+    // sandboxed function
+    var sbxed = decmpile(fun, wrap(globalArg));
+    // bind thisArg
+    var bound = sbxed.bind(wrap(thisArgs));
+    // bind arguments
+    for(var arg in argsArray) {
+      bound = bound.bind(null, arg);
+    }
+    // return bound function
+    return bound;
+  }
+
+
+
+  
+/*
+    // todo, exclude
+    globalArg = (globalArg!==undefined) ? globalArg : new Object();
+    thisArg = (thisArg!==undefined) ? thisArg : globalArg;
+    argsArray = (argsArray!==undefined) ? argsArray : new Array();
+*/
 
 
 
 
-
-
-
+  // TODO, make this read only
+  this.eval = function() {}
   this.bind = function() {};
 }
+
+
+ function evalInSandbox(fun, globalArg, thisArg, argsArray) {
+    if(!(fun instanceof Function)) error("No Function Object", (new Error()).fileName, (new Error()).lineNumber);
+
+    var string = "(" + fun.toString() + ")"; 
+    var sandbox = globalArg;
+    var secureFun = eval("(function() { with(sandbox) { return " + string + " }})();");
+
+    return secureFun.apply(thisArg, argsArray);
+  }
+
 
 // ___               _ _               ___ ___  
 /// __| __ _ _ _  __| | |__  _____ __ |_ _|   \ 
