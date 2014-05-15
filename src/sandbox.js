@@ -478,7 +478,7 @@ function Sandbox(params) {
       error("decompile", "No Function Object");
 
     // TODO
-    if(!(__decompile))
+    if(!(__decompile__))
       return fun;
 
     var body = "(" + fun.toString() + ")"; 
@@ -499,7 +499,7 @@ function Sandbox(params) {
       error("evaluate", "Not Arguments Array");
 
     // sandboxed function
-    var sbxed = decmpile(fun, wrap(globalArg));
+    var sbxed = decompile(fun, wrap(globalArg));
     // apply constructor function
     var val = sbxed.apply(wrap(thisArgs), wrap(argsArray));
     // return val
@@ -515,7 +515,7 @@ function Sandbox(params) {
       error("evaluate", "Not Arguments Array");
 
     // sandboxed function
-    var sbxed = decmpile(fun, wrap(globalArg));
+    var sbxed = decompile(fun, wrap(globalArg));
     // new this reference
     var thisArg = Object.create(secureFun.prototype);
     // apply function
@@ -541,7 +541,7 @@ function Sandbox(params) {
       error("evaluate", "Not Arguments Array");
 
     // sandboxed function
-    var sbxed = decmpile(fun, wrap(globalArg));
+    var sbxed = decompile(fun, wrap(globalArg));
     // bind thisArg
     var bound = sbxed.bind(wrap(thisArgs));
     // bind arguments
@@ -552,16 +552,11 @@ function Sandbox(params) {
     return bound;
   }
 
-
-
-
-  /*
-  // todo, exclude
-  globalArg = (globalArg!==undefined) ? globalArg : new Object();
-  thisArg = (thisArg!==undefined) ? thisArg : globalArg;
-  argsArray = (argsArray!==undefined) ? argsArray : new Array();
-  */
-
+  //   _             _      
+  //  /_\  _ __ _ __| |_  _ 
+  // / _ \| '_ \ '_ \ | || |
+  ///_/ \_\ .__/ .__/_|\_, |
+  //      |_|  |_|     |__/ 
 
   __define("apply", function(fun, globalArg, thisArg, argsArray) {
     globalArg = (globalArg!==undefined) ? globalArg : new Object();
@@ -572,6 +567,10 @@ function Sandbox(params) {
     return evaluate(fun, globalArg, thisArg, argsArray);
   }, this);
 
+  //  ___      _ _ 
+  // / __|__ _| | |
+  //| (__/ _` | | |
+  // \___\__,_|_|_|
 
   __define("call", function(fun, globalArg, thisArg) {
     globalArg = (globalArg!==undefined) ? globalArg : new Object();
@@ -581,6 +580,10 @@ function Sandbox(params) {
     return evaluate(fun, globalArg, thisArg, arguments);
   }, this);
 
+  // ___ _         _ 
+  //| _ |_)_ _  __| |
+  //| _ \ | ' \/ _` |
+  //|___/_|_||_\__,_|
 
   __define("bind", function(fun, globalArg, thisArg, argsArray) {
     globalArg = (globalArg!==undefined) ? globalArg : new Object();
@@ -591,18 +594,6 @@ function Sandbox(params) {
     return bind(fun, globalArg, thisArg, argsArray);
   }, this);
 }
-
-
-function evalInSandbox(fun, globalArg, thisArg, argsArray) {
-  if(!(fun instanceof Function)) error("No Function Object", (new Error()).fileName, (new Error()).lineNumber);
-
-  var string = "(" + fun.toString() + ")"; 
-  var sandbox = globalArg;
-  var secureFun = eval("(function() { with(sandbox) { return " + string + " }})();");
-
-  return secureFun.apply(thisArg, argsArray);
-}
-
 
 // ___               _ _               ___ ___  
 /// __| __ _ _ _  __| | |__  _____ __ |_ _|   \ 
@@ -630,22 +621,3 @@ Object.defineProperty(Sandbox.prototype, "id", {
 Sandbox.prototype.toString = function() {
   return "[[Sandbox#" + this.id + "]]";
 }
-
-
-
-
-//(new Out()).id;
-
-var sbx = new Sandbox();
-sbx.bind();
-sbx.bind();
-print("###1" + sbx.id);
-print(sbx);
-
-var sbx2 = new Sandbox({});
-sbx2.bind();
-sbx2.bind();
-print("###2" + sbx2.id);
-print(sbx2);
-
-
