@@ -13,18 +13,19 @@
  * http://www.informatik.uni-freiburg.de/~keilr/
  */
 
-function Testcase(func, fixture, name) {
+function Testcase(fun, globalArg, thisArg, argsArray, name) {
 
   function run() {
-    var sbx = new SandboxEnvironment(fixture);
-    var sbxFun = sbx.bind(func);
+    // TODO: rename SandboxEnvironment to Sandbox
+    var sbx = new SandboxEnvironment(globalArg);
 
-    var outcomeA = sbx.bind(func).apply({}, [])
-    var outcomeB = func.apply({}, []);
+    var outcomeA = sbx.eval(fun, globalArg, thisArg, argsArray)
+      var outcomeB = func.apply(thisArg, argsArray);
 
     var result = (outcomeA===outcomeB);
 
-    print("# " + name + " - " + result);
+    // TODO decoupling of print
+    print("# " + name + " ... " + result);
     if(true || !result) {
       print("A) " + outcomeA);
       print("B) " + outcomeB);
@@ -33,7 +34,3 @@ function Testcase(func, fixture, name) {
 
   this.run = run; 
 }
-
-
-
-load('test/membrane/object.hasown.js');
