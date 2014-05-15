@@ -74,9 +74,9 @@ function ShellOut() {
   // TODO
 
   this.error = function(msg) {
-      subout("Error");
-      blank();
-      notice(msg);
+    subout("Error");
+    blank();
+    notice(msg);
   }
 
 
@@ -113,6 +113,8 @@ ShellOut.prototype = new Out();
    });
    */
 // TODO: to stricng function
+
+// return type errores iontead of ...
 
 function Sandbox(params) {
   if(!(this instanceof Sandbox)) return new Sandbox(params);
@@ -490,11 +492,11 @@ function Sandbox(params) {
     logc("evaluate");
 
     if(!(globalArg instanceof Object))
-       error("evaluate", "No Global Object");
+      error("evaluate", "No Global Object");
     if(!(thisArg instanceof Object))
-       error("evaluate", "No This Object");
+      error("evaluate", "No This Object");
     if(!(argsArray instanceof Array))
-       error("evaluate", "Not Arguments Array");
+      error("evaluate", "Not Arguments Array");
 
     // sandboxed function
     var sbxed = decmpile(fun, wrap(globalArg));
@@ -529,14 +531,14 @@ function Sandbox(params) {
   //__decompile in ceocmpile
 
   function bind(fun, globalArg, thisArg, argsArray) {
-     logc("bind");
+    logc("bind");
 
     if(!(globalArg instanceof Object))
-       error("evaluate", "No Global Object");
+      error("evaluate", "No Global Object");
     if(!(thisArg instanceof Object))
-       error("evaluate", "No This Object");
+      error("evaluate", "No This Object");
     if(!(argsArray instanceof Array))
-       error("evaluate", "Not Arguments Array");
+      error("evaluate", "Not Arguments Array");
 
     // sandboxed function
     var sbxed = decmpile(fun, wrap(globalArg));
@@ -552,38 +554,61 @@ function Sandbox(params) {
 
 
 
-  
-/*
-    // todo, exclude
+
+  /*
+  // todo, exclude
+  globalArg = (globalArg!==undefined) ? globalArg : new Object();
+  thisArg = (thisArg!==undefined) ? thisArg : globalArg;
+  argsArray = (argsArray!==undefined) ? argsArray : new Array();
+  */
+
+
+  __define("apply", function(fun, globalArg, thisArg, argsArray) {
     globalArg = (globalArg!==undefined) ? globalArg : new Object();
     thisArg = (thisArg!==undefined) ? thisArg : globalArg;
     argsArray = (argsArray!==undefined) ? argsArray : new Array();
-*/
+
+    // TODO, is it required to wrap the return value ?
+    return evaluate(fun, globalArg, thisArg, argsArray);
+  }, this);
 
 
+  __define("call", function(fun, globalArg, thisArg) {
+    globalArg = (globalArg!==undefined) ? globalArg : new Object();
+    thisArg = (thisArg!==undefined) ? thisArg : globalArg;
+
+    // TODO, is it required to wrap the return value ?
+    return evaluate(fun, globalArg, thisArg, arguments);
+  }, this);
 
 
-  // TODO, make this read only
-  this.eval = function() {}
-  this.bind = function() {};
+  __define("bind", function(fun, globalArg, thisArg, argsArray) {
+    globalArg = (globalArg!==undefined) ? globalArg : new Object();
+    thisArg = (thisArg!==undefined) ? thisArg : globalArg;
+    argsArray = (argsArray!==undefined) ? argsArray : new Array();
+
+    // TODO, is it required to wrap the return value ?
+    return bind(fun, globalArg, thisArg, argsArray);
+  }, this);
 }
 
 
- function evalInSandbox(fun, globalArg, thisArg, argsArray) {
-    if(!(fun instanceof Function)) error("No Function Object", (new Error()).fileName, (new Error()).lineNumber);
+function evalInSandbox(fun, globalArg, thisArg, argsArray) {
+  if(!(fun instanceof Function)) error("No Function Object", (new Error()).fileName, (new Error()).lineNumber);
 
-    var string = "(" + fun.toString() + ")"; 
-    var sandbox = globalArg;
-    var secureFun = eval("(function() { with(sandbox) { return " + string + " }})();");
+  var string = "(" + fun.toString() + ")"; 
+  var sandbox = globalArg;
+  var secureFun = eval("(function() { with(sandbox) { return " + string + " }})();");
 
-    return secureFun.apply(thisArg, argsArray);
-  }
+  return secureFun.apply(thisArg, argsArray);
+}
 
 
 // ___               _ _               ___ ___  
 /// __| __ _ _ _  __| | |__  _____ __ |_ _|   \ 
 //\__ \/ _` | ' \/ _` | '_ \/ _ \ \ /  | || |) |
 //|___/\__,_|_||_\__,_|_.__/\___/_\_\ |___|___/ 
+
 Object.defineProperty(Sandbox.prototype, "id", {
   get: (function() {
     var str = "SBX";
@@ -601,6 +626,7 @@ Object.defineProperty(Sandbox.prototype, "id", {
 //|  _/ _ \__ \  _| '_| | ' \/ _` |
 // \__\___/___/\__|_| |_|_||_\__, |
 //                           |___/ 
+
 Sandbox.prototype.toString = function() {
   return "[[Sandbox#" + this.id + "]]";
 }

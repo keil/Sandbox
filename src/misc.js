@@ -1,6 +1,9 @@
-//////////////////////////////////////////////////
-// ARRAY FOREACH
-//////////////////////////////////////////////////
+//   _                     
+//  /_\  _ _ _ _ __ _ _  _ 
+// / _ \| '_| '_/ _` | || |
+///_/ \_\_| |_| \__,_|\_, |
+//                    |__/ 
+//
 
 Array.prototype.foreach = function( callback ) {
   for( var k=0; k<this .length; k++ ) {
@@ -25,21 +28,26 @@ Array.prototype.clear = function() {
   }
 };
 
-//////////////////////////////////////////////////
-// DUMP
-//////////////////////////////////////////////////
+// ___                  
+//|   \ _  _ _ __  _ __ 
+//| |) | || | '  \| '_ \
+//|___/ \_,_|_|_|_| .__/
+//                |_|   
 
-/* Dump Values to String Output
-*/
 function __dump(value) {
   if (value === Object(value)) return "[" + typeof value + "]";
   if (typeof value == "string") return "\"" + value + "\"";
   return "" + value;
 }
 
+// ___       __ _          
+//|   \ ___ / _(_)_ _  ___ 
+//| |) / -_)  _| | ' \/ -_)
+//|___/\___|_| |_|_||_\___|
 
 function __define(name, property, target) {
   Object.defineProperty(target, name, {
-    get: function () { return property; }
+    get: function () { return property; },
+    enumerable: true
   });
-
+}
