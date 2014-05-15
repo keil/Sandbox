@@ -76,24 +76,6 @@ function Sandbox(params) {
     return (param in (params===undefined ? {} : params)) ? params[param] : value;
   };
 
-  // _    _ 
-  //(_)__| |
-  //| / _` |
-  //|_\__,_|
-
- // var id = Math.random()*10000; // Sandbox.prototype.makeID();
- // __define("idx", id, this);
-
-  // _       ___ _       _           
-  //| |_ ___/ __| |_ _ _(_)_ _  __ _ 
-  //|  _/ _ \__ \  _| '_| | ' \/ _` |
-  // \__\___/___/\__|_| |_|_||_\__, |
-  //                           |___/ 
-
- // __define("toString", (function() {
- //   return "[[Sandbox#" + id + "]]";
- // }), this);
-
   // _           
   //| |___  __ _ 
   //| / _ \/ _` |
@@ -584,107 +566,35 @@ function Sandbox(params) {
 //\__ \/ _` | ' \/ _` | '_ \/ _ \ \ /  | || |) |
 //|___/\__,_|_||_\__,_|_.__/\___/_\_\ |___|___/ 
 
-Object.defineProperty(Sandbox.prototype, "idX", {
+Object.defineProperty(Sandbox.prototype, "id", {
   get: (function() {
     var str = "SBX";
     var i = 0;
-    return function() {
+
+    function makeID() {
       i = i+1;
       return (str+(padding_left(String(i), "0", 3)));
     }
-  })(),
-  enumerable: false
-});
 
-// make this to a getter
-/*(function() {
-    var id = 0;
-
-    function generateId() { return id++; };
-
-    Object.prototype.uid = function() {
-        var newId = generateId();
-
-        this.uid = function() { return newId; };
-
-        return newId;
-    };
-})();
-*/
-
-
-Object.defineProperty(Sandbox.prototype, "id", {
-  get: (function() {
-  var id = 0;
-
-    function generateId() { return id++; };
-  
-
-  
     return function() {
-      var newId = generateId();
+      var id = makeID();
 
       Object.defineProperty(this, "id", {
-        get: function() { return newId; }
-      })
-      //this.id = newId;
-      return newId;
-    }
-  
-  
-  })()
-  });
+        get: function() { return id; }});
 
-/*
- 
-Object.defineProperty(Sandbox.prototype, "id", {
-  get: function() { return this.uid();
-  }});
-
- */
-
-
-(function() {
-    var id = 0;
-
-    function generateId() { return id++; };
-
-    idfun = function() {
-        var newId = generateId();
-        this.id = function() { return newId; };
-        return newId;
+      return id;
     };
-
-    Object.defineProperty(this, "id", {
-      get: function() { return (function() {
-        var newId = generateId();
-
-        this.id = function() { return newId; };
-
-        return newId;
-    })();
-     }
-});
-
-
-
-});
-
-
-(function() {
-  var str = "SBX";
-  var i = 0;
-  function makeID() {
-    i = i+1;
-    return (str+(padding_left(String(i), "0", 3)));
-  }
-
-Object.defineProperty(Sandbox.prototype, "idXX", {
-  get: (function() {
-    var id = makeID();
-    return function() {
-      return id; 
-    }
   })()
 });
-})();
+
+// _       ___ _       _           
+//| |_ ___/ __| |_ _ _(_)_ _  __ _ 
+//|  _/ _ \__ \  _| '_| | ' \/ _` |
+// \__\___/___/\__|_| |_|_||_\__, |
+//                           |___/ 
+
+Object.defineProperty(Sandbox.prototype, "toString", {
+  get: function() {
+    return function() { return "[[Sandbox#" + this.id + "]]"; };
+  }
+});
