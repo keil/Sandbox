@@ -12,11 +12,54 @@
  * Author Matthias Keil
  * http://www.informatik.uni-freiburg.de/~keilr/
  */
+
+load("src/misc.js");
+
+
+
+
+
 load("src/shell.js");
 load("src/sandbox.js");
 
+
+
+
+//(new Out()).id;
+
+var sbx = new Sandbox();
+sbx.bind();
+sbx.bind();
+print("###1" + sbx.id);
+print(sbx);
+
+var sbx2 = new Sandbox({});
+sbx2.bind();
+sbx2.bind();
+print("###2" + sbx2.id);
+print(sbx2);
+
+
+
+
+
 load('test/testcase.js');
 load('test/test.js');
+
+var a = 1;
+function f(b, c, d) {
+  print("----");
+  print(this.a);
+  print(b);
+  print(c);
+  print(d);
+}
+
+f(4711,1);
+
+g = f.bind({a:2}, 1).bind(null, 1).bind(null, 1);
+g(4711, 1);
+
 
 /**
 var x = 0;
