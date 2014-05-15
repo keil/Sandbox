@@ -597,7 +597,7 @@ Object.defineProperty(Sandbox.prototype, "idX", {
 });
 
 // make this to a getter
-(function() {
+/*(function() {
     var id = 0;
 
     function generateId() { return id++; };
@@ -610,10 +610,38 @@ Object.defineProperty(Sandbox.prototype, "idX", {
         return newId;
     };
 })();
+*/
 
+
+Object.defineProperty(Sandbox.prototype, "id", {
+  get: (function() {
+  var id = 0;
+
+    function generateId() { return id++; };
+  
+
+  
+    return function() {
+      var newId = generateId();
+
+      Object.defineProperty(this, "id", {
+        get: function() { return newId; }
+      })
+      //this.id = newId;
+      return newId;
+    }
+  
+  
+  })()
+  });
+
+/*
+ 
 Object.defineProperty(Sandbox.prototype, "id", {
   get: function() { return this.uid();
   }});
+
+ */
 
 
 (function() {
