@@ -1,5 +1,5 @@
 /*
- * TreatJS: Higher-Order Contracts for JavaScript 
+ * TreatJS: Sandbox 
  * http://proglang.informatik.uni-freiburg.de/treatjs/
  *
  * Copyright (c) 2014, Proglang, University of Freiburg.
