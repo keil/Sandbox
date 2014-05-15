@@ -34,4 +34,6 @@ function Testcase(func, fixture, name) {
   this.run = run; 
 }
 
-load('test/object.hasown.js');
+
+
+load('test/membrane/object.hasown.js');

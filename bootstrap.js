@@ -15,6 +15,8 @@
 load("src/shell.js");
 load("src/sandbox.js");
 
+
+/**
 var x = 0;
 var y = 0;
 var z = 0;
@@ -66,7 +68,7 @@ var b = new SandboxEnvironment(this);
 
 //f();
 //g();
-
+**/
 /*
 
 ff = a.bind(f);
@@ -91,7 +93,7 @@ outb("b");
 //gg = b.bind(g);
 //gg();
 
-
+/**
 function Testcase(func, fixture, name) {
 
   function run() {
@@ -168,7 +170,7 @@ var X = new Testcase(test, global, "This is a Test ... ");
 X.run();
 
 
-
+*/
 
 load('test/testcase.js');
 
