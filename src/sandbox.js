@@ -98,7 +98,7 @@ function Sandbox(params) {
    */ 
   function logc(cmd, arg) {
     if(__verbose__) {
-      __out__.membrane("$."+cmd+"("+((arg!==undefined) ? arg : "")+")", id);
+      __out__.membrane("$."+padding_right(cmd+" ", ".", 30)+((arg!==undefined) ? " "+arg : ""), id);
     }
   }
 
