@@ -76,18 +76,38 @@ function Sandbox(params) {
     return (param in (params===undefined ? {} : params)) ? params[param] : value;
   };
 
+  // _    _ 
+  //(_)__| |
+  //| / _` |
+  //|_\__,_|
+
+ // var id = Math.random()*10000; // Sandbox.prototype.makeID();
+ // __define("idx", id, this);
+
+  // _       ___ _       _           
+  //| |_ ___/ __| |_ _ _(_)_ _  __ _ 
+  //|  _/ _ \__ \  _| '_| | ' \/ _` |
+  // \__\___/___/\__|_| |_|_||_\__, |
+  //                           |___/ 
+
+ // __define("toString", (function() {
+ //   return "[[Sandbox#" + id + "]]";
+ // }), this);
+
   // _           
   //| |___  __ _ 
   //| / _ \/ _` |
   //|_\___/\__, |
   //       |___/ 
 
+  var id = this;
+
   /** log(msg)
    * @param msg String message
    */ 
   function log(msg) {
     if(__verbose__) {
-      __out__.membrane(msg);
+      __out__.membrane(msg, id);
     }
   }
 
@@ -96,7 +116,7 @@ function Sandbox(params) {
    */ 
   function logc(cmd, arg) {
     if(__verbose__) {
-      __out__.membrane("$."+cmd+"("+((arg!==undefined) ? arg : "")+")"+" @"+this.id+"");
+      __out__.membrane("$."+cmd+"("+((arg!==undefined) ? arg : "")+")", id);
     }
   }
 
@@ -326,7 +346,7 @@ function Sandbox(params) {
     };
     this.get = function(target, name, receiver) {
       logc("get", name);
-
+      // TODO, test
       return wrap(doGet(target, name), global);
     };
     this.set = function(target, name, value, receiver) {
@@ -401,7 +421,7 @@ function Sandbox(params) {
 
     if(!(fun instanceof Function))
       throw new TypeError("fun");
-    if(!(enf instanceof Object))
+    if(!(env instanceof Object))
       throw new TypeError("env");
 
     // Decompile ?
@@ -435,7 +455,7 @@ function Sandbox(params) {
     // sandboxed function
     var sbxed = decompile(fun, wrap(globalArg, globalArg));
     // apply constructor function
-    var val = sbxed.apply(wrap(thisArgs, globalArg), wrap(argsArray, globalArg));
+    var val = sbxed.apply(wrap(thisArg, globalArg), wrap(argsArray, globalArg));
     // return val
     return val;
 
@@ -463,7 +483,7 @@ function Sandbox(params) {
     // new this reference
     var thisArg = Object.create(secureFun.prototype);
     // apply function
-    var val = sbxed.apply(wrap(thisArgs, globalArg), wrap(argsArray, globalArg));
+    var val = sbxed.apply(wrap(thisArg, globalArg), wrap(argsArray, globalArg));
     // return thisArg | val
     return (val instanceof Object) ? val : thisArg;
 
@@ -492,7 +512,7 @@ function Sandbox(params) {
     // sandboxed function
     var sbxed = decompile(fun, wrap(globalArg, globalArg));
     // bind thisArg
-    var bound = sbxed.bind(wrap(thisArgs, globalArg));
+    var bound = sbxed.bind(wrap(thisArg, globalArg));
     // bind arguments
     for(var arg in argsArray) {
       bound = bound.bind(null, arg);
@@ -564,7 +584,7 @@ function Sandbox(params) {
 //\__ \/ _` | ' \/ _` | '_ \/ _ \ \ /  | || |) |
 //|___/\__,_|_||_\__,_|_.__/\___/_\_\ |___|___/ 
 
-Object.defineProperty(Sandbox.prototype, "id", {
+Object.defineProperty(Sandbox.prototype, "idX", {
   get: (function() {
     var str = "SBX";
     var i = 0;
@@ -576,12 +596,67 @@ Object.defineProperty(Sandbox.prototype, "id", {
   enumerable: false
 });
 
-// _       ___ _       _           
-//| |_ ___/ __| |_ _ _(_)_ _  __ _ 
-//|  _/ _ \__ \  _| '_| | ' \/ _` |
-// \__\___/___/\__|_| |_|_||_\__, |
-//                           |___/ 
+// make this to a getter
+(function() {
+    var id = 0;
 
-Sandbox.prototype.toString = function() {
-  return "[[Sandbox#" + this.id + "]]";
-}
+    function generateId() { return id++; };
+
+    Object.prototype.uid = function() {
+        var newId = generateId();
+
+        this.uid = function() { return newId; };
+
+        return newId;
+    };
+})();
+
+Object.defineProperty(Sandbox.prototype, "id", {
+  get: function() { return this.uid();
+  }});
+
+
+(function() {
+    var id = 0;
+
+    function generateId() { return id++; };
+
+    idfun = function() {
+        var newId = generateId();
+        this.id = function() { return newId; };
+        return newId;
+    };
+
+    Object.defineProperty(this, "id", {
+      get: function() { return (function() {
+        var newId = generateId();
+
+        this.id = function() { return newId; };
+
+        return newId;
+    })();
+     }
+});
+
+
+
+});
+
+
+(function() {
+  var str = "SBX";
+  var i = 0;
+  function makeID() {
+    i = i+1;
+    return (str+(padding_left(String(i), "0", 3)));
+  }
+
+Object.defineProperty(Sandbox.prototype, "idXX", {
+  get: (function() {
+    var id = makeID();
+    return function() {
+      return id; 
+    }
+  })()
+});
+})();

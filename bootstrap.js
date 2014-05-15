@@ -21,9 +21,11 @@ load("src/shell.js");
 load("src/sandbox.js");
 
 
-//load('test/testcase.js');
-//load('test/test.js');
+load('test/testcase.js');
+load('test/test.js');
 
+
+//quit();
 
 
 /*
@@ -56,9 +58,14 @@ load("src/sandbox.js");
 //(new Out()).id;
 
 var sbx = new Sandbox();
+sbx.id;
 //sbx.bind();
 //sbx.bind();
 print("###1" + sbx.id);
+print("###1" + sbx.id);
+print("###1" + sbx.id);
+print(sbx);
+print(sbx);
 print(sbx);
 
 var sbx2 = new Sandbox({});

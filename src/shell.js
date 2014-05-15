@@ -63,8 +63,9 @@ function ShellOut() {
   //| '  \/ -_) '  \| '_ \ '_/ _` | ' \/ -_)
   //|_|_|_\___|_|_|_|_.__/_| \__,_|_||_\___|
 
-  this.membrane = function(msg) {
-    out(head("[Membrane]") + msg);
+  this.membrane = function(msg, sbx) {
+    var id = (sbx!==undefined) ? "@" + sbx.id : "";
+    out(head("[Membrane"+id+"]") + " " +msg);
     blank();
   };
 
@@ -73,8 +74,9 @@ function ShellOut() {
   //|  _| '_/ _` | ' \(_-</ _` / _|  _| / _ \ ' \(_-<
   // \__|_| \__,_|_||_/__/\__,_\__|\__|_\___/_||_/__/
 
-  this.transactions = function(msg) {
-    out(head("[Transaction]") + msg);
+  this.transactions = function(msg, sbx) {
+    var id = (sbx!==undefined) ? "@" + sbx.id : "";
+    out(head("[Transaction"+id+"]") + " " + msg);
     blank();
   };
 }

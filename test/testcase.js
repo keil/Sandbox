@@ -15,12 +15,20 @@
 
 function Testcase(fun, globalArg, thisArg, argsArray, name) {
 
+  var params = {
+    verbose: true,
+    out: new ShellOut()
+  }
+
   function run() {
     // TODO: rename SandboxEnvironment to Sandbox
-    var sbx = new SandboxEnvironment(globalArg);
+    var sbx = new Sandbox(params);
 
-    var outcomeA = sbx.eval(fun, globalArg, thisArg, argsArray)
-      var outcomeB = fun.apply(thisArg, argsArray);
+    print("@@@@ " + sbx.toString());
+
+
+    var outcomeA = sbx.apply(fun, globalArg, thisArg, argsArray);
+    var outcomeB = fun.apply(thisArg, argsArray);
 
     var result = (outcomeA===outcomeB);
 

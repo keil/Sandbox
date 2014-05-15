@@ -19,6 +19,6 @@
 function Out() {
   if(!(this instanceof Out)) return new Out();
 
-  this.membrane = function(msg) {};
-  this.transactions = function(msg) {};
+  this.membrane = function(msg, sbx) {};
+  this.transactions = function(msg, sbx) {};
 }
