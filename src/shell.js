@@ -44,7 +44,7 @@
   // core api
   var core = ['core/treat.violation.js','core/treat.sandbox.js'];
   // convenience api
-//  var convenience = ['treat.convenience.js'];
+  //  var convenience = ['treat.convenience.js'];
 
   function loadSource(files, base) {
     if(load) for(var i=0; i<files.length; i++) {

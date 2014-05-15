@@ -162,9 +162,9 @@ function Sandbox(params) {
   /** logc(msg)
    * @param msg String message
    */ 
-  function logc(command) {
+  function logc(command, arg) {
     if(verbose) {
-      out.membrane("$."+command+" (@"+this.id+")");
+      out.membrane("$."+command+"("+((arg!==undefined) ? arg : "")+")"+" @"+this.id+"");
     }
   }
 
@@ -202,7 +202,7 @@ function Sandbox(params) {
    * @return JavaScript Proxy 
    */
   function wrap(target, global) { 
-    logc("wrap(" + target + ")");
+    logc("wrap", target);
 
     // If target is a primitive value, then return target
     if (target !== Object(target)) {
@@ -262,14 +262,14 @@ function Sandbox(params) {
       }
     }
 
-//  ___                     _   _             
-// / _ \ _ __  ___ _ _ __ _| |_(_)___ _ _  ___
-//| (_) | '_ \/ -_) '_/ _` |  _| / _ \ ' \(_-<
-// \___/| .__/\___|_| \__,_|\__|_\___/_||_/__/
-//      |_|                                   
+    //  ___                     _   _             
+    // / _ \ _ __  ___ _ _ __ _| |_(_)___ _ _  ___
+    //| (_) | '_ \/ -_) '_/ _` |  _| / _ \ ' \(_-<
+    // \___/| .__/\___|_| \__,_|\__|_\___/_||_/__/
+    //      |_|                                   
 
     function doHas(target, name) {
-// TODO, not correct because of prototype values
+      // TODO, not correct because of prototype values
       return (affected(name)) ? (name in scope) : (name in target);
     }
 
@@ -297,18 +297,18 @@ function Sandbox(params) {
 
 
 
-// Handler Traps
+    // Handler Traps
 
-  //  function()
+    //  function()
 
-// _____                 
-//|_   _| _ __ _ _ __ ___
-//  | || '_/ _` | '_ (_-<
-//  |_||_| \__,_| .__/__/
-//              |_|      
+    // _____                 
+    //|_   _| _ __ _ _ __ ___
+    //  | || '_/ _` | '_ (_-<
+    //  |_||_| \__,_| .__/__/
+    //              |_|      
 
     this.getOwnPropertyDescriptor = function(target, name) {
-      logc("getOwnPropertyDescriptor(" + name + ")");
+      logc("getOwnPropertyDescriptor", name);
 
       // TODO switch target
       var desc = Object.getOwnPropertyDescriptor(target, name);
@@ -316,23 +316,23 @@ function Sandbox(params) {
       return desc;
     };
     this.getOwnPropertyNames = function(target) {
-      logc("getOwnPropertyNames(" + name + ")");
+      logc("getOwnPropertyNames", name);
 
       // TODO merge property names
       return Object.getOwnPropertyNames(target);
     };
     this.getPrototypeOf = function(target) {
-      logc("getPrototypeOf()");
+      logc("getPrototypeOf");
 
       return Object.getPrototypeOf(target)
     };
     this.defineProperty = function(target, name, desc) {
-      logc("defineProperty(" + name + ")");
+      logc("defineProperty", name);
 
       return Object.defineProperty(scope, name, desc);
     };
     this.deleteProperty = function(target, name) {
-      logc("deleteProperty(" + name + ")");
+      logc("deleteProperty", name);
 
       return doDelete(target, name);
 
@@ -340,37 +340,37 @@ function Sandbox(params) {
       //return delete target[name];
     };
     this.freeze = function(target) {
-      logc("freeze()");
+      logc("freeze");
 
       return Object.freeze(target);
     };
     this.seal = function(target) {
-      logc("seal()");
+      logc("seal");
 
       return Object.seal(target);
     };
     this.preventExtensions = function(target) {
-      logc("preventExtensions()");
+      logc("preventExtensions");
 
       return Object.preventExtensions(target);
     };
     this.isFrozen = function(target) {
-      logc("isFrozen()");
+      logc("isFrozen");
 
       return Object.isFrozen(target);
     };
     this.isSealed = function(target) {
-      logc("isSealed()");
+      logc("isSealed");
 
       return Object.isSealed(target);
     };
     this.isExtensible = function(target) {
-      logc("isExtensible()");
+      logc("isExtensible");
 
       return Object.isExtensible(target);
     };
     this.has = function(target, name) {
-      logc("has(" + name + ")");
+      logc("has", name);
 
       return doHas(target, name);
 
@@ -379,27 +379,27 @@ function Sandbox(params) {
       //else return (name in target);
     };
     this.hasOwn = function(target, name) {
-      logc("hasOwn(" + name + ")");
+      logc("hasOwn", name);
 
       // TODO switch target
       if(!(name in target)) violation("Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber);
       else return ({}).hasOwnProperty.call(target, name); 
     };
     this.get = function(target, name, receiver) {
-      logc("get(" + name + ")");
+      logc("get", name);
 
-     return wrap(doGet(target, name));
+      return wrap(doGet(target, name));
     };
     this.set = function(target, name, value, receiver) {
-      logc("set(" + name + ")");
-     
+      logc("set", name);
+
       return doSet(target, name, value);
 
       // XTODO, test if property is writable
       //return (scope[name]=value);
     };
     this.enumerate = function(target) {
-      logc("enumerate()");
+      logc("enumerate");
 
       // TODO merge property names
       var result = [];
@@ -409,7 +409,7 @@ function Sandbox(params) {
       return result;
     };
     this.iterate = function(target) {
-      logc("iterate()");
+      logc("iterate");
 
       // TODO merge property names
       var result = [];
@@ -420,19 +420,19 @@ function Sandbox(params) {
     };
 
     this.keys = function(target) {
-      logc("keys()");
+      logc("keys");
 
       // TODO merge property names
       return Object.keys(target);
     };
     this.apply = function(target, thisArg, argsArray) {
-      logc("apply()");
+      logc("apply");
 
       // TODO implement apply
       return evalFunction(target, global, thisArg, argsArray);
     };
     this.construct = function(target, argsArray) {
-      logc("construct()");
+      logc("construct");
 
       // TODO implement construct
       return evalNew(target, global, this, argsArray);
