@@ -1,5 +1,5 @@
 /*
- * TreatJS: Higher-Order Contracts for JavaScript 
+ * TreatJS: Sandbox 
  * http://proglang.informatik.uni-freiburg.de/treatjs/
  *
  * Copyright (c) 2014, Proglang, University of Freiburg.
@@ -13,46 +13,12 @@
  * http://www.informatik.uni-freiburg.de/~keilr/
  */
 
-function TreatJSOut() {
-  if(!(this instanceof TreatJSOut)) return new TreatJSOut();
+/** Out
+ * Sandbox Logging. 
+ */
+function Out() {
+  if(!(this instanceof Out)) return new Out();
 
-  /** log(msg)
-   * @param msg String message
-   */ 
-  this.logAssert = function(msg, target) {
-  }
-
-  /** log(msg)
-   * @param msg String message
-   */ 
-  this.logSandbox = function(msg, target) {
-  }
+  this.membrane = function(msg) {};
+  this.transactions = function(msg) {};
 }
-
-
-function TreatJSShellOut(sysout) {
-  if(!(this instanceof TreatJSShellOut)) return new TreatJSShellOut(sysout);
-
-  /** log(msg)
-   * @param msg String message
-   */ 
-  this.assert = function(msg, target) {
-    if(_.Config.Verbose.assert) {
-      __out(padding_right(msg + " ", ".", 30));
-      __blank();
-      __out(((target!=undefined)?" "+target:""));
-      __blank();
-    }
-  }
-
-  /** log(msg)
-   * @param msg String message
-   */ 
-  this.sandbox = function(msg, target) {
-    if(_.Config.Verbose.sandbox) {
-      __out(padding_right(msg + " ", ".", 30) + ((target!=undefined)?" "+target:""));
-      __blank();
-    }
-  }
-}
-TreatJSShellOut.prototype = new TreatJSOut()

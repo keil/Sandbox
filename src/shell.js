@@ -1,5 +1,5 @@
 /*
- * TreatJS: Higher-Order Contracts for JavaScript 
+ * TreatJS: Sandbox 
  * http://proglang.informatik.uni-freiburg.de/treatjs/
  *
  * Copyright (c) 2014, Proglang, University of Freiburg.
@@ -12,75 +12,70 @@
  * Author Matthias Keil
  * http://www.informatik.uni-freiburg.de/~keilr/
  */
-(function(load, print) {
 
-  if(print) {
-    print("  _____             _      _ ___ ");
-    print(" |_   _| _ ___ __ _| |_ _ | / __|");
-    print("   | || '_/ -_) _` |  _| || \\__ \\");
-    print("   |_||_| \\___\\__,_|\\__|\\__/|___/");
-    print("                                 ");
+/** ShellOut
+ * Sandbox Logging (JavaScript Shell).
+ */
+function ShellOut() {
+  if(!(this instanceof ShellOut)) return new ShellOut();
+  else Out.call(this);
 
-    print(" * TreatJS: Higher-Order Contracts for JavaScript");
-    print(" * http://proglang.informatik.uni-freiburg.de/treatjs/");
-    print("");
-    print(" * Copyright (c) 2014, Proglang, University of Freiburg.");
-    print(" * http://proglang.informatik.uni-freiburg.de/");
-    print(" * All rights reserved.");
-    print("");
-    print(" * Author Matthias Keil");
-    print(" * http://www.informatik.uni-freiburg.de/~keilr/");
-    print("");
+  /** Padding Information
+  */
+  var idWidth = 30;
+  var fstWidth = 100;
+  var sndWidth = 20;
+  var seperator = ".";
+
+  /** Standard Output (Head + Message)
+  */
+  function out(string) {
+    putstr(padding_right(string + " ", seperator, fstWidth));
   }
 
-  // ___ ___ _  _ _ _ __ ___ 
-  //(_-</ _ \ || | '_/ _/ -_)
-  ///__/\___/\_,_|_| \__\___|
-
-  // libraries
-  var lib = ['lib_padding.js'];
-  // base source files
-  var base = ['out.js','debugger.js','treat.js','treat.system.js','treat.base.js','treat.config.js'];
-  // core api
-  var core = ['core/treat.violation.js','core/treat.sandbox.js'];
-  // convenience api
-  //  var convenience = ['treat.convenience.js'];
-
-  function loadSource(files, base) {
-    if(load) for(var i=0; i<files.length; i++) {
-      if(print) print(" * load: " + base + files[i]);
-      load(base + files[i]);
-    }
+  /** Sub-Standard Output (Message)
+  */
+  function subout(string) {
+    putstr(padding_right("... " + string + " ", seperator, fstWidth));
   }
 
-  loadSource(lib, 'lib/');
-  loadSource(base, 'src/');
-  loadSource(core, 'src/');
-  //loadSource(convenience, 'src/');
+  /** Blank Output (End Of Line)
+  */
+  function blank() {
+    putstr(padding_left(seperator, seperator, sndWidth));
+    putstr("\n");
+  }
 
-  //              __ _                    _   _          
-  // __ ___ _ _  / _(_)__ _ _  _ _ _ __ _| |_(_)___ _ _  
-  /// _/ _ \ ' \|  _| / _` | || | '_/ _` |  _| / _ \ ' \ 
-  //\__\___/_||_|_| |_\__, |\_,_|_| \__,_|\__|_\___/_||_|
-  //                  |___/                              
+  /** Notice Output (Sub-Output including Blank)
+  */
+  function notice(string) {
+    putstr(padding_right("... " + string + " ", seperator, fstWidth+sndWidth));
+    putstr("\n");
+  }
 
-  // set configuration
-  _.configure({
-    assertion:true,
-    membrabe:true,
-    decompile:true
-  });
+  /** Head Output
+  */
+  function head(id) {
+    return padding_right(id + " ", ".", idWidth);
+  }
+  //                 _                      
+  // _ __  ___ _ __ | |__ _ _ __ _ _ _  ___ 
+  //| '  \/ -_) '  \| '_ \ '_/ _` | ' \/ -_)
+  //|_|_|_\___|_|_|_|_.__/_| \__,_|_||_\___|
 
-  // set verbose
-  _.verbose({
-    assert:false,
-    sandbox:false
-  });
+  this.membrane = function(msg) {
+    out(head("[Membrane]") + msg);
+    blank();
+  };
 
-  // TODO
-  // var out = new TreatJSShellOut(print);
-  // _.out(undefined);
+  // _                             _   _             
+  //| |_ _ _ __ _ _ _  ___ __ _ __| |_(_)___ _ _  ___
+  //|  _| '_/ _` | ' \(_-</ _` / _|  _| / _ \ ' \(_-<
+  // \__|_| \__,_|_||_/__/\__,_\__|\__|_\___/_||_/__/
 
-
-
-})(load, print);
+  this.transactions = function(msg) {
+    out(head("[Transaction]") + msg);
+    blank();
+  };
+}
+ShellOut.prototype = new Out();
