@@ -173,7 +173,7 @@ outb("b");
 //
 //
 
-
+/*
 print(":'(");
 
 Object.defineProperty(Object.prototype, "id", {
@@ -212,4 +212,4 @@ print(a.id);
 print(oo.id);
 
 
-
+*/
