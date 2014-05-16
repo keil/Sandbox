@@ -169,3 +169,47 @@ outb("b");
 
 
 //quit();
+//
+//
+//
+
+
+print(":'(");
+
+Object.defineProperty(Object.prototype, "id", {
+  get: (function() {
+    var i = 0;
+
+    function makeID() {
+      i = i+1;
+      return (new String(i));
+    }
+
+    return function() {
+      var id = makeID();
+
+      Object.defineProperty(this, "id", {
+        get: function() { return id; }});
+
+      return id;
+    };
+  })()
+});
+
+var o = new Object();
+print(o.id);
+print(o.id);
+print(o.id);
+print(o.id);
+var a = new Array();
+print(o.id);
+print(a.id);
+print(a.id);
+var oo = new Object();
+print(oo.id);
+print(o.id);
+print(a.id);
+print(oo.id);
+
+
+
