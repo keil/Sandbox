@@ -15,31 +15,30 @@
 
 function Testcase(fun, globalArg, thisArg, argsArray, name) {
 
+  var out = new ShellOut();
+
   var params = {
     verbose: true,
-    out: new ShellOut()
+    out: out
   }
 
   function run() {
-    // TODO: rename SandboxEnvironment to Sandbox
     var sbx = new Sandbox(params);
-
-    print("@@@@ " + sbx.toString());
-
 
     var outcomeA = sbx.apply(fun, globalArg, thisArg, argsArray);
     var outcomeB = fun.apply(thisArg, argsArray);
 
     var result = (outcomeA===outcomeB);
 
-    // TODO decoupling of print
-    print("# " + name + " .. " + result);
-    // TODO output only if false
-    if(true || !result) {
-      print(" .. Sandbox: " + outcomeA);
-      print(" .. Normal:  " + outcomeB);
-    } 
-  }
+    var id = (sbx!==undefined) ? "@" + sbx.id : "";
+    out.out(out.head("Run TestCase # "+name) + " " +id);
+    if(result) out.ok();
+    else out.fail();
 
+    out.notice("SANDBOX : " + outcomeA);
+    out.notice("BASELINE: " + outcomeB);
+
+    if(!result) quit();
+  }
   this.run = run; 
 }

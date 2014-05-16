@@ -252,7 +252,7 @@ function SandboxEnvironment(global) {
 
   /** evalInSandbox(fun[, globalArg, thisArg, argsArray])
    *
-   * Evaluates the given function in a sandbox. 
+   *  
    *
    * @param fun The function object.
    * @param globalArg The secure global object.

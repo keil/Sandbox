@@ -21,3 +21,28 @@
 //load("test/membrane/object.create.js");
 //load("test/membrane/object.defineproperty.js");
 load("test/membrane/object.in.js");
+
+//svn: warning: 'object.in.js' is already under version control
+//svn: warning: 'object.hasown.js' is already under version control
+
+
+load("test/membrane/Object.apply.js");
+load("test/membrane/Object.construct.js");
+load("test/membrane/Object.defineProperty.js");
+load("test/membrane/Object.deleteProperty.js");
+load("test/membrane/Object.enumerate.js");
+load("test/membrane/Object.freeze.js");
+load("test/membrane/Object.get.js");
+load("test/membrane/Object.getOwnPropertyDescriptor.js");
+load("test/membrane/Object.getOwnPropertyNames.js");
+load("test/membrane/Object.getPrototypeOf.js");
+load("test/membrane/Object.has.js");
+load("test/membrane/Object.hasOwn.js");
+load("test/membrane/Object.isExtensible.js");
+load("test/membrane/Object.isFrozen.js");
+load("test/membrane/Object.isSealed.js");
+load("test/membrane/Object.iterate.js");
+load("test/membrane/Object.keys.js");
+load("test/membrane/Object.preventExtensions.js");
+load("test/membrane/Object.seal.js");
+load("test/membrane/Object.set.js");

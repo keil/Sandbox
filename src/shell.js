@@ -32,12 +32,14 @@ function ShellOut() {
   function out(string) {
     putstr(padding_right(string + " ", seperator, fstWidth));
   }
+  __define("out", out, this);
 
   /** Sub-Standard Output (Message)
   */
   function subout(string) {
     putstr(padding_right("... " + string + " ", seperator, fstWidth));
   }
+  __define("subout", subout, this);
 
   /** Blank Output (End Of Line)
   */
@@ -45,6 +47,31 @@ function ShellOut() {
     putstr(padding_left(seperator, seperator, sndWidth));
     putstr("\n");
   }
+  __define("blank", blank, this);
+
+  /** OK Output (End Of Line)
+  */
+  function ok() {
+    putstr(padding_left(" OK", seperator, sndWidth));
+    putstr("\n");
+  }
+  __define("ok", ok, this);
+
+  /** DONE Output (End Of Line)
+  */
+  function done() {
+    putstr(padding_left(" DONE", seperator, sndWidth));
+    putstr("\n");
+  }
+  __define("done", done, this);
+
+  /** FAILED Output (End Of Line)
+  */
+  function fail() {
+    putstr(padding_left(" FAILED", seperator, sndWidth));
+    putstr("\n");
+  }
+  __define("fail", fail, this);
 
   /** Notice Output (Sub-Output including Blank)
   */
@@ -52,12 +79,15 @@ function ShellOut() {
     putstr(padding_right("... " + string + " ", seperator, fstWidth+sndWidth));
     putstr("\n");
   }
+  __define("notice", notice, this);
 
   /** Head Output
   */
   function head(id) {
     return padding_right(id + " ", ".", idWidth);
   }
+  __define("head", head, this);
+
   //                 _                      
   // _ __  ___ _ __ | |__ _ _ __ _ _ _  ___ 
   //| '  \/ -_) '  \| '_ \ '_/ _` | ' \/ -_)
