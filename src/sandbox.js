@@ -116,8 +116,8 @@ function Sandbox(params) {
    * @return true, if fun is a native function, false otherwise
    */
   function isNative(fun) {
-    if(!(fuc instanceof Function)) return false;
-    else return (FunctionPrototypeToString.apply(func).indexOf('[native code]') > -1);
+    if(!(fun instanceof Function)) return false;
+    else return (FunctionPrototypeToString.apply(fun).indexOf('[native code]') > -1);
   }
 
   //__ __ ___ _ __ _ _ __ 
@@ -138,15 +138,15 @@ function Sandbox(params) {
   function wrap(target, global) { 
     logc("wrap", target);
 
-    if(target===undefined)
-      throw new ReferenceError("Target is undefined.");
-    if(global===undefined)
-      throw new ReferenceError("Global is undefined.");
-
     // If target is a primitive value, then return target
     if (target !== Object(target)) {
       return target;
     }
+
+    if(target===undefined)
+      throw new ReferenceError("Target is undefined.");
+    if(global===undefined)
+      throw new ReferenceError("Global is undefined."); 
 
     // Membrane ? 
     if(!(__membrane__))
@@ -257,7 +257,7 @@ function Sandbox(params) {
       return desc;
     };
     this.getOwnPropertyNames = function(target) {
-      logc("getOwnPropertyNames", name);
+      logc("getOwnPropertyNames");
 
       // TODO merge property names
       return Object.getOwnPropertyNames(target);
@@ -321,10 +321,14 @@ function Sandbox(params) {
     };
     this.hasOwn = function(target, name) {
       logc("hasOwn", name);
+      
+      return ({}).hasOwnProperty.call(target, name);
+      return doHasOwn(target, name);
+
 
       // TODO switch target
-      if(!(name in target)) violation("Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber);
-      else return ({}).hasOwnProperty.call(target, name); 
+      //if(!(name in target)) violation("Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber);
+      //else return ({}).hasOwnProperty.call(target, name); 
     };
     this.get = function(target, name, receiver) {
       logc("get", name);
@@ -370,13 +374,13 @@ function Sandbox(params) {
       logc("apply");
 
       // TODO implement apply
-      return evalaluate(target, global, thisArg, argsArray);
+      return evaluate(target, global, thisArg, argsArray);
     };
     this.construct = function(target, argsArray) {
       logc("construct");
 
       // TODO implement construct
-      return construct(target, global, this, argsArray);
+      return construct(target, global, argsArray);
     };
   };
 
@@ -463,7 +467,7 @@ function Sandbox(params) {
     // sandboxed function
     var sbxed = decompile(fun, wrap(globalArg, globalArg));
     // new this reference
-    var thisArg = Object.create(secureFun.prototype);
+    var thisArg = Object.create(fun.prototype);
     // apply function
     var val = sbxed.apply(wrap(thisArg, globalArg), wrap(argsArray, globalArg));
     // return thisArg | val

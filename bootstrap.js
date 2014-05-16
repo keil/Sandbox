@@ -56,7 +56,7 @@ load('test/test.js');
 
 
 //(new Out()).id;
-
+/*
 var sbx = new Sandbox();
 sbx.id;
 //sbx.bind();
@@ -90,7 +90,7 @@ f(4711,1);
 
 g = f.bind({a:2}, 1).bind(null, 1).bind(null, 1);
 g(4711, 1);
-
+*/
 
 /**
 var x = 0;

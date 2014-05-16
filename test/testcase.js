@@ -13,32 +13,43 @@
  * http://www.informatik.uni-freiburg.de/~keilr/
  */
 
-function Testcase(fun, globalArg, thisArg, argsArray, name) {
+function Testcase(fun, globalArg, thisArg, argsArray, name, quitOnExit) {
+
+  var exit = (quitOnExit!==undefined) ? quitOnExit : false;
 
   var out = new ShellOut();
 
   var params = {
-    verbose: true,
+    verbose: false,
     out: out
   }
 
   function run() {
     var sbx = new Sandbox(params);
 
-    var outcomeA = sbx.apply(fun, globalArg, thisArg, argsArray);
-    var outcomeB = fun.apply(thisArg, argsArray);
+    try{
+      var outcomeA = sbx.apply(fun, globalArg, thisArg, argsArray);
+    } catch(e) {
+      var outcomeA = e.toString();
+    }
+
+    try{
+      var outcomeB = fun.apply(thisArg, argsArray);
+    } catch(e) {
+      var outcomeb = e.toString();
+    }
 
     var result = (outcomeA===outcomeB);
 
     var id = (sbx!==undefined) ? "@" + sbx.id : "";
-    out.out(out.head("Run TestCase # "+name) + " " +id);
+    out.out(out.head("TestCase # "+name) + " " +id);
     if(result) out.ok();
     else out.fail();
 
     out.notice("SANDBOX : " + outcomeA);
     out.notice("BASELINE: " + outcomeB);
 
-    if(!result) quit();
+    //if(exit && (!result)) quit();
   }
   this.run = run; 
 }
