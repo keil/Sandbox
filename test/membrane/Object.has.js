@@ -14,7 +14,10 @@
  */
 
 (new Testcase(function(object) {
+  object.a = "~";
+  object.x = "~";
+
   var outcome = "";
-  for(var property in object) outcome = outcome + property;
+  for(var property in object) outcome = outcome + (property in object);
   return outcome;
-}, {}, {}, [{a:4711, b:4712, c:4713}], "Object.in")).run();
+}, {}, {}, [{a:4711, b:4712, c:4713}], "Object.has")).run();
