@@ -305,12 +305,15 @@ function Sandbox(params) {
     this.seal = function(target) {
       logc("seal");
 
-      return Object.seal(target);
+      // TODO
+//      return Object.seal(target);
+       return Object.seal(scope);
+
     };
     this.preventExtensions = function(target) {
       logc("preventExtensions");
-
-      return Object.preventExtensions(target);
+//       return Object.preventExtensions(target);
+      return Object.preventExtensions(scope);
     };
     this.isFrozen = function(target) {
       logc("isFrozen");
@@ -324,6 +327,8 @@ function Sandbox(params) {
     };
     this.isExtensible = function(target) {
       logc("isExtensible");
+
+      return Object.isExtensible(scope);
 
       return Object.isExtensible(target);
     };
