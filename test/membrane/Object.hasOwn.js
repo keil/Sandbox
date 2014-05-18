@@ -18,6 +18,12 @@
   object.x = "~";
 
   var outcome = "";
-  for(var property in object) outcome = outcome + Object.prototype.hasOwnProperty.call(this, property);
+  outcome += Object.prototype.hasOwnProperty.call(object, "a");
+  outcome += Object.prototype.hasOwnProperty.call(object, "b");
+
+  outcome += Object.prototype.hasOwnProperty.call(object, "c");
+  outcome += Object.prototype.hasOwnProperty.call(object, "x");
+  outcome += Object.prototype.hasOwnProperty.call(object, "y");
+
   return outcome;
 }, {}, {}, [{a:4711, b:4712, c:4713}], "Object.hasOwn")).run();

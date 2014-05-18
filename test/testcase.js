@@ -16,11 +16,12 @@
 function Testcase(fun, globalArg, thisArg, argsArray, name, quitOnExit) {
 
   var exit = (quitOnExit!==undefined) ? quitOnExit : false;
+  exit = true;
 
   var out = new ShellOut();
 
   var params = {
-    verbose: false,
+    verbose: true,
     out: out
   }
 
@@ -49,7 +50,7 @@ function Testcase(fun, globalArg, thisArg, argsArray, name, quitOnExit) {
     out.notice("SANDBOX : " + outcomeA);
     out.notice("BASELINE: " + outcomeB);
 
-    //if(exit && (!result)) quit();
+    if(exit && (!result)) quit();
   }
   this.run = run; 
 }

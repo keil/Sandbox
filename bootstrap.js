@@ -24,6 +24,24 @@ load("src/sandbox.js");
 load('test/testcase.js');
 load('test/test.js');
 
+var o = {a:1, b:2, c:3};
+
+var h = new Proxy({}, {
+  get: function(target, name) {
+  print("#" + name);
+  return target[name];
+  }
+})
+
+var p = new Proxy(o, h);
+p.a;
+p.x=3;
+
+for(x in p) {
+print("!" + x);
+}
+
+
 
 //quit();
 

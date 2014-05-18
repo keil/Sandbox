@@ -216,6 +216,23 @@ function Sandbox(params) {
     //      |_|                                   
 
     function doHas(target, name) {
+      var keys = [];
+      
+      for(key in target) {
+        keys.add(key);
+      }
+
+      for(key in scope) {
+        keys.add(key);
+      }
+
+    var base = keys.sort();
+   // return (name in base);
+  
+      // remove deltetet properties
+
+
+
       // TODO, not correct because of prototype values
       return (affected(name)) ? (name in scope) : (name in target);
     }
@@ -312,7 +329,6 @@ function Sandbox(params) {
     };
     this.has = function(target, name) {
       logc("has", name);
-
       return doHas(target, name);
 
       // TODO switch target
@@ -321,14 +337,7 @@ function Sandbox(params) {
     };
     this.hasOwn = function(target, name) {
       logc("hasOwn", name);
-      
-      return ({}).hasOwnProperty.call(target, name);
       return doHasOwn(target, name);
-
-
-      // TODO switch target
-      //if(!(name in target)) violation("Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber);
-      //else return ({}).hasOwnProperty.call(target, name); 
     };
     this.get = function(target, name, receiver) {
       logc("get", name);
@@ -337,14 +346,13 @@ function Sandbox(params) {
     };
     this.set = function(target, name, value, receiver) {
       logc("set", name);
-
       return doSet(target, name, value);
-
-      // XTODO, test if property is writable
-      //return (scope[name]=value);
     };
     this.enumerate = function(target) {
       logc("enumerate");
+
+
+      return [];
 
       // TODO merge property names
       var result = [];
@@ -356,6 +364,8 @@ function Sandbox(params) {
     this.iterate = function(target) {
       logc("iterate");
 
+      return [];
+
       // TODO merge property names
       var result = [];
       for (var name in target) {
@@ -366,8 +376,7 @@ function Sandbox(params) {
 
     this.keys = function(target) {
       logc("keys");
-
-      // TODO merge property names
+     // TODO merge property names
       return Object.keys(target);
     };
     this.apply = function(target, thisArg, argsArray) {
