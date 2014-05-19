@@ -252,9 +252,9 @@ function Sandbox(params) {
       // TODO, not correct because target may change during execution 
       return (affected(name)) ? (name in scope) : (name in target);
     }
-
-
-    function doHasOwn(target, name) {
+    /** target, name -> boolean
+     */
+    function doHasOwn(scope, name) {
       return (affected(name)) ? Object.prototype.hasOwnProperty.call(scope, name) : Object.prototype.hasOwnProperty.call(target, name);
     }
 
@@ -357,6 +357,8 @@ function Sandbox(params) {
       logc("has", name);
       return doHas(target, name);
     };
+    /** target, name -> boolean
+     */
     this.hasOwn = function(scope, name) {
       logc("hasOwn", name);
       return doHasOwn(target, name);

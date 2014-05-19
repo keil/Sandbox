@@ -28,8 +28,8 @@
 //load("test/membrane/Object.getOwnPropertyDescriptor.js");
 //load("test/membrane/Object.getOwnPropertyNames.js");
 //load("test/membrane/Object.getPrototypeOf.js");
-//load("test/membrane/Object.has.js");
-//load("test/membrane/Object.hasOwn.js");
+////load("test/membrane/Object.has.js");
+load("test/membrane/Object.hasOwn.js");
 //load("test/membrane/Object.isExtensible.js");
 //load("test/membrane/Object.isFrozen.js");
 //load("test/membrane/Object.isSealed.js");
