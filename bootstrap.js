@@ -22,34 +22,26 @@ load("src/sandbox.js");
 
 
 load('test/testcase.js');
+load('test/metahandler.js');
 //load('test/test.js');
 
-/*
-   var target = {};
-   var handler = new Proxy({
-   get: function(target, name) { print("#"+name); return target[name]; },
-   XpreventExtensions: function(target) {
-   return 0;
-   },
-   XisExtensible: function(target) {
-   return false;
-   }
-   },{
-   get: function(target, name) { print("@"+name); return target[name]; }
-   });
-   var proxy = new Proxy(target, handler);
 
-   print(proxy.a);
-   print(proxy.a=1);
-   print(proxy.a);
+// Meta Level Funneling
+(function() {
+  var target = {};
+  var handler = new MetaHandler({});
+  var proxy = new Proxy(target, handler);
 
-   print("---");
-   print("> "+Object.freeze(proxy));
-   print("---");
-   print("> "+Object.isFrozen(proxy));
-   print("---");
-   */
+  print(proxy.a);
+  print(proxy.a=1);
+  print(proxy.a);
 
+  print("---");
+  print("> "+Object.freeze(proxy));
+  print("---");
+  print("> "+Object.isFrozen(proxy));
+  print("---");
+});
 
 
 (function() {
