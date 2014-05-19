@@ -16,6 +16,7 @@
 function Testcase(fun, globalArg, thisArg, argsArray, name, quitOnExit) {
 
   var exit = (quitOnExit!==undefined) ? quitOnExit : true;
+  exit = false;
 
   var out = new ShellOut();
 
@@ -27,18 +28,28 @@ function Testcase(fun, globalArg, thisArg, argsArray, name, quitOnExit) {
   function run() {
     var sbx = new Sandbox(params);
 
+    print("### " + Object.isExtensible(argsArray[0].c));
+
+
     try{
       var outcomeA = sbx.apply(fun, globalArg, thisArg, argsArray);
+    //  var outcomeA = "ERR";
     } catch(e) {
       var outcomeA = e.toString();
     }
 
+    print("### " + Object.isExtensible(argsArray[0].c));
+    Object.preventExtensions(argsArray[0].c);
+     print("### " + Object.isExtensible(argsArray[0]));
+
+
+
     try{
       var outcomeB = fun.apply(thisArg, argsArray);
     } catch(e) {
-      var outcomeb = e.toString();
+      var outcomeB = e.toString();
     }
-
+    
     var result = (outcomeA===outcomeB);
 
     var id = (sbx!==undefined) ? "@" + sbx.id : "";

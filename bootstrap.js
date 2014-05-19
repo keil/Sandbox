@@ -21,9 +21,26 @@ load("src/shell.js");
 load("src/sandbox.js");
 
 
+function test (arg) {
+
+  Object.preventExtensions(arg.p);
+  arg.p.x = "x";
+
+  print(Object.isExtensible(arg.p));
+  print(arg.p.x);
+}
+
+test({p:{}});
+test.apply(this, [{p:{}}]);
+//quit();
+
+
 load('test/testcase.js');
 load('test/metahandler.js');
 load('test/test.js');
+
+
+
 
 
 // Meta Level Funneling

@@ -164,6 +164,8 @@ function Sandbox(params) {
       return cache.get(target);
     } else {
       var scope = {}; // TODO, test id this is all to work with prototypes
+//      scope=target;
+//      // TODO implement meta handler
       var proxy = new Proxy(scope, new Membrane(global, target, scope));
       cache.set(target, proxy);
       return proxy;
@@ -268,7 +270,27 @@ function Sandbox(params) {
      */
     function doSet(scope, name, value) {
       touch(target, name);
-      return (scope[name]=value);
+     
+
+       return (scope[name]=value);
+
+       /*
+      print("@@ " + Object.isExtensible(scope));
+
+      if(!Object.isExtensible(scope)) return 0;
+
+      try{
+         return (scope[name]=value);
+      } catch(e) {
+        print(e);
+        return 0;
+      }
+      */
+      
+      /**if(Object.isExtensible(scope))
+        return (scope[name]=value);
+      else 
+        return 0;*/
     }
     /** target, name, propertyDescriptor -> any
      */
@@ -321,39 +343,38 @@ function Sandbox(params) {
       logc("deleteProperty", name);
       return doDelete(scope, name);
     };
+    /** target -> boolean
+     */
     this.freeze = function(scope) {
       logc("freeze");
-
-      return Object.freeze(target);
+      return Object.freeze(scope);
     };
+    /** target -> boolean
+     */
     this.seal = function(scope) {
       logc("seal");
-
-      // TODO
-      //      return Object.seal(target);
       return Object.seal(scope);
-
     };
+    /** target -> boolean
+     */
     this.preventExtensions = function(scope) {
       logc("preventExtensions");
-      //       return Object.preventExtensions(target);
       return Object.preventExtensions(scope);
     };
     this.isFrozen = function(scope) {
       logc("isFrozen");
-
+      // TODO
       return Object.isFrozen(scope);
     };
     this.isSealed = function(scope) {
       logc("isSealed");
-
+      // TODO
       return Object.isSealed(scopet);
     };
+    /** target -> boolean
+     */
     this.isExtensible = function(scope) {
       logc("isExtensible");
-
-      return Object.isExtensible(scope);
-
       return Object.isExtensible(scope);
     };
     /** target, name -> boolean

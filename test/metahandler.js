@@ -18,6 +18,7 @@ function MetaHandler(handler) {
   var metahandler = {
     get: function(target, name) {
       out.notice("call trap: " + name);
+      return target[name];
     }
   };
   return new Proxy(handler, metahandler)
