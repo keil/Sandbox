@@ -30,14 +30,107 @@ function test (arg) {
   print(arg.p.x);
 }
 
-test({p:{}});
-test.apply(this, [{p:{}}]);
+//test({p:{}});
+//test.apply(this, [{p:{}}]);
 //quit();
 
 
 load('test/testcase.js');
 load('test/metahandler.js');
-load('test/test.js');
+//load('test/test.js');
+
+var arg={};
+
+(function(object) {
+
+  function Handler(target) {
+    this.get = function(target, name) {
+      return target[name];
+    };
+    this.set = function(target, name, value) {
+      return (target[name]=value);
+    }
+    this.preventExtensions = function(target) {
+      return Object.preventExtensions(target);
+    }
+    this.isExtensible = function(target)  {
+      return Object.isExtensible(target);
+    }
+  }
+
+  var proxy = new Proxy({}, new Handler(object));
+  proxy.a = 4711;
+  Object.preventExtensions(proxy);
+  proxy.b = 4711;
+
+  print("---");
+  print("---");
+  print(Object.isExtensible(proxy));
+  print(Object.isExtensible(object));
+  print("---");
+  print(proxy.a);
+  print(proxy.b);
+  print("---");
+  print(object.a);
+  print(object.b);
+  print("---");
+  print("---");
+
+})(arg);
+
+//var arg={};
+
+(function(object) {
+
+  function Handler() {
+    this.get = function(target, name) {
+      return target[name];
+    };
+    this.set = function(target, name, value) {
+      return (target[name]=value);
+    }
+    this.preventExtensions = function(target) {
+      return Object.preventExtensions(target);
+    }
+    this.isExtensible = function(target)  {
+      return Object.isExtensible(target);
+    }
+  }
+
+  var proxy = new Proxy(object, new Handler());
+  proxy.a = 4711;
+  Object.preventExtensions(proxy);
+  proxy.b = 4711;
+
+  print("---");
+  print("---");
+  print(Object.isExtensible(proxy));
+  print(Object.isExtensible(object));
+  print("---");
+  print(proxy.a);
+  print(proxy.b);
+  print("---");
+  print(object.a);
+  print(object.b);
+  print("---");
+  print("---");
+
+})(arg);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
