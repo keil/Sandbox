@@ -270,11 +270,17 @@ function Sandbox(params) {
       touch(target, name);
       return (scope[name]=value);
     }
-
-    function doDelete(target, name) {
-      // TODO, not correct because of prototype values
-
+    /** target, name, propertyDescriptor -> any
+     */
+    function doDefineProperty(scope, name, desc) {
       touch(target, name);
+      return Object.defineProperty(scope, name, desc);
+    }
+    /** target, name -> boolean
+     */
+    function doDelete(scope, name) {
+      touch(target, name);
+      // TODO, not correct because of prototype values
       return (delete scope[name]);
     }
 
@@ -300,21 +306,20 @@ function Sandbox(params) {
     };
     this.getPrototypeOf = function(scope) {
       logc("getPrototypeOf");
-
+      // TODO
       return Object.getPrototypeOf(target)
     };
+    /** target, name, propertyDescriptor -> any
+     */
     this.defineProperty = function(scope, name, desc) {
       logc("defineProperty", name);
-
-      return Object.defineProperty(scope, name, desc);
+      return doDefineProperty(scope, name, desc);
     };
+    /** target, name -> boolean
+     */
     this.deleteProperty = function(scope, name) {
       logc("deleteProperty", name);
-
-      return doDelete(target, name);
-
-      // TODO, implement delete
-      //return delete target[name];
+      return doDelete(scope, name);
     };
     this.freeze = function(scope) {
       logc("freeze");

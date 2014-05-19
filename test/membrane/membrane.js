@@ -20,8 +20,8 @@
 
 //load("test/membrane/Object.apply.js");
 //load("test/membrane/Object.construct.js");
-//load("test/membrane/Object.defineProperty.js");
-//load("test/membrane/Object.deleteProperty.js");
+////load("test/membrane/Object.defineProperty.js");
+////load("test/membrane/Object.deleteProperty.js");
 //load("test/membrane/Object.enumerate.js");
 //load("test/membrane/Object.freeze.js");
 ////load("test/membrane/Object.get.js"); 
@@ -29,7 +29,7 @@
 //load("test/membrane/Object.getOwnPropertyNames.js");
 //load("test/membrane/Object.getPrototypeOf.js");
 ////load("test/membrane/Object.has.js");
-load("test/membrane/Object.hasOwn.js");
+////load("test/membrane/Object.hasOwn.js");
 //load("test/membrane/Object.isExtensible.js");
 //load("test/membrane/Object.isFrozen.js");
 //load("test/membrane/Object.isSealed.js");
