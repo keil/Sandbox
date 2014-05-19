@@ -15,8 +15,7 @@
 
 function Testcase(fun, globalArg, thisArg, argsArray, name, quitOnExit) {
 
-  var exit = (quitOnExit!==undefined) ? quitOnExit : false;
-  exit = true;
+  var exit = (quitOnExit!==undefined) ? quitOnExit : true;
 
   var out = new ShellOut();
 

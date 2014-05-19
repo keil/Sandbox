@@ -163,7 +163,8 @@ function Sandbox(params) {
     if(cache.has(target)) {
       return cache.get(target);
     } else {
-      var proxy = new Proxy(target, new Membrane(global));
+      var scope = {}; // TODO, test id this is all to work with prototypes
+      var proxy = new Proxy(scope, new Membrane(global, target, scope));
       cache.set(target, proxy);
       return proxy;
     }
@@ -179,30 +180,44 @@ function Sandbox(params) {
    *
    * @param global The current Global Object.
    */
-  function Membrane(global) {
+  // TODO
+  function Membrane(global, target, _scope) {
 
     if(!(global instanceof Object))
       throw new TypeError("global");
 
+    // TODO, comment
+    // TODO, make function
+    // TODO, clone target
+    for (property in target) {
+      // TODO rename _scope to scioe
+      _scope[property]=target[property];
+    }
+
     /* 
      * Write scope.
      */
-    var scope = {};
+    //    var scope = {};
+    // TODO, moved to target
+
+
+    // TODO, implement clone !
+    // without effected flag!
 
     /*
      * List of effected properties
      */
     var properties = new Set();
-
+    // TODO, comment
     function affected(property) {
       return properties.has(property);
     }
-
+    // TODO, comment
     function unaffected(property) {
       return !affected(property);
     }
-
-    function touch(target, name) {
+    // TODO, comment
+    function touch(scope, name) {
       if(unaffected(name)) {
         scope[name]=target[name];
         properties.add(name);
@@ -215,25 +230,26 @@ function Sandbox(params) {
     // \___/| .__/\___|_| \__,_|\__|_\___/_||_/__/
     //      |_|                                   
 
-    function doHas(target, name) {
-      var keys = [];
-      
-      for(key in target) {
-        keys.add(key);
-      }
+    /** target, name -> boolean
+    */
+    function doHas(scope, name) {
+      /*
+         var keys = [];
 
-      for(key in scope) {
-        keys.add(key);
-      }
+         for(key in target) {
+         keys.add(key);
+         }
 
-    var base = keys.sort();
-   // return (name in base);
-  
-      // remove deltetet properties
+         for(key in scope) {
+         keys.add(key);
+         }
 
-
+         var base = keys.sort();
+      // return (name in base);
+      */
 
       // TODO, not correct because of prototype values
+      // TODO, not correct because target may change during execution 
       return (affected(name)) ? (name in scope) : (name in target);
     }
 
@@ -242,12 +258,15 @@ function Sandbox(params) {
       return (affected(name)) ? Object.prototype.hasOwnProperty.call(scope, name) : Object.prototype.hasOwnProperty.call(target, name);
     }
 
-    function doGet(target, name) {
+    /** target, name, receiver -> any
+    */
+    function doGet(scope, name) {
       // TODO, not correct because of prototype values
       return (affected(name)) ? scope[name] : target[name];
     }
-
-    function doSet(target, name, value) {
+    /** target, name, val, receiver -> boolean
+     */
+    function doSet(scope, name, value) {
       touch(target, name);
       return (scope[name]=value);
     }
@@ -265,31 +284,31 @@ function Sandbox(params) {
     //  |_||_| \__,_| .__/__/
     //              |_|      
 
-    this.getOwnPropertyDescriptor = function(target, name) {
+    this.getOwnPropertyDescriptor = function(scope, name) {
       logc("getOwnPropertyDescriptor", name);
 
       // TODO switch target
-      var desc = Object.getOwnPropertyDescriptor(target, name);
+      var desc = Object.getOwnPropertyDescriptor(scope, name);
       if (desc !== undefined) desc.value = wrap(desc, global);
       return desc;
     };
-    this.getOwnPropertyNames = function(target) {
+    this.getOwnPropertyNames = function(scope) {
       logc("getOwnPropertyNames");
 
       // TODO merge property names
-      return Object.getOwnPropertyNames(target);
+      return Object.getOwnPropertyNames(scope);
     };
-    this.getPrototypeOf = function(target) {
+    this.getPrototypeOf = function(scope) {
       logc("getPrototypeOf");
 
       return Object.getPrototypeOf(target)
     };
-    this.defineProperty = function(target, name, desc) {
+    this.defineProperty = function(scope, name, desc) {
       logc("defineProperty", name);
 
       return Object.defineProperty(scope, name, desc);
     };
-    this.deleteProperty = function(target, name) {
+    this.deleteProperty = function(scope, name) {
       logc("deleteProperty", name);
 
       return doDelete(target, name);
@@ -297,61 +316,62 @@ function Sandbox(params) {
       // TODO, implement delete
       //return delete target[name];
     };
-    this.freeze = function(target) {
+    this.freeze = function(scope) {
       logc("freeze");
 
       return Object.freeze(target);
     };
-    this.seal = function(target) {
+    this.seal = function(scope) {
       logc("seal");
 
       // TODO
-//      return Object.seal(target);
-       return Object.seal(scope);
+      //      return Object.seal(target);
+      return Object.seal(scope);
 
     };
-    this.preventExtensions = function(target) {
+    this.preventExtensions = function(scope) {
       logc("preventExtensions");
-//       return Object.preventExtensions(target);
+      //       return Object.preventExtensions(target);
       return Object.preventExtensions(scope);
     };
-    this.isFrozen = function(target) {
+    this.isFrozen = function(scope) {
       logc("isFrozen");
 
-      return Object.isFrozen(target);
+      return Object.isFrozen(scope);
     };
-    this.isSealed = function(target) {
+    this.isSealed = function(scope) {
       logc("isSealed");
 
-      return Object.isSealed(target);
+      return Object.isSealed(scopet);
     };
-    this.isExtensible = function(target) {
+    this.isExtensible = function(scope) {
       logc("isExtensible");
 
       return Object.isExtensible(scope);
 
-      return Object.isExtensible(target);
+      return Object.isExtensible(scope);
     };
-    this.has = function(target, name) {
+    /** target, name -> boolean
+    */
+    this.has = function(scope, name) {
       logc("has", name);
       return doHas(target, name);
-
-      // TODO switch target
-      //if(!(name in target)) violation("Unauthorized Access " + name, (new Error()).fileName, (new Error()).lineNumber);
-      //else return (name in target);
     };
-    this.hasOwn = function(target, name) {
+    this.hasOwn = function(scope, name) {
       logc("hasOwn", name);
       return doHasOwn(target, name);
     };
-    this.get = function(target, name, receiver) {
+    /** target, name, receiver -> any
+    */
+    this.get = function(scope, name, receiver) {
       logc("get", name);
-      // TODO, test
-      return wrap(doGet(target, name), global);
+      return wrap(doGet(scope, name), global);
     };
-    this.set = function(target, name, value, receiver) {
+    /** target, name, val, receiver -> boolean
+     */
+    this.set = function(scope, name, value, receiver) {
       logc("set", name);
-      return doSet(target, name, value);
+      return doSet(scope, name, value);
     };
     this.enumerate = function(target) {
       logc("enumerate");
@@ -366,7 +386,7 @@ function Sandbox(params) {
       };
       return result;
     };
-    this.iterate = function(target) {
+    this.iterate = function(scope) {
       logc("iterate");
 
       return [];
@@ -379,12 +399,12 @@ function Sandbox(params) {
       return result;
     };
 
-    this.keys = function(target) {
+    this.keys = function(scope) {
       logc("keys");
-     // TODO merge property names
+      // TODO merge property names
       return Object.keys(target);
     };
-    this.apply = function(target, thisArg, argsArray) {
+    this.apply = function(scope, thisArg, argsArray) {
       logc("apply");
 
       // TODO implement apply
@@ -394,7 +414,7 @@ function Sandbox(params) {
       logc("construct");
 
       // TODO implement construct
-      return construct(target, global, argsArray);
+      return construct(scope, global, argsArray);
     };
   };
 

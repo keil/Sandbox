@@ -23,7 +23,7 @@ load("src/sandbox.js");
 
 load('test/testcase.js');
 load('test/metahandler.js');
-//load('test/test.js');
+load('test/test.js');
 
 
 // Meta Level Funneling
@@ -90,7 +90,7 @@ for (p in target) {
 }
 
 
-})();
+});
 
 (function() {
   var target = {a:4711, b:4712, c:{x:4713, y:4714}};
@@ -154,7 +154,7 @@ for (p in target) {
   }
 
 
-})();
+});
 
 
 
