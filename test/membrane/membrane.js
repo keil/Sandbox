@@ -34,7 +34,7 @@
 //load("test/membrane/Object.isFrozen.js");
 //load("test/membrane/Object.isSealed.js");
 ////load("test/membrane/Object.iterate.js");
-//load("test/membrane/Object.keys.js"); 
+load("test/membrane/Object.keys.js"); 
 //load("test/membrane/Object.preventExtensions.js");
 //load("test/membrane/Object.seal.js");
 ////load("test/membrane/Object.set.js");
