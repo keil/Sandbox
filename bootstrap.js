@@ -37,7 +37,7 @@ function test (arg) {
 
 load('test/testcase.js');
 load('test/metahandler.js');
-//load('test/test.js');
+load('test/test.js');
 
 var arg={};
 
@@ -76,7 +76,7 @@ var arg={};
   print("---");
   print("---");
 
-})(arg);
+});//(arg);
 
 //var arg={};
 
@@ -115,7 +115,7 @@ var arg={};
   print("---");
   print("---");
 
-})(arg);
+});//(arg);
 
 
 

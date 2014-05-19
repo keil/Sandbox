@@ -16,7 +16,6 @@
 function Testcase(fun, globalArg, thisArg, argsArray, name, quitOnExit) {
 
   var exit = (quitOnExit!==undefined) ? quitOnExit : true;
-  exit = false;
 
   var out = new ShellOut();
 
@@ -28,21 +27,17 @@ function Testcase(fun, globalArg, thisArg, argsArray, name, quitOnExit) {
   function run() {
     var sbx = new Sandbox(params);
 
-    print("### " + Object.isExtensible(argsArray[0].c));
-
-
     try{
-      var outcomeA = sbx.apply(fun, globalArg, thisArg, argsArray);
-    //  var outcomeA = "ERR";
+      var outcomeA1 = sbx.apply(fun, globalArg, thisArg, argsArray);
     } catch(e) {
-      var outcomeA = e.toString();
+      var outcomeA1 = e.toString();
     }
 
-    print("### " + Object.isExtensible(argsArray[0].c));
-    Object.preventExtensions(argsArray[0].c);
-     print("### " + Object.isExtensible(argsArray[0]));
-
-
+    try{
+      var outcomeA2 = sbx.apply(fun, globalArg, thisArg, argsArray);
+    } catch(e) {
+      var outcomeA2 = e.toString();
+    }
 
     try{
       var outcomeB = fun.apply(thisArg, argsArray);
@@ -50,14 +45,15 @@ function Testcase(fun, globalArg, thisArg, argsArray, name, quitOnExit) {
       var outcomeB = e.toString();
     }
     
-    var result = (outcomeA===outcomeB);
+    var result = (outcomeA1===outcomeB && outcomeA1===outcomeA2);
 
     var id = (sbx!==undefined) ? "@" + sbx.id : "";
     out.out(out.head("TestCase # "+name) + " " +id);
     if(result) out.ok();
     else out.fail();
 
-    out.notice("SANDBOX : " + outcomeA);
+    out.notice("SANDBOX1: " + outcomeA1);
+    out.notice("SANDBOX2: " + outcomeA2);
     out.notice("BASELINE: " + outcomeB);
 
     if(exit && (!result)) quit();
