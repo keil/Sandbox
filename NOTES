@@ -1,3 +1,40 @@
+*Pre State Snapshot*
+
+ a) Clone global when installing a sandbox will build an shadow tree
+    Some unused values will also be wrapped (recursively)
+
+ b) Parial wrapping and merging 
+    Scope (clone has to be od the same type/ instance of the origin)
+    Function Prototypes has to be set when decompiling a value
+
+    origin instead of target
+
+
+*Transactions*
+
+A transaction is an operation CMD (command) affected on a target value:
+
+Traget  := Proxy target (origin)
+CMD     := Proxy trap value
+
+- commit 
+- conflict
+- diff
+
+(give every objet an id)
+
+
+*Eval*
+
+
+
+
+
+
+
+
+
+
 # Project Name
 
 Working Name:
