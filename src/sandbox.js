@@ -269,10 +269,27 @@ function Sandbox(params) {
     /** target, name, val, receiver -> boolean
      */
     function doSet(scope, name, value) {
-      touch(target, name);
-     
 
-       return (scope[name]=value);
+
+      print("UPDATE: " + name);
+      print("TARGET: " + Object.keys(target));
+      print("SCOPE:  " + Object.keys(scope));
+
+
+      touch(scope, name);
+    
+
+      print("UPDATE: " + name);
+      print("TARGET: " + Object.keys(target));
+      print("SCOPE:  " + Object.keys(scope));
+
+      var r =  (scope[name]=value);
+
+       print("UPDATE: " + name);
+      print("TARGET: " + Object.keys(target));
+      print("SCOPE:  " + Object.keys(scope));
+
+      return r;
 
        /*
       print("@@ " + Object.isExtensible(scope));
@@ -295,15 +312,43 @@ function Sandbox(params) {
     /** target, name, propertyDescriptor -> any
      */
     function doDefineProperty(scope, name, desc) {
-      touch(target, name);
+      touch(scope, name);
       return Object.defineProperty(scope, name, desc);
     }
     /** target, name -> boolean
      */
     function doDelete(scope, name) {
-      touch(target, name);
+      touch(scope, name);
       // TODO, not correct because of prototype values
       return (delete scope[name]);
+    }
+
+    /** target -> [String]
+     */
+    function doEnumerate(scope) {
+      // Note: Trap is never called
+    }
+    /** target -> iterator
+     */
+    function doIterate(scope) {
+      // Note: Trap is never called
+    }
+    /** target -> [String]
+     */
+    function doKeys(scope) {
+      var keys = [];
+
+      var targetKeys = Object.keys(scope);
+      for(key in targetKeys) {
+        keys[key] = targetKeys[key];
+      }
+      // TODO, check order of objects
+      var scopeKeys = Object.keys(scope);
+      for(key in scopeKeys) {
+        keys[key] = scopeKeys[key];
+      }
+
+      return keys;
     }
 
     // _____                 
@@ -405,36 +450,23 @@ function Sandbox(params) {
      */
     this.enumerate = function(scope) {
       logc("enumerate");
+      throw new Error("Unimplemented Trap enumerate.");
       // NOTE: Trap is never called
-      // return doEnumnerate();
-      throw new Error(unimplemen)
-
-       return [];
-
-      // TODO merge property names
-      var result = [];
-      for (var name in target) {
-        result.push(name);
-      };
-      return result;
+      // return doEnumnerate(scope);
     };
+     /** target -> iterator
+     */
     this.iterate = function(scope) {
       logc("iterate");
-
-      return [];
-
-      // TODO merge property names
-      var result = [];
-      for (var name in target) {
-        result.push(name);
-      };
-      return result;
+      throw new Error("Unimplemented Trap iterate.");
+      // NOTE: Trap is never called
+      // return doIterate(scope);
     };
-
+    /** target) -> [String]
+     */
     this.keys = function(scope) {
       logc("keys");
-      // TODO merge property names
-      return Object.keys(target);
+      return doKeys(scope);      
     };
     this.apply = function(scope, thisArg, argsArray) {
       logc("apply");

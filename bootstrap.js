@@ -56,7 +56,7 @@ load('test/test.js');
   // isExtensible is an called trap, but never documented
 
 
-});
+})();
 
 
 (function() {

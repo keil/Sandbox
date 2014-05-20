@@ -17,6 +17,11 @@
   object.a = "~";
   object.x = "~";
 
+  object.xx = "~";
+ object.xxx = "~";
+ object.xxxx = "~";
+
+
   object.c.x = "~";
   object.c.z = "~";
 
@@ -24,7 +29,7 @@
   var n = Object.keys(object.c);
 
   var outcome = "";
-  for(var p in m) outcome = outcome + p;
-  for(var p in n) outcome = outcome + p;
+  for(var p in m) outcome = outcome + " " + ((m[p] instanceof Function) ? "~" : m[p]);
+  for(var p in n) outcome = outcome + " " + ((n[p] instanceof Function) ? "~" : n[p]);
   return outcome;
 }, {}, {}, [{a:4711, b:4712, c:{x:4713, y:4714}}], "Object.keys")).run();
