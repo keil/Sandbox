@@ -201,7 +201,7 @@ function Sandbox(params) {
     // TODO, clone target
     for (property in target) {
      //  TODO rename _scope to scioe
-      //_scope[property]=wrap(target[property], global);
+    //  _scope[property]=wrap(target[property], global);
     _scope[property]=target[property], global;
 
     }
@@ -266,7 +266,15 @@ function Sandbox(params) {
       */
 
       // TODO, not correct because of prototype values
-      // TODO, not correct because target may change during execution 
+      // TODO, not correct because target may change during execution
+      //
+      //
+
+
+      print("~~~~~~~~~~~~ " + (affected(name)));
+      print("???????????  " + target.a);
+
+      print("~~~~~~~~~~~~ " +  ((affected(name)) ? (name in scope) : (name in target)));
       return (affected(name)) ? (name in scope) : (name in target);
     }
     /** target, name -> boolean
@@ -284,28 +292,10 @@ function Sandbox(params) {
     /** target, name, val, receiver -> boolean
      */
     function doSet(scope, name, value) {
+      touch(scope, name); 
+      return  (scope[name]=value);
 
-
-      print("UPDATE: " + name);
-      print("TARGET: " + Object.keys(target));
-      print("SCOPE:  " + Object.keys(scope));
-
-
-      touch(scope, name);
-    
-
-      print("UPDATE: " + name);
-      print("TARGET: " + Object.keys(target));
-      print("SCOPE:  " + Object.keys(scope));
-
-      var r =  (scope[name]=value);
-
-       print("UPDATE: " + name);
-      print("TARGET: " + Object.keys(target));
-      print("SCOPE:  " + Object.keys(scope));
-
-      return r;
-
+      
        /*
       print("@@ " + Object.isExtensible(scope));
 
@@ -454,6 +444,7 @@ function Sandbox(params) {
     this.get = function(scope, name, receiver) {
       logc("get", name);
       // Tabe, no need to wrap values written inside of the sandbox
+//      return doGet(scope, name);
       return wrap(doGet(scope, name), global);
     };
     /** target, name, val, receiver -> boolean
@@ -491,10 +482,18 @@ function Sandbox(params) {
       // TODO, is it required to decompile the function ?
       return evaluate(scope, global, thisArg, argsArray);
     };
+    /** target, args -> object
+     */
     this.construct = function(scope, argsArray) {
       logc("construct");
       // TODO, is it required to decompile the function ?
-      return construct(scope, global, argsArray);
+      // OR move this back to the seperated function!
+      // new this reference
+      var thisArg = wrap(Object.create(target.prototype), global);
+      // apply function
+      var val = scope.apply(thisArg, wrap(argsArray, global));
+      // return thisArg | val
+      return (val instanceof Object) ? val : thisArg;
     };
   };
 
@@ -581,14 +580,12 @@ function Sandbox(params) {
     // sandboxed function
     var sbxed = decompile(fun, wrap(globalArg, globalArg));
     // new this reference
-    var thisArg = Object.create(fun.prototype);
+    var thisArg = wrap(Object.create(fun.prototype), globalArg);
     // apply function
-    var val = sbxed.apply(wrap(thisArg, globalArg), wrap(argsArray, globalArg));
+    var val = sbxed.apply(thisArg, wrap(argsArray, globalArg)); 
     // return thisArg | val
     return (val instanceof Object) ? val : thisArg;
-
-    // TODO
-    // Is it required to wrap the return?
+    // TODO: Is it required to wrap the return?
   }
 
   /** bind

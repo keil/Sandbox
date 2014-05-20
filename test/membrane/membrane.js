@@ -18,8 +18,8 @@
 //| '  \/ -_) '  \| '_ \/ _` | '_| ' \/ -_)
 //|_|_|_\___|_|_|_|_.__/\__,_|_| |_||_\___|
 
-load("test/membrane/Object.apply.js");
-//load("test/membrane/Object.construct.js");
+////load("test/membrane/Object.apply.js");
+load("test/membrane/Object.construct.js");
 ////load("test/membrane/Object.defineProperty.js");
 ////load("test/membrane/Object.deleteProperty.js");
 ////load("test/membrane/Object.enumerate.js");
