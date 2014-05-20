@@ -26,6 +26,10 @@ CMD     := Proxy trap value
 
 *Eval*
 
+js> print(Function.prototype.toString.apply(eval));
+function eval() {
+    [native code]
+}
 
 
 
