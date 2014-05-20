@@ -9,6 +9,9 @@ test enumerate mit prototype
 
 teste, function welche in der sbx zweimal aufgerufen werden und dabei werte ueberschreiben
 
+teste instanceof
+
+
 #1 Configuration
 
 #1.10 Verbose

@@ -169,7 +169,12 @@ function Sandbox(params) {
 //
 
       // TODO test this
+      // What about the function prototype ?
       if((typeof target) === "function") scope = decompile(target, global);
+      else {
+          scope = Object.create(Object.getPrototypeOf(target));
+          print("####" + (Object.getPrototypeOf(scope)===Object.getPrototypeOf(target)));
+      } 
 
 //      if(target instanceof Function) scope = target;
 
@@ -271,10 +276,6 @@ function Sandbox(params) {
       //
 
 
-      print("~~~~~~~~~~~~ " + (affected(name)));
-      print("???????????  " + target.a);
-
-      print("~~~~~~~~~~~~ " +  ((affected(name)) ? (name in scope) : (name in target)));
       return (affected(name)) ? (name in scope) : (name in target);
     }
     /** target, name -> boolean
@@ -378,8 +379,9 @@ function Sandbox(params) {
     };
     this.getPrototypeOf = function(scope) {
       logc("getPrototypeOf");
-      // TODO
-      return Object.getPrototypeOf(scope);
+      throw new Error("Unimplemented Trap enumerate.");
+      // NOTE: Trap is never called
+      // return Object.getPrototypeOf(scope);
     };
     /** target, name, propertyDescriptor -> any
      */
@@ -489,7 +491,12 @@ function Sandbox(params) {
       // TODO, is it required to decompile the function ?
       // OR move this back to the seperated function!
       // new this reference
+      // TODO is it required to wrap the this arg ?
+      // it is still an object inside the sandbox
+      // therefore it it no need to wrap the objet
+      // target is deompiled ?
       var thisArg = wrap(Object.create(target.prototype), global);
+      // var thisArg = Object.create(scope)al);
       // apply function
       var val = scope.apply(thisArg, wrap(argsArray, global));
       // return thisArg | val
