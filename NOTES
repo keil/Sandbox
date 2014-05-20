@@ -16,6 +16,9 @@ A transaction is an operation CMD (command) affected on a target value:
 
 Traget  := Proxy target (origin)
 CMD     := Proxy trap value
+Origin  := Origin Value before CMD applies
+Value   := Value
+Stamp   := Timestamp
 
 - commit 
 - conflict
@@ -23,6 +26,10 @@ CMD     := Proxy trap value
 
 (give every objet an id)
 
+- Sandbox
+  - diff/commit/transactions/conflicts
+  - List pf transaction
+    Target -> Transaction
 
 *Eval*
 
