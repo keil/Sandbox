@@ -20,6 +20,122 @@ load("src/out.js");
 load("src/shell.js");
 load("src/sandbox.js");
 
+load('test/testcase.js');
+load('test/metahandler.js');
+load('test/test.js');
+
+
+(function() {
+
+  var object = {};
+  var handler = new MetaHandler({});
+  var proxy = new Proxy(object, handler);
+
+  //Object.getOwnPropertyDescriptor(proxy, "name");
+  //Object.getOwnPropertyNames(proxy);
+  //Object.defineProperty(proxy,"name",{});
+  //delete proxy.name;
+  //Object.freeze(proxy); // TODO
+  //Object.seal(proxy); // TODO
+  //Object.preventExtensions(proxy);
+  //("name" in proxy);
+  //Object.prototype.hasOwnProperty.call(proxy, "name");
+  //proxy.name;
+  //proxy.name = "val";
+  //for(prop in proxy){}; // TODO
+  //for(prop of proxy){}; // TODO
+  //Object.keys(proxy);
+  //proxy.apply({}, []);
+  //new proxy(...args);
+
+  // TODO:
+  // freeze; seal are never called
+  // for(prop in proxy){} does not call a trap
+  // - Not possible to handle (difference to has/keys!)
+  // iterate; enumerate are never called
+  // isExtensible is an called trap, but never documented
+
+
+});
+
+
+(function() {
+
+  function Handler() {
+  
+    this.preventExtensions = function(target) {
+      return Object.preventExtensions(target);
+    }
+
+    this.isExtensible = function(target) {
+      return Object.isExtensible(target);
+    }
+  }
+
+  var target = {};
+  var handler = new Handler();
+  var metahandler = new MetaHandler(handler);
+  var proxy = new Proxy(target, metahandler);
+
+  print("---");
+  print(Object.isExtensible(target));
+  print(Object.isExtensible(proxy));
+  print("---");
+  Object.preventExtensions(proxy);
+  print("---");
+  print(Object.isExtensible(target));
+  print(Object.isExtensible(proxy));
+  print("---");
+
+});
+
+(function() {
+
+  function Handler() {
+
+    var object = {};
+  
+    this.preventExtensions = function(target) {
+      return Object.preventExtensions(object);
+    }
+
+    this.isExtensible = function(target) {
+      return Object.isExtensible(object);
+    }
+  }
+
+  var target = {};
+  var handler = new Handler();
+  var metahandler = new MetaHandler(handler);
+  var proxy = new Proxy(target, metahandler);
+
+  print("---");
+  print(Object.isExtensible(target));
+  print(Object.isExtensible(proxy));
+  print("---");
+  Object.preventExtensions(proxy);
+  print("---");
+  print(Object.isExtensible(target));
+  print(Object.isExtensible(proxy));
+  print("---");
+
+  // TODO
+  // Proxy check for isExtensible ?
+
+});
+
+quit();
+
+
+
+
+
+
+
+
+
+
+
 
 function test (arg) {
 
@@ -35,9 +151,7 @@ function test (arg) {
 //quit();
 
 
-load('test/testcase.js');
-load('test/metahandler.js');
-load('test/test.js');
+
 
 var arg={};
 

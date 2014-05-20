@@ -401,11 +401,15 @@ function Sandbox(params) {
       logc("set", name);
       return doSet(scope, name, value);
     };
-    this.enumerate = function(target) {
+    /** target -> [String]
+     */
+    this.enumerate = function(scope) {
       logc("enumerate");
+      // NOTE: Trap is never called
+      // return doEnumnerate();
+      throw new Error(unimplemen)
 
-
-      return [];
+       return [];
 
       // TODO merge property names
       var result = [];
