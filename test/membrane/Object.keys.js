@@ -18,9 +18,8 @@
   object.x = "~";
 
   object.xx = "~";
- object.xxx = "~";
- object.xxxx = "~";
-
+  object.xxx = "~";
+  object.xxxx = "~";
 
   object.c.x = "~";
   object.c.z = "~";

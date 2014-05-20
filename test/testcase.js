@@ -28,32 +28,25 @@ function Testcase(fun, globalArg, thisArg, argsArray, name, quitOnExit) {
     var sbx = new Sandbox(params);
 
     try{
-      var outcomeA1 = sbx.apply(fun, globalArg, thisArg, argsArray);
+      var outcomeA = sbx.apply(fun, globalArg, thisArg, argsArray);
     } catch(e) {
-      var outcomeA1 = e.toString();
-    }
-
-    try{
-      var outcomeA2 = sbx.apply(fun, globalArg, thisArg, argsArray);
-    } catch(e) {
-      var outcomeA2 = e.toString();
+      var outcomeA = e.toString() + "\n" + e.stack;
     }
 
     try{
       var outcomeB = fun.apply(thisArg, argsArray);
     } catch(e) {
-      var outcomeB = e.toString();
+      var outcomeB = e.toString() + "\n" + e.stack;
     }
     
-    var result = (outcomeA1===outcomeB && outcomeA1===outcomeA2);
+    var result = (outcomeA===outcomeB);
 
     var id = (sbx!==undefined) ? "@" + sbx.id : "";
     out.out(out.head("TestCase # "+name) + " " +id);
     if(result) out.ok();
     else out.fail();
 
-    out.notice("SANDBOX1: " + outcomeA1);
-    out.notice("SANDBOX2: " + outcomeA2);
+    out.notice("SANDBOX:  " + outcomeA);
     out.notice("BASELINE: " + outcomeB);
 
     if(exit && (!result)) quit();

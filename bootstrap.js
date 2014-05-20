@@ -28,6 +28,26 @@ load('test/test.js');
 (function() {
 
   var object = {};
+  object = function() {};
+  var handler = new MetaHandler({});
+  var proxy = new Proxy(object, handler);
+
+  print("typeof " + (typeof proxy));
+  print("instanceof " + (proxy instanceof Function));
+//  proxy();
+//
+
+  // TODO
+  // instanceof and typeof are not trapped
+
+
+
+});
+
+
+(function() {
+
+  var object = {};
   var handler = new MetaHandler({});
   var proxy = new Proxy(object, handler);
 

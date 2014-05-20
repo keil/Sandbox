@@ -14,6 +14,7 @@
  */
 
 (new Testcase(function(object) {
+  var outcome = "";
   var outcome = "" + object.f() + object.g()() + object.h().x + object.h().y;
   return outcome;
 }, {}, {}, [{

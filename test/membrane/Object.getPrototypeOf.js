@@ -14,10 +14,17 @@
  */
 
 (new Testcase(function(object) {
+
+  var f = object.f;
+
+  print("XXX " + typeof f);
+//  print("YYY " + (object.f) instanceof Function);
+
+
   var outcome = "";
   outcome += ((new object.f()) instanceof object.f);
-  outcome += ((new (new object.g()).b()) instanceof (new object.g()).b);
-  outcome += ((new object.h()) instanceof object.h);
+//  outcome += ((new (new object.g()).b()) instanceof (new object.g()).b);
+//  outcome += ((new object.h()) instanceof object.h);
   return outcome;
 }, {}, {}, [{
   f:function() { 

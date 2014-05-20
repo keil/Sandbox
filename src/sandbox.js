@@ -166,6 +166,14 @@ function Sandbox(params) {
       var scope = {}; // TODO, test id this is all to work with prototypes
 //      scope=target;
 //      // TODO implement meta handler
+//
+
+      // TODO test this
+      if((typeof target) === "function") scope = decompile(target, global);
+
+//      if(target instanceof Function) scope = target;
+
+
       var proxy = new Proxy(scope, new Membrane(global, target, scope));
       cache.set(target, proxy);
       return proxy;
@@ -192,9 +200,16 @@ function Sandbox(params) {
     // TODO, make function
     // TODO, clone target
     for (property in target) {
-      // TODO rename _scope to scioe
-      _scope[property]=target[property];
+     //  TODO rename _scope to scioe
+      //_scope[property]=wrap(target[property], global);
+    _scope[property]=target[property], global;
+
     }
+
+    // TODO, what happens if I clone the complete path
+    //  _scope[property]=wrap(target[property]);
+
+
 
     /* 
      * Write scope.
@@ -374,7 +389,7 @@ function Sandbox(params) {
     this.getPrototypeOf = function(scope) {
       logc("getPrototypeOf");
       // TODO
-      return Object.getPrototypeOf(target)
+      return Object.getPrototypeOf(scope);
     };
     /** target, name, propertyDescriptor -> any
      */
@@ -438,6 +453,7 @@ function Sandbox(params) {
     */
     this.get = function(scope, name, receiver) {
       logc("get", name);
+      // Tabe, no need to wrap values written inside of the sandbox
       return wrap(doGet(scope, name), global);
     };
     /** target, name, val, receiver -> boolean
@@ -468,16 +484,16 @@ function Sandbox(params) {
       logc("keys");
       return doKeys(scope);      
     };
+    /** target, thisValue, args -> any
+     */
     this.apply = function(scope, thisArg, argsArray) {
       logc("apply");
-
-      // TODO implement apply
-      return evaluate(target, global, thisArg, argsArray);
+      // TODO, is it required to decompile the function ?
+      return evaluate(scope, global, thisArg, argsArray);
     };
-    this.construct = function(target, argsArray) {
+    this.construct = function(scope, argsArray) {
       logc("construct");
-
-      // TODO implement construct
+      // TODO, is it required to decompile the function ?
       return construct(scope, global, argsArray);
     };
   };
