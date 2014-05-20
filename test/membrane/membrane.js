@@ -30,7 +30,7 @@
 //load("test/membrane/Object.getPrototypeOf.js"); // TODO should not be a testcase
 ////load("test/membrane/Object.has.js");
 ////load("test/membrane/Object.hasOwn.js");
-//load("test/membrane/Object.isExtensible.js");
+load("test/membrane/Object.isExtensible.js");
 //load("test/membrane/Object.isFrozen.js");
 //load("test/membrane/Object.isSealed.js");
 ////load("test/membrane/Object.iterate.js");
