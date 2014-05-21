@@ -305,37 +305,16 @@ function Sandbox(params) {
     function doHasOwn(scope, name) {
       return (affected(name)) ? Object.prototype.hasOwnProperty.call(scope, name) : Object.prototype.hasOwnProperty.call(target, name);
     }
-
     /** target, name, receiver -> any
     */
     function doGet(scope, name) {
-      // TODO, not correct because of prototype values
-      return (affected(name)) ? scope[name] : target[name];
+      return (affected(name)) ? scope[name] : wrap(target[name], global);
     }
     /** target, name, val, receiver -> boolean
     */
     function doSet(scope, name, value) {
       touch(scope, name); 
       return (scope[name]=value);
-
-
-      /*
-         print("@@ " + Object.isExtensible(scope));
-
-         if(!Object.isExtensible(scope)) return 0;
-
-         try{
-         return (scope[name]=value);
-         } catch(e) {
-         print(e);
-         return 0;
-         }
-         */
-
-      /**if(Object.isExtensible(scope))
-        return (scope[name]=value);
-        else 
-        return 0;*/
     }
     /** target, name, propertyDescriptor -> any
     */
@@ -467,9 +446,7 @@ function Sandbox(params) {
     */
     this.get = function(scope, name, receiver) {
       logc("get", name);
-      // Tabe, no need to wrap values written inside of the sandbox
-      //      return doGet(scope, name);
-      return wrap(doGet(scope, name), global);
+      return doGet(scope, name);
     };
     /** target, name, val, receiver -> boolean
     */
