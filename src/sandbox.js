@@ -326,10 +326,8 @@ function Sandbox(params) {
     */
     function doDelete(scope, name) {
       touch(scope, name);
-      // TODO, not correct because of prototype values
       return (delete scope[name]);
     }
-
     /** target -> [String]
     */
     function doEnumerate(scope) {
@@ -345,17 +343,15 @@ function Sandbox(params) {
     function doKeys(scope) {
       var keys = [];
 
-      var targetKeys = Object.keys(scope);
-      for(key in targetKeys) {
-        keys[key] = targetKeys[key];
-      }
-      // TODO, check order of objects
-      var scopeKeys = Object.keys(scope);
-      for(key in scopeKeys) {
-        keys[key] = scopeKeys[key];
-      }
+      // NOTE:
+      // Object.keys(scope) will return the key elements
+      // in the same order as provided by for..in
+      // But: the iterate trap does not work right now. 
+      // Iterate works directly on the proxy target.
+      // Therefore Object.keys returns only the keys of the 
+      // proxy target be be consistent. 
 
-      return keys;
+      return Object.keys(scope);
     }
 
     // _____                 
