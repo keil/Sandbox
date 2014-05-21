@@ -27,3 +27,5 @@ teste instanceof
 
 
 Test evaluation of a functon twice, with counter
+
+restrict snadbox access in a way that if the property dies not exist, than terminate or throw an exception
