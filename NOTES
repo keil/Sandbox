@@ -23,12 +23,19 @@ Stamp   := Timestamp
 - commit 
 - conflict
 - diff
+- rollback
+- begintransaction, name
+
+*Read conflics*
+
+A value read access is after a value write access.
+--> This makes it nececessery to compare sandbox executions
 
 (give every objet an id)
 
 - Sandbox
   - diff/commit/transactions/conflicts
-  - List pf transaction
+  - List of transaction
     Target -> Transaction
 
 *Eval*
@@ -39,6 +46,9 @@ function eval() {
 }
 
 
+*Rollback*
+
+Implement the possibility to be transparent with respect to the normal execution and to rollback effects.
 
 
 

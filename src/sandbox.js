@@ -628,6 +628,13 @@ function Sandbox(params) {
     // Is it required to wrap the return?
   }
 
+  //  _____                 _ _               
+  // / ____|               | | |              
+  //| (___   __ _ _ __   __| | |__   _____  __
+  // \___ \ / _` | '_ \ / _` | '_ \ / _ \ \/ /
+  // ____) | (_| | | | | (_| | |_) | (_) >  < 
+  //|_____/ \__,_|_| |_|\__,_|_.__/ \___/_/\_\
+
   //   _             _      
   //  /_\  _ __ _ __| |_  _ 
   // / _ \| '_ \ '_ \ | || |
@@ -680,6 +687,49 @@ function Sandbox(params) {
 
   // TODO, is it required to wrap the return value ?
   return bind(fun, globalArg, thisArg, argsArray);
+  }, this);
+
+  // _______                             _   _                 
+  //|__   __|                           | | (_)                
+  //   | |_ __ __ _ _ __  ___  __ _  ___| |_ _  ___  _ __  ___ 
+  //   | | '__/ _` | '_ \/ __|/ _` |/ __| __| |/ _ \| '_ \/ __|
+  //   | | | | (_| | | | \__ \ (_| | (__| |_| | (_) | | | \__ \
+  //   |_|_|  \__,_|_| |_|___/\__,_|\___|\__|_|\___/|_| |_|___/
+
+
+  // TODO
+  // * store also effects?
+
+  var effects = new WeakMap();
+
+  // TODO
+  // * make comment
+  // * test
+  // * name: transaction or effect ?
+  function trace(target, transaction) {
+    if(!(target instanceof Object))
+      throw new TypeError("No traget object.");
+
+    if(!(transaction instanceof Transaction))
+      throw new Error("No transasction object.");
+   
+    if(!effetcs.has(target)) {
+      effects.set(target, []);
+    }
+
+    return effetcs.get(target).push(transaction);
+
+    // TODO, what to store in a weak map
+    // one target walue can have a couple of effects
+    // so store:
+    // target -> Timestamp -> Transaction
+  }
+
+  // TODO
+  // * name?
+  __define("effetcs", function(target) {
+    if(effects.has(target)) return effects.get(target);
+    else return [];
   }, this);
 }
 
