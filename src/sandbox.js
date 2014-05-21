@@ -202,6 +202,7 @@ function Sandbox(params) {
 
       // TODO
       // * implement a meta handler
+      // * meta handler checks if the trap is implemented and throws an exception otherwise
 
       var proxy = new Proxy(scope, new Membrane(global, target, scope));
       cache.set(target, proxy);
@@ -341,17 +342,31 @@ function Sandbox(params) {
     /** target -> [String]
     */
     function doKeys(scope) {
-      var keys = [];
-
-      // NOTE:
-      // Object.keys(scope) will return the key elements
-      // in the same order as provided by for..in
-      // But: the iterate trap does not work right now. 
-      // Iterate works directly on the proxy target.
-      // Therefore Object.keys returns only the keys of the 
-      // proxy target be be consistent. 
-
+      // NOTE: Matthias Keil (May 21 2014)
+      // The order of
+      // *Object.getOwnPropertyNames*
+      // corresponds to the order provided by the for...in loop.
       return Object.keys(scope);
+    }
+    /** target, name -> PropertyDescriptor | undefined
+     */
+    function doGetOwnPropertyDescriptor(scope, name) {
+      if(affected(name)) {
+        return Object.getOwnPropertyDescriptor(scope, name);
+      } else {
+        var desc = Object.getOwnPropertyDescriptor(scope, name);
+        if (desc !== undefined) desc.value = wrap(desc.value, global);
+        return desc;
+      }
+    }
+    /** target -> [String]
+     */
+    function doGetOwnPropertyNames(scope) {
+      // NOTE: Matthias Keil (May 21 2014)
+      // The order of
+      // *Object.getOwnPropertyNames*
+      // corresponds to the order provided by the for...in loop.
+      return Object.getOwnPropertyNames(scope);
     }
 
     // _____                 
@@ -360,25 +375,17 @@ function Sandbox(params) {
     //  |_||_| \__,_| .__/__/
     //              |_|      
 
+    /** target, name -> PropertyDescriptor | undefined
+     */
     this.getOwnPropertyDescriptor = function(scope, name) {
       logc("getOwnPropertyDescriptor", name);
-
-      // TODO switch target
-      var desc = Object.getOwnPropertyDescriptor(scope, name);
-      if (desc !== undefined) desc.value = wrap(desc, global);
-      return desc;
+      return doGetOwnPropertyDescriptor(scope, name);
     };
+    /** target -> [String]
+     */
     this.getOwnPropertyNames = function(scope) {
       logc("getOwnPropertyNames");
-
-      // TODO merge property names
-      return Object.getOwnPropertyNames(scope);
-    };
-    this.getPrototypeOf = function(scope) {
-      logc("getPrototypeOf");
-      throw new Error("Unimplemented Trap enumerate.");
-      // NOTE: Trap is never called
-      // return Object.getPrototypeOf(scope);
+      return doGetOwnPropertyNames(scope);
     };
     /** target, name, propertyDescriptor -> any
     */
@@ -410,14 +417,16 @@ function Sandbox(params) {
       logc("preventExtensions");
       return Object.preventExtensions(scope);
     };
+    /** target -> boolean
+    */
     this.isFrozen = function(scope) {
       logc("isFrozen");
-      // TODO
       return Object.isFrozen(scope);
     };
+    /** target -> boolean
+    */
     this.isSealed = function(scope) {
       logc("isSealed");
-      // TODO
       return Object.isSealed(scopet);
     };
     /** target -> boolean
@@ -476,8 +485,8 @@ function Sandbox(params) {
     */
     this.apply = function(scope, thisArg, argsArray) {
       logc("apply");
-      // TODO, is it required to decompile the function ?
-      //return evaluate(scope, global, thisArg, argsArray);
+      // TODO, is it required to wrap this and argments
+      // or only when calling an external evaluate
       return scope.apply(wrap(thisArg,global), wrap(argsArray, global));
     };
     /** target, args -> object
@@ -499,6 +508,13 @@ function Sandbox(params) {
       return (val instanceof Object) ? val : thisArg;
     };
   };
+
+  //  _____                 _ _               
+  // / ____|               | | |              
+  //| (___   __ _ _ __   __| | |__   _____  __
+  // \___ \ / _` | '_ \ / _` | '_ \ / _ \ \/ /
+  // ____) | (_| | | | | (_| | |_) | (_) >  < 
+  //|_____/ \__,_|_| |_|\__,_|_.__/ \___/_/\_\
 
   //    _                       _ _     
   // __| |___ __ ___ _ __  _ __(_) |___ 
@@ -560,9 +576,6 @@ function Sandbox(params) {
     var val = sbxed.apply(wrap(thisArg, globalArg), wrap(argsArray, globalArg));
     // return val
     return val;
-
-    // TODO
-    // Is it required to wrap the return?
   }
 
   /** Construct
@@ -588,7 +601,6 @@ function Sandbox(params) {
     var val = sbxed.apply(thisArg, wrap(argsArray, globalArg)); 
     // return thisArg | val
     return (val instanceof Object) ? val : thisArg;
-    // TODO: Is it required to wrap the return?
   }
 
   /** bind
@@ -619,17 +631,7 @@ function Sandbox(params) {
     }
     // return bound function
     return bound;
-
-    // TODO
-    // Is it required to wrap the return?
   }
-
-  //  _____                 _ _               
-  // / ____|               | | |              
-  //| (___   __ _ _ __   __| | |__   _____  __
-  // \___ \ / _` | '_ \ / _` | '_ \ / _ \ \/ /
-  // ____) | (_| | | | | (_| | |_) | (_) >  < 
-  //|_____/ \__,_|_| |_|\__,_|_.__/ \___/_/\_\
 
   //   _             _      
   //  /_\  _ __ _ __| |_  _ 
@@ -663,7 +665,6 @@ function Sandbox(params) {
   globalArg = (globalArg!==undefined) ? globalArg : new Object();
   thisArg = (thisArg!==undefined) ? thisArg : globalArg;
 
-  // TODO, is it required to wrap the return value ?
   return evaluate(fun, globalArg, thisArg, arguments);
   }, this);
 
@@ -681,7 +682,6 @@ function Sandbox(params) {
   thisArg = (thisArg!==undefined) ? thisArg : globalArg;
   argsArray = (argsArray!==undefined) ? argsArray : new Array();
 
-  // TODO, is it required to wrap the return value ?
   return bind(fun, globalArg, thisArg, argsArray);
   }, this);
 
