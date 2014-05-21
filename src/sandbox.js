@@ -125,6 +125,11 @@ function Sandbox(params) {
   //| (_-< _|\ V / _` | |
   //|_/__/___|\_/\__,_|_|
 
+  // TODO
+  // * add isEval
+  // * wrap eval into a with statement
+  // * test encapsulation
+
   var GlobalEval = eval;
 
   /** isEval(fun)
