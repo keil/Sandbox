@@ -26,4 +26,36 @@
   outcome += Object.prototype.hasOwnProperty.call(object, "y");
 
   return outcome;
-}, {}, {}, [{a:4711, b:4712, c:4713}], "Object.hasOwn")).run();
+}, {}, {}, [{a:4711, b:4712, c:4713}], "Object.hasOwn # 1")).run();
+
+
+
+(new Testcase(function(b) {
+
+  var outcome = "";
+  for(var property in b) outcome = outcome + " " + property + ":" + b[property] + "-" + Object.prototype.hasOwnProperty.call(b, property);
+
+  outcome+=" / ";
+
+  b.a = "[x]";
+  for(var property in b) outcome = outcome + " " + property + ":" + b[property] + "-" + Object.prototype.hasOwnProperty.call(b, property);
+
+  outcome+=" / ";
+
+  delete b.a;
+  for(var property in b) outcome = outcome + " " + property + ":" + b[property] + "-" + Object.prototype.hasOwnProperty.call(b, property);
+
+  return outcome;
+}, {}, {}, [(function(){
+
+  function A() {
+    this.a = "[a]";
+  }
+  function B() {
+    this.b = "[b]";
+  }
+  B.prototype = new A();
+
+  return new B();
+
+})()], "Object.hasOwn # 2")).run();

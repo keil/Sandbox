@@ -26,8 +26,9 @@ load('test/metahandler.js');
 // ==================================================
 
 load("test/membrane/Object.has.js");
+load("test/membrane/Object.hasOwn.js");
 
-load("test/behavior/eval.js");
+//load("test/behavior/eval.js");
 
 
 function A() {

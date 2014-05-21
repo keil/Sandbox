@@ -20,4 +20,34 @@
   var outcome = "";
   for(var property in object) outcome = outcome + " " + property + ":" + (property in object);
   return outcome;
-}, {}, {}, [{a:4711, b:4712, c:4713}], "Object.has")).run();
+}, {}, {}, [{a:4711, b:4712, c:4713}], "Object.has # 1")).run();
+
+(new Testcase(function(b) {
+
+  var outcome = "";
+  for(var property in b) outcome = outcome + " " + property + ":" + b[property] + "-" + (property in b);
+
+  outcome+=" / ";
+
+  b.a = "[x]";
+  for(var property in b) outcome = outcome + " " + property + ":" + b[property] + "-" + (property in b);
+
+  outcome+=" / ";
+
+  delete b.a;
+  for(var property in b) outcome = outcome + " " + property + ":" + b[property] + "-" + (property in b);
+
+  return outcome;
+}, {}, {}, [(function(){
+
+  function A() {
+    this.a = "[a]";
+  }
+  function B() {
+    this.b = "[b]";
+  }
+  B.prototype = new A();
+
+  return new B();
+
+})()], "Object.has # 2")).run();
