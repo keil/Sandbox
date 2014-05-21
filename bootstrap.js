@@ -53,48 +53,7 @@ load("test/membrane/Object.seal.js");
 
 
 
-function A() {
-  this.a = "a";
-}
 
-function B() {
-  this.b = "b";
-}
-B.prototype = new A();
-
-
-function clone(target) {
-  var object = Object.create(Object.getPrototypeOf(target));
-
-  for (var property in target) {
-    if (target.hasOwnProperty(property)) object[property] = target[property];
-  }
-  return object;
-}
-
-
-function cloneFun(target) {
-  var func = decompile(target, {});
-//  print(Object.getPrototypeOf(target));
-  func.prototype = target.prototype;
-  return func;
-}
-
-var X = cloneFun(B);
-
-print("XXXXXXXXXXXXXXXX");
-print(B.prototype.a);
-print(X);
-print(X.prototype.a);
-
-
-
-
-  function decompile(fun, env) {
-    var body = "(" + fun.toString() + ")"; 
-    var sbxed = eval("(function() { with(env) { return " + body + " }})();");
-    return sbxed;
-  }
 
 
 
