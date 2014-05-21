@@ -182,29 +182,27 @@ function Sandbox(params) {
       }
     }
 
-    // TODO, handle eval
-
-
+    // TODO
+    // * handle eval
 
     // If target already wrapped, return cached proxy
     if(cache.has(target)) {
       return cache.get(target);
     } else {
-      var scope = {}; // TODO, test id this is all to work with prototypes
-//      scope=target;
-//      // TODO implement meta handler
-//
 
-      // TODO test this
-      // What about the function prototype ?
-      if((typeof target) === "function") scope = decompile(target, global);
-      else {
-          scope = Object.create(Object.getPrototypeOf(target));
-          print("####" + (Object.getPrototypeOf(scope)===Object.getPrototypeOf(target)));
-      } 
+      // decompiles function or clones object
+      // to preserve typeof/ instanceof
+      // and to make an iterable image for loops
+      if(target instanceof Function) {
+        var scope = decompile(target, global);
+      } else {
+        var scope = clone(target);
+      }
 
-//      if(target instanceof Function) scope = target;
-
+      // TODO
+      // * implement a meta handler
+      // * What about the function prototype ?
+      //
 
       var proxy = new Proxy(scope, new Membrane(global, target, scope));
       cache.set(target, proxy);
