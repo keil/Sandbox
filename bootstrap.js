@@ -25,10 +25,10 @@ load('test/metahandler.js');
 
 // ==================================================
 
-load("test/membrane/Object.has.js");
-load("test/membrane/Object.hasOwn.js");
+//load("test/membrane/Object.has.js");
+//load("test/membrane/Object.hasOwn.js");
 
-//load("test/behavior/eval.js");
+load("test/behavior/eval.js");
 
 var M = {a:5711, x:4711, b:134};
 

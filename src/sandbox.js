@@ -154,7 +154,7 @@ function Sandbox(params) {
    * @return JavaScript Proxy 
    */
   function wrap(target, global) { 
-    logc("wrap", target);
+    logc("wrap", (typeof target) + "=" + target);
 
     // If target is a primitive value, then return target
     if (target !== Object(target)) {
@@ -176,7 +176,7 @@ function Sandbox(params) {
     // ** Access to Math.abd
     // ** ...
     if(isEval(target)) {
-      throw new Error("eval nut supported");
+      throw new Error("eval not supported");
     }
 
     // Native Function pass-through
@@ -484,10 +484,18 @@ function Sandbox(params) {
     /** target, thisValue, args -> any
     */
     this.apply = function(scope, thisArg, argsArray) {
-      logc("apply");
+      logc("apply", scope);
       // TODO, is it required to wrap this and argments
       // or only when calling an external evaluate
-      return scope.apply(wrap(thisArg,global), wrap(argsArray, global));
+      
+//      return wrap(evaluate(scope, global, (thisArg===undefined) ? global : thisArg, argsArray), global);
+
+      // TODO
+      // * do the same in construct and with argsArray
+      thisArg = (thisArg===undefined) ? global : thisArg;
+        //thisArg = global;
+
+      return scope.apply(wrap(thisArg, global), wrap(argsArray, global));
     };
     /** target, args -> object
     */
@@ -505,9 +513,12 @@ function Sandbox(params) {
       // apply function
       var val = scope.apply(thisArg, wrap(argsArray, global));
       // return thisArg | val
-      return (val instanceof Object) ? val : thisArg;
+      return (val instanceof Object) ? wrap(val, global) : thisArg;
     };
   };
+
+  // TODO, wrap return
+
 
   //  _____                 _ _               
   // / ____|               | | |              
@@ -535,7 +546,7 @@ function Sandbox(params) {
    * @return JavaScript Function
    */
   function decompile(fun, env) {
-    logc("decompile");
+    logc("decompile", fun);
 
     if(!(fun instanceof Function))
       throw new TypeError("fun");
@@ -648,7 +659,6 @@ function Sandbox(params) {
   thisArg = (thisArg!==undefined) ? thisArg : globalArg;
   argsArray = (argsArray!==undefined) ? argsArray : new Array();
 
-  // TODO, is it required to wrap the return value ?
   return evaluate(fun, globalArg, thisArg, argsArray);
   }, this);
 
