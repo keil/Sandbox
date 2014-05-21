@@ -182,6 +182,10 @@ function Sandbox(params) {
       }
     }
 
+    // TODO, handle eval
+
+
+
     // If target already wrapped, return cached proxy
     if(cache.has(target)) {
       return cache.get(target);
@@ -206,6 +210,26 @@ function Sandbox(params) {
       cache.set(target, proxy);
       return proxy;
     }
+  }
+
+  /**
+   * clone(target)
+   * clones an object
+   *
+   * @param target JavaScript Object
+   * @return JavaScript Object
+   */
+  function clone(target) {
+    var object = Object.create(Object.getPrototypeOf(target));
+
+    // TODO
+    // * discuss flag about building shadow trees
+    // ** object[property] = wrap(target[property], global);
+
+    for (var property in target) {
+      if (target.hasOwnProperty(property)) object[property] = target[property];
+    }
+    return object;
   }
 
   // __  __           _                      
