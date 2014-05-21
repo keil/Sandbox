@@ -194,9 +194,9 @@ function Sandbox(params) {
       // to preserve typeof/ instanceof
       // and to make an iterable image for loops
       if(target instanceof Function) {
-        var scope = decompile(target, global);
+        var scope = cloneFunction(target, global)
       } else {
-        var scope = clone(target);
+        var scope = cloneObject(target);
       }
 
       // TODO
@@ -211,23 +211,46 @@ function Sandbox(params) {
   }
 
   /**
-   * clone(target)
-   * clones an object
+   * cloneObject(target)
+   * clones a JavaScript Object
    *
    * @param target JavaScript Object
    * @return JavaScript Object
    */
-  function clone(target) {
-    var object = Object.create(Object.getPrototypeOf(target));
+  function cloneObject(target) {
+    if(!(target instanceof Object))
+      throw new Error("No JavaScript Object.");
+
+    var clone = Object.create(Object.getPrototypeOf(target));
 
     // TODO
     // * discuss flag about building shadow trees
     // ** object[property] = wrap(target[property], global);
 
     for (var property in target) {
-      if (target.hasOwnProperty(property)) object[property] = target[property];
+      if (target.hasOwnProperty(property)) clone[property] = target[property];
     }
-    return object;
+    return clone;
+  }
+
+  /**
+   * cloneFunction(target)
+   * clones a JavaScript Function
+   *
+   * @param target JavaScript Function
+   * @return JavaScript Function
+   */
+  function cloneFunction(target, global) {
+    if(!(target instanceof Function))
+      throw new Error("No JavaScript Function.");
+
+    var clone = decompile(target, globale);
+
+    // TODO
+    // * is it required to wrap target.prototype ?
+
+    clone.prototype = target.prototype;
+    return clone;
   }
 
   // __  __           _                      
