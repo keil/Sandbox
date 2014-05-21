@@ -50,7 +50,12 @@ function eval() {
 
 Implement the possibility to be transparent with respect to the normal execution and to rollback effects.
 
+*valueOf*
 
+use valueOf to wrap primitive values
+4711
+js> x+x;
+9422
 
 
 

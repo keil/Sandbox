@@ -24,7 +24,25 @@ load('test/testcase.js');
 load('test/metahandler.js');
 
 // ==================================================
+
+load("test/membrane/Object.has.js");
+
 load("test/behavior/eval.js");
+
+
+function A() {
+this.a = "[a]";
+}
+function B() {
+this.b = "[b]";
+}
+B.prototype = new A();
+
+for (p in (new B())) {
+  print("#"+p);
+}
+
+ 
 
 var x = "4711";
 

@@ -186,10 +186,6 @@ function Sandbox(params) {
       }
     }
 
-  
-    // TODO
-    // * handle eval
-
     // If target already wrapped, return cached proxy
     if(cache.has(target)) {
       return cache.get(target);
@@ -206,8 +202,6 @@ function Sandbox(params) {
 
       // TODO
       // * implement a meta handler
-      // * What about the function prototype ?
-      //
 
       var proxy = new Proxy(scope, new Membrane(global, target, scope));
       cache.set(target, proxy);
@@ -264,53 +258,33 @@ function Sandbox(params) {
    *
    * @param global The current Global Object.
    */
-  // TODO
-  function Membrane(global, target, _scope) {
-
+  function Membrane(global, target) {
     if(!(global instanceof Object))
       throw new TypeError("global");
-
-    // TODO, comment
-    // TODO, make function
-    // TODO, clone target
-    for (property in target) {
-     //  TODO rename _scope to scioe
-    //  _scope[property]=wrap(target[property], global);
-    _scope[property]=target[property], global;
-
-    }
-
-    // TODO, what happens if I clone the complete path
-    //  _scope[property]=wrap(target[property]);
-
-
-
-    /* 
-     * Write scope.
-     */
-    //    var scope = {};
-    // TODO, moved to target
-
-
-    // TODO, implement clone !
-    // without effected flag!
 
     /*
      * List of effected properties
      */
     var properties = new Set();
-    // TODO, comment
+
+    /** Returns true if the property was touched by the sandbox, false otherwise
+     */
     function affected(property) {
       return properties.has(property);
     }
-    // TODO, comment
+    /** Returns true if the property was not touched by the sandbox, false otherwise
+     */
     function unaffected(property) {
       return !affected(property);
     }
-    // TODO, comment
+    /** Flags a property as touched
+     */
     function touch(scope, name) {
       if(unaffected(name)) {
-        scope[name]=target[name];
+        // TODO
+        // *PreStateSnapshot */
+        // update current scope required ?
+        // scope[name]=target[name];
         properties.add(name);
       }
     }
@@ -324,31 +298,10 @@ function Sandbox(params) {
     /** target, name -> boolean
     */
     function doHas(scope, name) {
-      /*
-         var keys = [];
-
-         for(key in target) {
-         keys.add(key);
-         }
-
-         for(key in scope) {
-         keys.add(key);
-         }
-
-         var base = keys.sort();
-      // return (name in base);
-      */
-
-      // TODO, not correct because of prototype values
-      // TODO, not correct because target may change during execution
-      //
-      //
-
-
       return (affected(name)) ? (name in scope) : (name in target);
     }
     /** target, name -> boolean
-     */
+    */
     function doHasOwn(scope, name) {
       return (affected(name)) ? Object.prototype.hasOwnProperty.call(scope, name) : Object.prototype.hasOwnProperty.call(target, name);
     }
@@ -360,38 +313,38 @@ function Sandbox(params) {
       return (affected(name)) ? scope[name] : target[name];
     }
     /** target, name, val, receiver -> boolean
-     */
+    */
     function doSet(scope, name, value) {
       touch(scope, name); 
-      return  (scope[name]=value);
+      return (scope[name]=value);
 
-      
-       /*
-      print("@@ " + Object.isExtensible(scope));
 
-      if(!Object.isExtensible(scope)) return 0;
+      /*
+         print("@@ " + Object.isExtensible(scope));
 
-      try{
+         if(!Object.isExtensible(scope)) return 0;
+
+         try{
          return (scope[name]=value);
-      } catch(e) {
-        print(e);
-        return 0;
-      }
-      */
-      
+         } catch(e) {
+         print(e);
+         return 0;
+         }
+         */
+
       /**if(Object.isExtensible(scope))
         return (scope[name]=value);
-      else 
+        else 
         return 0;*/
     }
     /** target, name, propertyDescriptor -> any
-     */
+    */
     function doDefineProperty(scope, name, desc) {
       touch(scope, name);
       return Object.defineProperty(scope, name, desc);
     }
     /** target, name -> boolean
-     */
+    */
     function doDelete(scope, name) {
       touch(scope, name);
       // TODO, not correct because of prototype values
@@ -399,17 +352,17 @@ function Sandbox(params) {
     }
 
     /** target -> [String]
-     */
+    */
     function doEnumerate(scope) {
       // Note: Trap is never called
     }
     /** target -> iterator
-     */
+    */
     function doIterate(scope) {
       // Note: Trap is never called
     }
     /** target -> [String]
-     */
+    */
     function doKeys(scope) {
       var keys = [];
 
@@ -453,31 +406,31 @@ function Sandbox(params) {
       // return Object.getPrototypeOf(scope);
     };
     /** target, name, propertyDescriptor -> any
-     */
+    */
     this.defineProperty = function(scope, name, desc) {
       logc("defineProperty", name);
       return doDefineProperty(scope, name, desc);
     };
     /** target, name -> boolean
-     */
+    */
     this.deleteProperty = function(scope, name) {
       logc("deleteProperty", name);
       return doDelete(scope, name);
     };
     /** target -> boolean
-     */
+    */
     this.freeze = function(scope) {
       logc("freeze");
       return Object.freeze(scope);
     };
     /** target -> boolean
-     */
+    */
     this.seal = function(scope) {
       logc("seal");
       return Object.seal(scope);
     };
     /** target -> boolean
-     */
+    */
     this.preventExtensions = function(scope) {
       logc("preventExtensions");
       return Object.preventExtensions(scope);
@@ -493,7 +446,7 @@ function Sandbox(params) {
       return Object.isSealed(scopet);
     };
     /** target -> boolean
-     */
+    */
     this.isExtensible = function(scope) {
       logc("isExtensible");
       return Object.isExtensible(scope);
@@ -502,38 +455,38 @@ function Sandbox(params) {
     */
     this.has = function(scope, name) {
       logc("has", name);
-      return doHas(target, name);
+      return doHas(scope, name);
     };
     /** target, name -> boolean
-     */
+    */
     this.hasOwn = function(scope, name) {
       logc("hasOwn", name);
-      return doHasOwn(target, name);
+      return doHasOwn(scope, name);
     };
     /** target, name, receiver -> any
     */
     this.get = function(scope, name, receiver) {
       logc("get", name);
       // Tabe, no need to wrap values written inside of the sandbox
-//      return doGet(scope, name);
+      //      return doGet(scope, name);
       return wrap(doGet(scope, name), global);
     };
     /** target, name, val, receiver -> boolean
-     */
+    */
     this.set = function(scope, name, value, receiver) {
       logc("set", name);
       return doSet(scope, name, value);
     };
     /** target -> [String]
-     */
+    */
     this.enumerate = function(scope) {
       logc("enumerate");
       throw new Error("Unimplemented Trap enumerate.");
       // NOTE: Trap is never called
       // return doEnumnerate(scope);
     };
-     /** target -> iterator
-     */
+    /** target -> iterator
+    */
     this.iterate = function(scope) {
       logc("iterate");
       throw new Error("Unimplemented Trap iterate.");
@@ -541,13 +494,13 @@ function Sandbox(params) {
       // return doIterate(scope);
     };
     /** target) -> [String]
-     */
+    */
     this.keys = function(scope) {
       logc("keys");
       return doKeys(scope);      
     };
     /** target, thisValue, args -> any
-     */
+    */
     this.apply = function(scope, thisArg, argsArray) {
       logc("apply");
       // TODO, is it required to decompile the function ?
@@ -555,7 +508,7 @@ function Sandbox(params) {
       return scope.apply(wrap(thisArg,global), wrap(argsArray, global));
     };
     /** target, args -> object
-     */
+    */
     this.construct = function(scope, argsArray) {
       logc("construct");
       // TODO, is it required to decompile the function ?
@@ -782,7 +735,7 @@ function Sandbox(params) {
 
     if(!(transaction instanceof Transaction))
       throw new Error("No transasction object.");
-   
+
     if(!effetcs.has(target)) {
       effects.set(target, []);
     }
