@@ -52,6 +52,18 @@ load("test/membrane/Object.seal.js");
 ////load("test/membrane/Object.set.js");
 
 
+var x = 4711;
+function f() {
+  var x = ":'(";
+  eval("x=\":)\"");
+  print(x);
+}
+f();
+print(x);
+
+print(eval);
+
+
 (function() {
 
   var object = {};

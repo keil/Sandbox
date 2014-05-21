@@ -120,6 +120,24 @@ function Sandbox(params) {
     else return (FunctionPrototypeToString.apply(fun).indexOf('[native code]') > -1);
   }
 
+  // _    ___          _ 
+  //(_)__| __|_ ____ _| |
+  //| (_-< _|\ V / _` | |
+  //|_/__/___|\_/\__,_|_|
+
+  var GlobalEval = eval;
+
+  /** isEval(fun)
+   * Checks whether the given function is the global eval function or not.
+   *
+   * @param fuc Function Object
+   * @return true, if fun is eval, false otherwise
+   */
+  function isEval(fun) {
+    if(!(fun instanceof Function)) return false;
+    else return (fun===eval);
+  }
+
   //__ __ ___ _ __ _ _ __ 
   //\ V  V / '_/ _` | '_ \
   // \_/\_/|_| \__,_| .__/
