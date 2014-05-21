@@ -38,7 +38,13 @@ print(Object.keys(M));
 
 
 
-
+var d = new Date();
+print(d);
+for(var i=0; i<100000000; i++) {}
+print(d);
+var dd = new Date();
+print(dd);
+print(d<dd);
 
 
 function A() {
