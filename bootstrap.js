@@ -23,12 +23,35 @@ load("src/sandbox.js");
 load('test/testcase.js');
 load('test/metahandler.js');
 
-//load('test/test.js');
+// ==================================================
+load("test/behavior/eval.js");
 
-//                 _                       
-// _ __  ___ _ __ | |__  __ _ _ _ _ _  ___ 
-//| '  \/ -_) '  \| '_ \/ _` | '_| ' \/ -_)
-//|_|_|_\___|_|_|_|_.__/\__,_|_| |_||_\___|
+var x = "4711";
+
+var f = (function() {
+  var x = "4711";
+  return function() {
+  print(x);
+  print(this.x);
+  eval("x=4712");
+  eval("this.x=4712");
+  print(x);
+  print(this.x);
+  }
+})();
+
+print(x);
+print(this.x);
+f();
+print(x);
+print(this.x);
+
+
+// ==================================================
+
+quit();
+
+//load('test/test.js');
 
 ////load("test/membrane/Object.apply.js");
 ////load("test/membrane/Object.construct.js");
@@ -48,18 +71,10 @@ load('test/metahandler.js');
 ////load("test/membrane/Object.iterate.js");
 ////load("test/membrane/Object.keys.js"); 
 ////load("test/membrane/Object.preventExtensions.js");
-load("test/membrane/Object.seal.js");
+//load("test/membrane/Object.seal.js");
 ////load("test/membrane/Object.set.js");
 
-
-
-
-
-
-
-
-
-
+load("test/behavior/prototype.js");
 
 
 
@@ -88,8 +103,8 @@ function f() {
 
   print("typeof " + (typeof proxy));
   print("instanceof " + (proxy instanceof Function));
-//  proxy();
-//
+  //  proxy();
+  //
 
   // TODO
   // instanceof and typeof are not trapped
@@ -136,7 +151,7 @@ function f() {
 (function() {
 
   function Handler() {
-  
+
     this.preventExtensions = function(target) {
       return Object.preventExtensions(target);
     }
@@ -168,7 +183,7 @@ function f() {
   function Handler() {
 
     var object = {};
-  
+
     this.preventExtensions = function(target) {
       return Object.preventExtensions(object);
     }
@@ -356,36 +371,36 @@ var arg={};
     this.preventExtensions = function(target) {
       return Object.preventExtensions(target);
     },
-this.isExtensible = function(target) {
-  return Object.isExtensible(target);
-}
-}
+  this.isExtensible = function(target) {
+    return Object.isExtensible(target);
+  }
+  }
 
-// wrap twice
-var proxy = new Proxy(target, new Handler(scope));
+  // wrap twice
+  var proxy = new Proxy(target, new Handler(scope));
 
-print("---");
-print(proxy.a);
-print(proxy.b);
-print(proxy.c.x);
-print(proxy.c.y);
-print(">"+(proxy.c.z=1));
-print(proxy.c.z);
-print(">"+(proxy.x=1));
-print(proxy.x);
-print(proxy.y);
-print("---");
+  print("---");
+  print(proxy.a);
+  print(proxy.b);
+  print(proxy.c.x);
+  print(proxy.c.y);
+  print(">"+(proxy.c.z=1));
+  print(proxy.c.z);
+  print(">"+(proxy.x=1));
+  print(proxy.x);
+  print(proxy.y);
+  print("---");
 
-for (p in proxy) {
-  print ("."+p);
-}
+  for (p in proxy) {
+    print ("."+p);
+  }
 
-print(">"+Object.preventExtensions(proxy));
-print(Object.isExtensible(target)===Object.isExtensible(proxy));
+  print(">"+Object.preventExtensions(proxy));
+  print(Object.isExtensible(target)===Object.isExtensible(proxy));
 
-for (p in target) {
-  print ("."+p);
-}
+  for (p in target) {
+    print ("."+p);
+  }
 
 
 });

@@ -18,4 +18,8 @@
 //| '_ \/ -_) ' \/ _` \ V / / _ \ '_|
 //|_.__/\___|_||_\__,_|\_/|_\___/_|  
 
+// prototype
+load("test/behavior/prototype.js");
+
 // eval
+load("test/behavior/eval.js");

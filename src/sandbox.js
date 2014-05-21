@@ -125,11 +125,6 @@ function Sandbox(params) {
   //| (_-< _|\ V / _` | |
   //|_/__/___|\_/\__,_|_|
 
-  // TODO
-  // * add isEval
-  // * wrap eval into a with statement
-  // * test encapsulation
-
   var GlobalEval = eval;
 
   /** isEval(fun)
@@ -140,7 +135,7 @@ function Sandbox(params) {
    */
   function isEval(fun) {
     if(!(fun instanceof Function)) return false;
-    else return (fun===eval);
+    else return (fun===GlobalEval);
   }
 
   //__ __ ___ _ __ _ _ __ 
@@ -175,6 +170,15 @@ function Sandbox(params) {
     if(!(__membrane__))
       return target;
 
+    // TODO
+    // * wrap eval to support it
+    // * test the support of eval when behaviot/eval succeeds
+    // ** Access to Math.abd
+    // ** ...
+    if(isEval(target)) {
+      throw new Error("eval nut supported");
+    }
+
     // Native Function pass-through
     if((target instanceof Function) && __nativepassthrough__) {
       if(isNative(target)) {
@@ -182,6 +186,7 @@ function Sandbox(params) {
       }
     }
 
+  
     // TODO
     // * handle eval
 
@@ -244,11 +249,7 @@ function Sandbox(params) {
     if(!(target instanceof Function))
       throw new Error("No JavaScript Function.");
 
-    var clone = decompile(target, globale);
-
-    // TODO
-    // * is it required to wrap target.prototype ?
-
+    var clone = decompile(target, wrap(global, global));
     clone.prototype = target.prototype;
     return clone;
   }
@@ -550,7 +551,8 @@ function Sandbox(params) {
     this.apply = function(scope, thisArg, argsArray) {
       logc("apply");
       // TODO, is it required to decompile the function ?
-      return evaluate(scope, global, thisArg, argsArray);
+      //return evaluate(scope, global, thisArg, argsArray);
+      return scope.apply(wrap(thisArg,global), wrap(argsArray, global));
     };
     /** target, args -> object
      */

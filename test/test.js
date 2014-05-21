@@ -18,4 +18,6 @@
 //| '  \/ -_) '  \| '_ \/ _` | '_| ' \/ -_)
 //|_|_|_\___|_|_|_|_.__/\__,_|_| |_||_\___|
 
+load("test/behavior/behavior.js");
+
 load("test/membrane/membrane.js");
