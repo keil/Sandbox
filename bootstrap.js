@@ -44,11 +44,13 @@ var sbx = new Sandbox({verbose:true, out:ShellOut()});
 function ff() {
   n1 = "[4711]";
   n2;
+  o.p;
+  o.q=true;
 }
 
 function gg() {
-  print(">> " + n1);
-  print(">> " + n2);
+//  print(">> " + n1);
+//  print(">> " + n2);
 }
 
 //ff();
@@ -58,14 +60,52 @@ sbx.apply(gg, this);
 print("> " + n1);
 print("> " + n2);
 
-var ects = sbx.getEffects(this);
-//ects.foreach(function(i, e) {print(e)});
-
 var rects = sbx.getReadEffects(this);
+print(";;; Read Effects");
 rects.foreach(function(i, e) {print(e)});
+print("\n");
 
 var wects = sbx.getWriteEffects(this);
+print(";;; Write Effects");
 wects.foreach(function(i, e) {print(e)});
+print("\n");
+
+/*
+var ects = sbx.getEffects(this);
+print(";;; All Effects");
+ects.foreach(function(i, e) {print(e)});
+print("\n");
+*/
+
+var rectso = sbx.getReadEffects(o);
+print(";;; Read Effects of o");
+rectso.foreach(function(i, e) {print(e)});
+print("\n");
+
+var wectso = sbx.getWriteEffects(o);
+print(";;; Write Effects of o");
+wectso.foreach(function(i, e) {print(e)});
+print("\n");
+
+
+print("? "+o.p);
+print("? "+o.q);
+
+print(wectso[0]);
+wectso[0].commit();
+
+print("? "+o.p);
+print("? "+o.q);
+
+// TODO origin, 
+
+
+
+
+
+
+
+
 
 
 
