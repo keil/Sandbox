@@ -721,7 +721,6 @@ function Sandbox(params) {
   // TODO
   // * store also effects?
 
-
   // target -> effect
 
   var readset = new WeakMap();

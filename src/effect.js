@@ -58,6 +58,12 @@ var Effect = (function() {
     else Effect.call(this, cmd, target);
   }
   Write.prototype = new Effect("", {});
+
+  // TODO
+  // * conflict?
+  // ** compare with a set of transactions?
+  // ** compare with origin
+
   // ___             _   ___  __  __        _      
   //| _ \___ __ _ __| | | __|/ _|/ _|___ __| |_ ___
   //|   / -_) _` / _` | | _||  _|  _/ -_) _|  _(_-<
