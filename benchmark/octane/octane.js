@@ -1,5 +1,5 @@
 /*
- * TreatJS: Higher-Order Contracts for JavaScript 
+ * TreatJS: Sandbox 
  * http://proglang.informatik.uni-freiburg.de/treatjs/
  *
  * Copyright (c) 2014, Proglang, University of Freiburg.
@@ -12,26 +12,11 @@
  * Author Matthias Keil
  * http://www.informatik.uni-freiburg.de/~keilr/
  */
-load("src/shell.js");
-load("test/contracts.js");
 
-//  makes TreatJS available under $
-//  Note: required to run the testcases
-var $ = _ ;
-
-// set configuration
-_.configure({
-  assertion:true,
+var params = {
+  verbose:true,
+  out:ShellOut(),
+  decompile:true,
   membrabe:true,
-  decompile:true
-});
-
-// set verbose
-_.verbose({
-  assert:false,
-  sandbox:false
-});
-
-load("benchmark/octane/run.js")
-
-quit();
+  effect:true
+};
