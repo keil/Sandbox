@@ -26,7 +26,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-var base_dir = '';
+var base_dir = 'benchmark/octane/';
 load(base_dir + 'base.js');
 load(base_dir + 'richards.js');
 load(base_dir + 'deltablue.js');
