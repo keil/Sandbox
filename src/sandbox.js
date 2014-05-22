@@ -56,6 +56,12 @@ function Sandbox(params) {
   var __membrane__ = configure("membrane", true);
 
   /*
+   * Effect
+   * (default: true)
+   */
+  var __effect__ = configure("effect", true);
+
+  /*
    * Native Function pass-through
    * (default: true)
    */
@@ -729,6 +735,10 @@ function Sandbox(params) {
   // * test
   // * name: transaction or effect ?
   function trace(effect) {
+
+    // Effect Logging ?
+    if(!__effect__) return true;
+
     if(!(effect instanceof Effect.Effect))
       throw new Error("No effect object.");
 
