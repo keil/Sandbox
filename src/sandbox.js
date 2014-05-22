@@ -451,12 +451,21 @@ function Sandbox(params) {
     */
     this.get = function(scope, name, receiver) {
       logc("get", name);
+
+      // Effect (TODO)
+      trace(new Get(target, name, receiver));
+
       return doGet(scope, name);
     };
     /** target, name, val, receiver -> boolean
     */
     this.set = function(scope, name, value, receiver) {
       logc("set", name);
+
+       // Effect (TODO)
+      trace(new Set(target, name, receiver));
+
+
       return doSet(scope, name, value);
     };
     /** target -> [String]
@@ -706,37 +715,60 @@ function Sandbox(params) {
   // TODO
   // * store also effects?
 
-  var effects = new WeakMap();
+
+  // target -> effect
+
+  var readset = new WeakMap();
+  var writeset = new WeakMap();
+
+  // TODO, is this really the best way ?
+  var effectset = new WeakMap();
 
   // TODO
   // * make comment
   // * test
   // * name: transaction or effect ?
-  function trace(target, transaction) {
+  function trace(target, effect) {
     if(!(target instanceof Object))
       throw new TypeError("No traget object.");
 
-    if(!(transaction instanceof Transaction))
-      throw new Error("No transasction object.");
+    if(!(transaction instanceof Effect))
+      throw new Error("No effect object.");
 
-    if(!effetcs.has(target)) {
-      effects.set(target, []);
+    if(effect instanceof Read) {
+      update(readset, target, effect);
+      update(effectset, target, effect);
+
+    } else if(effect instanceof Write) {
+      update(writeset, target, effect);
+      update(effectset, target, effect);
+    } 
+
+    function update(set, target, effect) {
+        if(!set.has(target))
+          set.set(target, []);
+        return set.get(target).push(effect);
     }
-
-    return effetcs.get(target).push(transaction);
-
-    // TODO, what to store in a weak map
-    // one target walue can have a couple of effects
-    // so store:
-    // target -> Timestamp -> Transaction
   }
 
-  // TODO
-  // * name?
-  __define("effetcs", function(target) {
-    if(effects.has(target)) return effects.get(target);
+  __define("getReadEffects", function(target) {
+    if(reasdset.has(target)) return readset.get(target);
     else return [];
   }, this);
+
+  __define("getWriteEffects", function(target) {
+    if(reasdset.has(target)) return writeset.get(target);
+    else return [];
+  }, this);
+
+  __define("getEffetcs", function(target) {  
+    if(effectset.has(target)) return effectset.get(target);
+    else return [];
+  }, this);
+
+   // conflict ?
+
+
 }
 
 // ___               _ _               ___ ___  

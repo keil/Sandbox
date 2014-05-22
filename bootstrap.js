@@ -28,7 +28,39 @@ load('test/metahandler.js');
 //load("test/membrane/Object.has.js");
 //load("test/membrane/Object.hasOwn.js");
 
-load("test/behavior/eval.js");
+//load("test/behavior/eval.js");
+
+// TODO, bis is when no this is defined
+// restrict acces bu an violation if no has is avaliable
+
+var n1=4711;
+var n2=4712;
+var o={p:true, q:false};
+
+var sbx = new Sandbox({verbose:true, out:ShellOut()});
+
+function ff() {
+  n1 = "[4711]";
+  n2;
+}
+
+function gg() {
+  print(">> " + n1);
+  print(">> " + n2);
+}
+
+//ff();
+sbx.apply(ff, this);
+sbx.apply(gg, this);
+
+print("> " + n1);
+print("> " + n2);
+
+
+
+
+
+quit();
 
 var M = {a:5711, x:4711, b:134};
 
