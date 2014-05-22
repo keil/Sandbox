@@ -122,6 +122,7 @@ function Sandbox(params) {
    * @return true, if fun is a native function, false otherwise
    */
   function isNative(fun) {
+    print(fun);
     if(!(fun instanceof Function)) return false;
     else return (FunctionPrototypeToString.apply(fun).indexOf('[native code]') > -1);
   }

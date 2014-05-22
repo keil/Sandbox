@@ -25,16 +25,16 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
 var base_dir = 'benchmark/octane/';
 load(base_dir + 'base.js');
+
 load(base_dir + 'richards.js');
 load(base_dir + 'deltablue.js');
 load(base_dir + 'crypto.js');
 load(base_dir + 'raytrace.js');
 load(base_dir + 'earley-boyer.js');
 load(base_dir + 'regexp.js');
-load(base_dir + 'splay.js');
+load(base_dir + 'splay.js'); 
 load(base_dir + 'navier-stokes.js');
 load(base_dir + 'pdfjs.js');
 load(base_dir + 'mandreel.js');
@@ -47,6 +47,7 @@ load(base_dir + 'zlib-data.js');
 load(base_dir + 'typescript.js');
 load(base_dir + 'typescript-input.js');
 load(base_dir + 'typescript-compiler.js');
+
 
 var success = true;
 
@@ -72,6 +73,25 @@ function PrintScore(score) {
 BenchmarkSuite.config.doWarmup = undefined;
 BenchmarkSuite.config.doDeterministic = undefined;
 
+BenchmarkSuite.config.doWarmup = true;
+BenchmarkSuite.config.doDeterministic = true;
+
+
 BenchmarkSuite.RunSuites({ NotifyResult: PrintResult,
                            NotifyError: PrintError,
                            NotifyScore: PrintScore });
+
+
+/*
+// TEST BLOCK
+// tests date caluclation
+
+var start = new Date();
+print(start);
+
+for (var i = 0; i<1000000000; i++) {}
+var end = new Date();
+print(end);
+
+print(end-start);
+*/
