@@ -103,7 +103,7 @@ var Effect = (function() {
 
   /** target, name -> boolean
   */
-  function Has(target) {
+  function Has(target, name) {
     if(!(this instanceof Has)) return new Has(target);
     else Read.call(this, "has [name="+name+"]", target);
 

@@ -385,80 +385,86 @@ function Sandbox(params) {
      */
     this.getOwnPropertyDescriptor = function(scope, name) {
       logc("getOwnPropertyDescriptor", name);
+      trace(new Effect.GetOwnPropertyDescriptor(target, name));
+
       return doGetOwnPropertyDescriptor(scope, name);
     };
     /** target -> [String]
      */
     this.getOwnPropertyNames = function(scope) {
       logc("getOwnPropertyNames");
+      trace(new Effect.GetOwnPropertyNames(target));
+
       return doGetOwnPropertyNames(scope);
     };
     /** target, name, propertyDescriptor -> any
     */
     this.defineProperty = function(scope, name, desc) {
       logc("defineProperty", name);
+      trace(new Effect.DefineProperty(target, name, desc));
+
       return doDefineProperty(scope, name, desc);
     };
     /** target, name -> boolean
     */
     this.deleteProperty = function(scope, name) {
       logc("deleteProperty", name);
+      trace(new Effect.DeleteProperty(target, name));
+
       return doDelete(scope, name);
     };
     /** target -> boolean
     */
     this.freeze = function(scope) {
       logc("freeze");
+      trace(new Effect.Freeze(target));
+
       return Object.freeze(scope);
     };
     /** target -> boolean
     */
     this.seal = function(scope) {
       logc("seal");
+      trace(new Effect.Seal(target));
+
       return Object.seal(scope);
     };
     /** target -> boolean
     */
     this.preventExtensions = function(scope) {
       logc("preventExtensions");
+      trace(new Effect.PreventExtensions(target));
+
       return Object.preventExtensions(scope);
-    };
-    /** target -> boolean
-    */
-    this.isFrozen = function(scope) {
-      logc("isFrozen");
-      return Object.isFrozen(scope);
-    };
-    /** target -> boolean
-    */
-    this.isSealed = function(scope) {
-      logc("isSealed");
-      return Object.isSealed(scopet);
     };
     /** target -> boolean
     */
     this.isExtensible = function(scope) {
       logc("isExtensible");
+      trace(new Effect.IsExtensible(target));
+
       return Object.isExtensible(scope);
     };
     /** target, name -> boolean
     */
     this.has = function(scope, name) {
       logc("has", name);
+      trace(new Effect.Has(target, name));
+
       return doHas(scope, name);
     };
     /** target, name -> boolean
     */
     this.hasOwn = function(scope, name) {
       logc("hasOwn", name);
+      trace(new Effect.HasOwn(target, name));
+
       return doHasOwn(scope, name);
     };
     /** target, name, receiver -> any
     */
     this.get = function(scope, name, receiver) {
       logc("get", name);
-
-      // Effect (TODO)
       trace(new Effect.Get(target, name, receiver));
 
       return doGet(scope, name);
@@ -467,10 +473,7 @@ function Sandbox(params) {
     */
     this.set = function(scope, name, value, receiver) {
       logc("set", name);
-
-       // Effect (TODO)
       trace(new Effect.Set(target, name, value, receiver));
-
 
       return doSet(scope, name, value);
     };
@@ -478,28 +481,36 @@ function Sandbox(params) {
     */
     this.enumerate = function(scope) {
       logc("enumerate");
-      throw new Error("Unimplemented Trap enumerate.");
+      trace(new Effect.Enumerate(target));
+
       // NOTE: Trap is never called
       // return doEnumnerate(scope);
+      throw new Error("Unimplemented Trap enumerate.");
     };
     /** target -> iterator
     */
     this.iterate = function(scope) {
       logc("iterate");
-      throw new Error("Unimplemented Trap iterate.");
+      trace(new Effect.Iterate(target));
+
       // NOTE: Trap is never called
       // return doIterate(scope);
+      throw new Error("Unimplemented Trap iterate.");
     };
     /** target) -> [String]
     */
     this.keys = function(scope) {
       logc("keys");
-      return doKeys(scope);      
+      trace(new Effect.Keys(target));
+
+      return doKeys(scope);
     };
     /** target, thisValue, args -> any
     */
     this.apply = function(scope, thisArg, argsArray) {
       logc("apply", scope);
+      trace(new Effect.Apply(target, thisArg, argsArray));
+
       // TODO, is it required to wrap this and argments
       // or only when calling an external evaluate
       
@@ -514,8 +525,10 @@ function Sandbox(params) {
     };
     /** target, args -> object
     */
-    this.construct = function(scope, argsArray) {
+    this.construct = function(scope, thisArg, argsArray) {
       logc("construct");
+      trace(new Effect.Construct(target, thisArg, argsArray));
+
       // TODO, is it required to decompile the function ?
       // OR move this back to the seperated function!
       // new this reference
