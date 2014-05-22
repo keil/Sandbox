@@ -18,6 +18,8 @@ load("lib/padding.js")
 load("src/misc.js");
 load("src/out.js");
 load("src/shell.js");
+
+load("src/effect.js");
 load("src/sandbox.js");
 
 load('test/testcase.js');
@@ -55,6 +57,15 @@ sbx.apply(gg, this);
 
 print("> " + n1);
 print("> " + n2);
+
+var ects = sbx.getEffects(this);
+//ects.foreach(function(i, e) {print(e)});
+
+var rects = sbx.getReadEffects(this);
+rects.foreach(function(i, e) {print(e)});
+
+var wects = sbx.getWriteEffects(this);
+wects.foreach(function(i, e) {print(e)});
 
 
 

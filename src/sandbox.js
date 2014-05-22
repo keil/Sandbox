@@ -453,7 +453,7 @@ function Sandbox(params) {
       logc("get", name);
 
       // Effect (TODO)
-      trace(new Get(target, name, receiver));
+      trace(new Effect.Get(target, name, receiver));
 
       return doGet(scope, name);
     };
@@ -463,7 +463,7 @@ function Sandbox(params) {
       logc("set", name);
 
        // Effect (TODO)
-      trace(new Set(target, name, receiver));
+      trace(new Effect.Set(target, name, value, receiver));
 
 
       return doSet(scope, name, value);
@@ -728,20 +728,20 @@ function Sandbox(params) {
   // * make comment
   // * test
   // * name: transaction or effect ?
-  function trace(target, effect) {
-    if(!(target instanceof Object))
-      throw new TypeError("No traget object.");
-
-    if(!(transaction instanceof Effect))
+  function trace(effect) {
+    if(!(effect instanceof Effect.Effect))
       throw new Error("No effect object.");
 
-    if(effect instanceof Read) {
-      update(readset, target, effect);
-      update(effectset, target, effect);
+    print("ADD -- " + effect)
 
-    } else if(effect instanceof Write) {
-      update(writeset, target, effect);
-      update(effectset, target, effect);
+
+    if(effect instanceof Effect.Read) {
+      update(readset, effect.target, effect);
+      update(effectset, effect.target, effect);
+
+    } else if(effect instanceof Effect.Write) {
+      update(writeset, effect.target, effect);
+      update(effectset, effect.target, effect);
     } 
 
     function update(set, target, effect) {
@@ -752,16 +752,16 @@ function Sandbox(params) {
   }
 
   __define("getReadEffects", function(target) {
-    if(reasdset.has(target)) return readset.get(target);
+    if(readset.has(target)) return readset.get(target);
     else return [];
   }, this);
 
   __define("getWriteEffects", function(target) {
-    if(reasdset.has(target)) return writeset.get(target);
+    if(writeset.has(target)) return writeset.get(target);
     else return [];
   }, this);
 
-  __define("getEffetcs", function(target) {  
+  __define("getEffects", function(target) {  
     if(effectset.has(target)) return effectset.get(target);
     else return [];
   }, this);
