@@ -57,7 +57,7 @@ var uid = "[Global UID]";
   return uid;
 }], "decompile # 4", true)).run();
 
-*/
+
 
 var uid = "[Global UID]";
 
@@ -70,7 +70,44 @@ var uid = "[Global UID]";
   return this.uid;
 }], "decompile # 5", true)).run();
 
+var uid = "[Global UID]";
 
+(new Testcase(function(f) {
+  var outcome = "";
+  outcome+=f()();
+  return outcome;
+}, this, {uid:"[This UID]"}, [function() {
+  return function() {
+    return uid;
+  };
+}], "decompile # 6.1", true)).run();
+
+(new Testcase(function(f) {
+  var uid = "[IN]";
+  var outcome = "";
+  outcome+=f()();
+  return outcome;
+}, this, {uid:"[This UID]"}, [function() {
+  return function() {
+    return uid;
+  };
+}], "decompile # 6.2", true)).run();
+
+*/
+
+
+var uid = "[Global UID]";
+
+(new Testcase(function(f) {
+  var outcome = "";
+  outcome+=this.uid;
+  outcome+=f()();
+  return outcome;
+}, this, {uid:"[This UID]"}, [function() {
+   return function() {
+    return this.uid;
+  };
+}], "decompile # 5", true)).run();
 
 
 
