@@ -743,10 +743,17 @@ function Sandbox(params) {
   globalArg = (globalArg!==undefined) ? globalArg : new Object();
   thisArg = (thisArg!==undefined) ? thisArg : globalArg;
 
-// TODO, arguments ?
-// pop first elememnts
+  var argsArray = [];
+  for(var i=0; i<arguments.length;i++) argsArray[i]=arguments[i];
 
-  return evaluate(fun, globalArg, thisArg, arguments);
+  // pop fun
+  domain.pop();
+  // pop globalArg
+  domain.pop();
+  // pop thisArg
+  domain.pop();
+
+  return evaluate(fun, globalArg, thisArg, argsArray);
   }, this);
 
   // ___ _         _ 
