@@ -13,33 +13,6 @@
  * http://www.informatik.uni-freiburg.de/~keilr/
  */
 
-(new Testcase(function(F) {
-  var f = F();
-  var outcome = "";
-  var x = "[LOCAL]";
-//  outcome+=" /"+(x);
-//  outcome+=" /"+(this.x);
-  this.ZZZ;
-//  outcome+=" /"+f();
-  outcome+=" /"+f.call(this);
-//  outcome+=" /"+(x);
-//  outcome+=" /"+(this.x);
-  return outcome;
-}, this, {x:"[THIS]"}, [(function() {
-  var x = "[FUNCTION] ";
-  this.XXX;
-  return function() {
-    this.YYY;
-    var outcome = " IN(";
-//    outcome+=" /"+(x);
-    outcome+=" /"+(this.x);
-    x="[4711]";
-    this.x="[4712]";
-//    outcome+=" /"+(x);
-    outcome+=" /"+(this.x);
-    return outcome+") ";
-  };
-})], "eval # 1")).run();
 
 
 

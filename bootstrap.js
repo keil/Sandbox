@@ -30,7 +30,10 @@ load('test/metahandler.js');
 //load("test/membrane/Object.has.js");
 //load("test/membrane/Object.hasOwn.js");
 
-//load("test/behavior/eval.js");
+load("test/behavior/decompile.js");
+
+
+quit();
 
 // TODO, bis is when no this is defined
 // restrict acces bu an violation if no has is avaliable

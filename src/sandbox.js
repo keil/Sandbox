@@ -773,32 +773,22 @@ function Sandbox(params) {
   //   | | | | (_| | | | \__ \ (_| | (__| |_| | (_) | | | \__ \
   //   |_|_|  \__,_|_| |_|___/\__,_|\___|\__|_|\___/|_| |_|___/
 
-
-  // TODO
-  // * store also effects?
-
-  // target -> effect
-
   var readset = new WeakMap();
   var writeset = new WeakMap();
 
-  // TODO, is this really the best way ?
   var effectset = new WeakMap();
 
-  // TODO
-  // * make comment
-  // * test
-  // * name: transaction or effect ?
+  /** saves an sandbox effect
+   * @param effect Effect
+   */
   function trace(effect) {
+    logc("trace", effect.toString());
 
     // Effect Logging ?
     if(!__effect__) return true;
 
     if(!(effect instanceof Effect.Effect))
       throw new Error("No effect object.");
-
-    print("ADD -- " + effect)
-
 
       if(effect instanceof Effect.Read) {
         update(readset, effect.target, effect);
@@ -816,24 +806,32 @@ function Sandbox(params) {
     }
   }
 
+   /** Get Effects
+   * @param target JavaScript Obejct
+   * @return JavaScript Array [Effect]
+   */
   __define("getReadEffects", function(target) {
     if(readset.has(target)) return readset.get(target);
     else return [];
   }, this);
 
+   /** Get Effects
+   * @param target JavaScript Obejct
+   * @return JavaScript Array [Effect]
+   */
   __define("getWriteEffects", function(target) {
     if(writeset.has(target)) return writeset.get(target);
     else return [];
   }, this);
 
+  /** Get Effects
+   * @param target JavaScript Obejct
+   * @return JavaScript Array [Effect]
+   */
   __define("getEffects", function(target) {  
     if(effectset.has(target)) return effectset.get(target);
     else return [];
   }, this);
-
-  // conflict ?
-
-
 }
 
 // ___               _ _               ___ ___  
