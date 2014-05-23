@@ -33,6 +33,30 @@ load('test/metahandler.js');
 load("test/behavior/decompile.js");
 
 
+var thisArg = {}
+var global = this;
+
+function m() {
+  print("@1.1 " + (this===thisArg));
+  print("@1.2 " + (this===global));
+  return function() {
+    print("@2.1 " + (this===thisArg));
+    print("@2.2 " + (this===global));
+  }
+}
+
+m()();
+print("-");
+m.apply(thisArg)();
+
+
+var c = function() { return eval("with({this:thisArg}){(function() {print(\"@1.1 \" + (this===thisArg));print(\"@1.2 \" + (this===global));return function() {print(\"@2.1 \" + (this===thisArg));print(\"@2.2 \" + (this===global));}})}"); }
+print("-");
+thisArg.n = c.apply(thisArg);
+thisArg.n()();
+
+
+
 quit();
 
 // TODO, bis is when no this is defined

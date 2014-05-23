@@ -562,6 +562,8 @@ function Sandbox(params) {
       thisArg = (thisArg!==undefined) ? thisArg : global;
       argsArray = (argsArray!==undefined) ? argsArray : new Array();
 
+      print("@@@@@@@@@@@@ "+thisArg.uuid);
+      
       // Note: 
       // The function in scope is already decompiled.
       return scope.apply(wrap(thisArg, global), wrap(argsArray, global));

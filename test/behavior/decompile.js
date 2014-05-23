@@ -93,7 +93,7 @@ var uid = "[Global UID]";
   };
 }], "decompile # 6.2", true)).run();
 
-*/
+
 
 
 var uid = "[Global UID]";
@@ -107,7 +107,81 @@ var uid = "[Global UID]";
    return function() {
     return this.uid;
   };
-}], "decompile # 5", true)).run();
+}], "decompile # 7", true)).run();
+
+var uuid = "[Global UID]";
+
+(new Testcase(function(f) {
+  var g = f();
+  var uuid = "[Local]";
+  var outcome = "";
+  outcome+=g();
+  return outcome;
+}, {uuid:"[Global]"}, {uuid:"[This]"}, [(function() {
+  var uuid = "[Closure] ";
+  return function() {
+    uuid="[New]";
+    return uuid;
+  };
+})], "decompile # 8.1", false)).run();
+
+var uuid = "[Global UID]";
+
+(new Testcase(function(f) {
+  var g = f();
+  var uuid = "[Local]";
+  var outcome = "";
+  outcome+=g();
+  return outcome;
+}, {uuid:"[Global]"}, {uuid:"[This]"}, [(function() {
+  var uuid = "[Closure] ";
+  return function() {
+    var pre = uuid;
+    uuid="[New]";
+    var post = uuid;
+    return pre+post;
+  };
+})], "decompile # 8.2", false)).run();
+
+*/
+
+var uuid = "[Global UID]";
+var ref = "X";
+
+(new Testcase(function(f) {
+  var g = f;
+  var uuid = "[Local]";
+  var outcome = "";
+  outcome+=g();
+//  outcome+=g.apply(this);
+  return outcome;
+}, {isProxy:isProxy,uuid:"[Global]"}, {uuid:"[This]"}, [(function() {
+  var uuid = "[Closure] ";
+  return (function() {
+   
+// Make extended demo
+
+   // return isProxy(this);
+   // return this.uuid;
+
+    // Wert muss heir hinkommen ohne dass es gewrap wird
+    // Frage, hab ich hier ungeschuetzen zugriff auf externe werte ?
+    //
+
+    // todo, es duerfen halt nue ungeschuetzte objecte zurueckgegeben werden
+
+    var pre = this.uuid;
+//    this.uuid="[New]";
+    var post = this.uuid;
+    return pre+post+isProxy(this);
+  })();
+})], "decompile # 8.2", false)).run();
+
+//print(uuid);
+//print(this.uuid);
+
+
+
 
 
 
