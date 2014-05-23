@@ -191,7 +191,6 @@ var Effect = (function() {
   // \ \/\/ / '_| |  _/ -_) | _||  _|  _/ -_) _|  _(_-<
   //  \_/\_/|_| |_|\__\___| |___|_| |_| \___\__|\__/__/
 
-
   function Set(target, name, value, receiver) {
     if(!(this instanceof Set)) return new Set(target, name, value, receiver);
     else Write.call(this, "set [name="+name+"]", target, name, value, receiver);
