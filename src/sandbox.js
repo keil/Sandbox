@@ -216,15 +216,19 @@ function Sandbox(params) {
 
     // If target already wrapped, return cached proxy
     if(cache.has(target)) {
+      log("Cache hit.");
       return cache.get(target);
     } else {
+      log("Cache miss.");
 
       // decompiles function or clones object
       // to preserve typeof/ instanceof
       // and to make an iterable image for loops
       if(target instanceof Function) {
+        log("target instanceOf Function");
         var scope = cloneFunction(target, global)
       } else {
+        log("target instanceOf Object");
         var scope = cloneObject(target);
       }
 
@@ -257,6 +261,8 @@ function Sandbox(params) {
    * @return JavaScript Object
    */
   function cloneObject(target) {
+    log("Clone Object.");
+
     if(!(target instanceof Object))
       throw new Error("No JavaScript Object.");
 
@@ -280,7 +286,8 @@ function Sandbox(params) {
    * @return JavaScript Function
    */
   function cloneFunction(target, global) {
-    return target;
+    log("Clone Function.");
+
     if(!(target instanceof Function))
       throw new Error("No JavaScript Function.");
 
@@ -555,9 +562,6 @@ function Sandbox(params) {
       thisArg = (thisArg!==undefined) ? thisArg : global;
       argsArray = (argsArray!==undefined) ? argsArray : new Array();
 
-      thisArg={};
-
-
       // Note: 
       // The function in scope is already decompiled.
       return scope.apply(wrap(thisArg, global), wrap(argsArray, global));
@@ -612,7 +616,7 @@ function Sandbox(params) {
       throw new TypeError("fun");
     if(!(env instanceof Object))
       throw new TypeError("env");
-
+    
     // Decompile ?
     if(!(__decompile__))
       return fun;
@@ -632,7 +636,7 @@ function Sandbox(params) {
    * @return Any
    */
   function evaluate(fun, globalArg, thisArg, argsArray) {
-    logc("evaluate");
+    logc("evaluate", fun);
 
     if(!(globalArg instanceof Object))
       throw new TypeError("globalArg");
@@ -657,7 +661,7 @@ function Sandbox(params) {
    * @return Object
    */
   function construct(fun, globalArg, argsArray) {
-    logc("construct");
+    logc("construct", fun);
 
     if(!(globalArg instanceof Object))
       throw new TypeError("globalArg");
@@ -683,7 +687,7 @@ function Sandbox(params) {
    * @return Any
    */
   function bind(fun, globalArg, thisArg, argsArray) {
-    logc("bind");
+    logc("bind", fun);
 
     if(!(globalArg instanceof Object))
       throw new TypeError("globalArg");

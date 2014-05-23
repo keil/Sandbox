@@ -12,7 +12,7 @@
  * Author Matthias Keil
  * http://www.informatik.uni-freiburg.de/~keilr/
  */
-
+/*
 var id = "[Global]";
 
 (new Testcase(function() {
@@ -57,8 +57,13 @@ var uid = "[Global UID]";
   return uid;
 }], "decompile # 4", true)).run();
 
+*/
+
+var uid = "[Global UID]";
+
 (new Testcase(function(f) {
   var outcome = "";
+  outcome+=this.uid;
   outcome+=f();
   return outcome;
 }, this, {uid:"[This UID]"}, [function() {
