@@ -585,9 +585,6 @@ function Sandbox(params) {
     };
   };
 
-  // TODO, wrap return
-
-
   //  _____                 _ _               
   // / ____|               | | |              
   //| (___   __ _ _ __   __| | |__   _____  __
@@ -600,13 +597,7 @@ function Sandbox(params) {
   /// _` / -_) _/ _ \ '  \| '_ \ | / -_)
   //\__,_\___\__\___/_|_|_| .__/_|_\___|
   //                      |_|           
-
-  // TODO
-  // Implement a decompile cache.
-  // This could look as follows:
-  //
-  // WeakMap: Function -> Global -> Sbxed
-
+ 
   /** decompile
    * Decompiles functions.
    * @param fun JavaScript Function
@@ -706,7 +697,7 @@ function Sandbox(params) {
     var bound = sbxed.bind(wrap(thisArg, globalArg));
     // bind arguments
     for(var arg in argsArray) {
-      bound = bound.bind(null, arg);
+      bound = bound.bind(null, wrap(arg, globalArg));
     }
     // return bound function
     return bound;

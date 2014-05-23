@@ -2,6 +2,9 @@
 
  - rename traget to origin
 
+ - implement decompile cache
+   WeakMap: Function -> Global -> Sbxed
+
 *Sandbox*
 
  - diff/ commit/ conflicts
