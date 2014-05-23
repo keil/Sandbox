@@ -1,3 +1,43 @@
+*Effects*
+
+  a) Read Effects
+     target -> timestamp -> (read operation)
+
+  b) Write Effects
+     target -> timestamp -> (write operation) -> value
+
+     - commit
+       commits the effect to the target
+
+     - rollback
+       rollback the commit/operation if possible
+       (not possible for Object.freeze/ Object.seal/ Object.preventExtensions)
+
+     - diff
+       returns true if a difference between target* and origin exists
+       (target or target[name], depending on the effect)
+
+     - origin
+       returns the origin value
+       (depending on the effect)
+
+     - [name, value, receiver, decs, thisArg, ArgsArray]
+       returns the corresponding arguments
+
+
+Diabalbe
+breakout 
+when value not exists
+- implement meta handler
+
+
+
+*Rollback*
+
+ a) Disable Sandbox Isolation (Membrane/Decompile)
+    and anable Effects to do an rollback.
+
+
 *Pre State Snapshot*
 
  a) Clone global when installing a sandbox will build an shadow tree
@@ -21,7 +61,7 @@ Value   := Value
 Stamp   := Timestamp
 
 - commit 
-- conflict
+- conflict / conflict detection
 - diff
 - rollback
 - begintransaction, name

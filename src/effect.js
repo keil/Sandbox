@@ -58,11 +58,15 @@ var Effect = (function() {
     else Effect.call(this, cmd, target);
   }
   Write.prototype = new Effect("", {});
-
-  // TODO
-  // * conflict?
-  // ** compare with a set of transactions?
-  // ** compare with origin
+  Write.prototype.commit = function() {
+    throw new ReferenceError("Commit not implemented");
+  }
+  Write.prototype.rollback = function() {
+    throw new ReferenceError("Rollback not implemented");
+  }
+  Write.prototype.diff = function() {
+    return new ReferenceError("Diff not implemented");
+  }
 
   // ___             _   ___  __  __        _      
   //| _ \___ __ _ __| | | __|/ _|/ _|___ __| |_ ___
@@ -192,17 +196,29 @@ var Effect = (function() {
     if(!(this instanceof Set)) return new Set(target, name, value, receiver);
     else Write.call(this, "set [name="+name+"]", target, name, value, receiver);
 
-    function commit() {
-      return target[name]=value;
-    }
     // define name
     __define("name", name, this);
     // define value
     __define("value", value, this);
     // define receiver
     __define("receiver", receiver, this);
+
     // define commit
-    __define("commit", commit, this);
+    __define("commit", function() {
+      return target[name]=value;
+    }, this);
+
+    // define origin
+    __define("origin", target[name], this);
+    // define rollback
+    __define("rollback", function() {
+      return target[name]=origin;
+    }, this);
+
+    // define diff
+    __define("diff", function() {
+      return (target[name]===origin);
+    }, this);
   }
   Set.prototype = new Write("", {});
 
@@ -212,21 +228,30 @@ var Effect = (function() {
     if(!(this instanceof DefineProperty)) return new DefineProperty(target, name, desc);
     else Write.call(this, "defineProperty [name="+name+"]", target, name);
 
-    /** commit
-    */
-    function commit() {
-      return Object.defineProperty(target, name, desc);
-    }
-
     // define name
     __define("name", name, this);
     // define desc
     __define("desc", desc, this);
+
     // define commit
-    __define("commit", commit, this);
+    __define("commit", function() {
+      return Object.defineProperty(target, name, desc);
+    }, this);
+
+    // define origin
+    __define("origin", Object.getOwnPropertyDescriptor(target, name), this);
+    // define rollback
+    __define("rollback", function() {
+      return Object.defineProperty(target, name, origin);
+    }
+    , this);
+
+    // define diff
+    __define("diff", function() {
+      return (target[name]===origin);
+    }, this);
   }
   DefineProperty.prototype = new Write("", {});
-
 
   /** target, name -> boolean
   */
@@ -234,16 +259,25 @@ var Effect = (function() {
     if(!(this instanceof DeleteProperty)) return new DeleteProperty(target, name);
     else Write.call(this, "deleteProperty [name="+name+"]", target, name);
 
-    /** commit
-    */
-    function commit() {
-      return (delete target[name]);
-    }
-
     // define name
     __define("name", name, this);
     // define commit
-    __define("commit", commit, this);
+    __define("commit", function() {
+      return (delete target[name]);
+    }, this);
+
+    // define origin
+    __define("origin", (Object.prototype.hasOwnProperty.call(target, name) ? target[name] : undefined), this);
+    // define rollback
+    __define("rollback", function() {
+      return (target[name]=origin);
+    }
+    , this);
+
+    // define diff
+    __define("diff", function() {
+      return (Object.prototype.hasOwnProperty.call(target, name) ? target[name] : undefined)===origin;
+    }, this);
   }
   DeleteProperty.prototype = new Write("", {});
 
@@ -253,14 +287,23 @@ var Effect = (function() {
     if(!(this instanceof Freeze)) return new Freeze(target);
     else Write.call(this, "freeze", target);
 
-    /** commit
-    */
-    function commit() {
-      return Object.freeze(target);
-    }
-
     // define commit
-    __define("commit", commit, this);
+    __define("commit", function() {
+      return Object.freeze(target);
+    }, this);
+
+    // define origin
+    __define("origin", Object.isFrozen(target), this);
+    // define rollback
+    __define("rollback", function() {
+      throw new Error("Rollback not possible");
+    }
+    , this);
+
+    // define diff
+    __define("diff", function() {
+      return (Object.isFrozen(target)===origin);
+    }, this);
   }
   Freeze.prototype = new Write("", {});
 
@@ -270,14 +313,22 @@ var Effect = (function() {
     if(!(this instanceof Seal)) return new Seal(target);
     else Write.call(this, "seal", target);
 
-    /** commit
-    */
-    function commit() {
-      return Object.seal(target);
-    }
-
     // define commit
-    __define("commit", commit, this);
+    __define("commit", function() {
+      return Object.seal(target);
+    }, this);
+
+    // define origin
+    __define("origin", Object.isSealed(target), this);
+    // define rollback
+    __define("rollback", function() {
+      throw new Error("Rollback not possible");
+    }, this);
+
+    // define diff
+    __define("diff", function() {
+      return (Object.isSealed(target)===origin);
+    }, this);
   }
   Seal.prototype = new Write("", {});
 
@@ -287,14 +338,22 @@ var Effect = (function() {
     if(!(this instanceof PreventExtensions)) return new PreventExtensions(target);
     else Write.call(this, "preventExtensions", target);
 
-    /** commit
-    */
-    function commit() {
-      return Object.preventExtensions(target);
-    }
-
     // define commit
-    __define("commit", commit, this);
+    __define("commit", function() {
+      return Object.preventExtensions(target);
+    }, this);
+
+    // define origin
+    __define("origin", Object.isExtensible(target), this);
+    // define rollback
+    __define("rollback", function() {
+      throw new Error("Rollback not possible");
+    }, this);
+
+    // define diff
+    __define("diff", function() {
+      return (Object.isExtensible(target)===origin);
+    }, this);
   }
   PreventExtensions.prototype = new Write("", {});
 
