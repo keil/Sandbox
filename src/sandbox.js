@@ -120,6 +120,15 @@ function Sandbox(params) {
     }
   }
 
+  //     _     _      _   _          
+  //__ _(_)___| |__ _| |_(_)___ _ _  
+  //\ V / / _ \ / _` |  _| / _ \ ' \ 
+  // \_/|_\___/_\__,_|\__|_\___/_||_|
+
+  function violation(msg) {
+    throw new Error("Unauthorized Access: "+msg);
+  }
+
   // _    _  _      _   _         ___             _   _          
   //(_)__| \| |__ _| |_(_)_ _____| __|  _ _ _  __| |_(_)___ _ _  
   //| (_-< .` / _` |  _| \ V / -_) _| || | ' \/ _|  _| / _ \ ' \ 
@@ -329,6 +338,13 @@ function Sandbox(params) {
     /** target, name -> boolean
     */
     function doHas(scope, name) {
+      var has = (affected(name)) ? (name in scope) : (name in target);
+
+      // TODO
+      // is violation the right way
+      // otherwise return true and say get to return undefined
+      if(has===false) violation(name);
+
       return (affected(name)) ? (name in scope) : (name in target);
     }
     /** target, name -> boolean
