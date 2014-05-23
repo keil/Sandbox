@@ -280,6 +280,7 @@ function Sandbox(params) {
    * @return JavaScript Function
    */
   function cloneFunction(target, global) {
+    return target;
     if(!(target instanceof Function))
       throw new Error("No JavaScript Function.");
 
@@ -551,17 +552,17 @@ function Sandbox(params) {
       logc("apply", scope);
       trace(new Effect.Apply(target, thisArg, argsArray));
 
-      // TODO, is it required to wrap this and argments
-      // or only when calling an external evaluate
+      thisArg = (thisArg!==undefined) ? thisArg : global;
+      argsArray = (argsArray!==undefined) ? argsArray : new Array();
 
-      //      return wrap(evaluate(scope, global, (thisArg===undefined) ? global : thisArg, argsArray), global);
+      thisArg={};
 
-      // TODO
-      // * do the same in construct and with argsArray
-      thisArg = (thisArg===undefined) ? global : thisArg;
-      //thisArg = global;
 
+      // Note: 
+      // The function in scope is already decompiled.
       return scope.apply(wrap(thisArg, global), wrap(argsArray, global));
+
+//      return evaluate(scope, global, thisArg, argsArray);
     };
     /** target, args -> object
     */
