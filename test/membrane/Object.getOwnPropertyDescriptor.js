@@ -34,4 +34,4 @@
   dump(Object.getOwnPropertyDescriptor(object, "x"));
 
 return outcome;
-}, {}, {}, [{a:4711, b:4712, c:{x:4713, y:4714}}], "Object.getOwnPropertyDescriptor")).run();
+}, this, {}, [{a:4711, b:4712, c:{x:4713, y:4714}}], "Object.getOwnPropertyDescriptor")).run();

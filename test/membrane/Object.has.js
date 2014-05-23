@@ -20,7 +20,7 @@
   var outcome = "";
   for(var property in object) outcome = outcome + " " + property + ":" + (property in object);
   return outcome;
-}, {}, {}, [{a:4711, b:4712, c:4713}], "Object.has # 1")).run();
+}, this, {}, [{a:4711, b:4712, c:4713}], "Object.has # 1")).run();
 
 (new Testcase(function(b) {
 
@@ -38,7 +38,7 @@
   for(var property in b) outcome = outcome + " " + property + ":" + b[property] + "-" + (property in b);
 
   return outcome;
-}, {}, {}, [(function(){
+}, this, {}, [(function(){
 
   function A() {
     this.a = "[a]";

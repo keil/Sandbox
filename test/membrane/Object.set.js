@@ -27,7 +27,7 @@ var arg1 = [{a:4711, b:4712, c:4713}];
   outcome = outcome + object.c;
   outcome = outcome + ((object.d===undefined) ? "~undefined~" : object.d);
   return outcome;
-}, {}, {}, arg1, "Object.set # 1")).run();
+}, this, {}, arg1, "Object.set # 1")).run();
 
 var arg2 = [{a:4711, b:4712, c:{x:4713, y:4714, z:{}}}];
 
@@ -36,11 +36,11 @@ var arg2 = [{a:4711, b:4712, c:{x:4713, y:4714, z:{}}}];
   object.c.x = "~";
   object.c.y = "~";
   object.c.z = "~";
-  
+
   var outcome = "";
   outcome = outcome + object.a;
   outcome = outcome + object.b;
   outcome = outcome + object.c.x;
   outcome = outcome + object.c.y;
   return outcome;
-}, {}, {}, arg2, "Object.set # 2")).run();
+}, this, {}, arg2, "Object.set # 2")).run();

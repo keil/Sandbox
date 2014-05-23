@@ -16,6 +16,8 @@
 (new Testcase(function(object) {
   Object.freeze(object.c);
 
+  // NOTE: Trap is not implemented.
+
   object.a = "~";
   delete object.b;
   object.x = "~";
@@ -26,4 +28,4 @@
 
   var outcome = "" + object.a + object.b + object.c.x + object.c.y + object.c.z + object.x;
   return outcome;
-}, {}, {}, [{a:4711, b:4712, c:{x:4713, y:4714}}], "Object.freeze")).run();
+}, this, {}, [{a:4711, b:4712, c:{x:4713, y:4714}}], "Object.freeze")).run();

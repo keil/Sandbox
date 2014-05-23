@@ -20,7 +20,7 @@
   outcome = outcome + object.c;
   outcome = outcome + ((object.d===undefined) ? "~undefined~" : object.d);
   return outcome;
-}, {}, {}, [{a:4711, b:4712, c:4713}], "Object.get # 1")).run();
+}, this, {}, [{a:4711, b:4712, c:4713}], "Object.get # 1")).run();
 
 (new Testcase(function(object) {
   var outcome = "";
@@ -29,4 +29,4 @@
   outcome = outcome + object.c.x;
   outcome = outcome + object.c.y;
   return outcome;
-}, {}, {}, [{a:4711, b:4712, c:{x:4713, y:4714, z:{}}}], "Object.get # 2")).run();
+}, this, {}, [{a:4711, b:4712, c:{x:4713, y:4714, z:{}}}], "Object.get # 2")).run();

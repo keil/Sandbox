@@ -20,6 +20,8 @@
 
 *Test
 
+ - seal, freeze
+
  - Test function which is called twice and which writes values
    (e.g. a counter)
 

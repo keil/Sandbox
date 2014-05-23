@@ -18,4 +18,4 @@
 
   var outcome = "" + Object.isFrozen(object) + Object.isFrozen(object.c) + Object.isSealed(object) + Object.isSealed(object.c) + Object.isExtensible(object) + Object.isExtensible(object.c);
   return outcome;
-}, {}, {}, [{a:4711, b:4712, c:{x:4713, y:4714}}], "Object.isExtensible")).run();
+}, this, {}, [{a:4711, b:4712, c:{x:4713, y:4714}}], "Object.isExtensible")).run();

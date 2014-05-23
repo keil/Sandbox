@@ -26,7 +26,7 @@
   outcome += Object.prototype.hasOwnProperty.call(object, "y");
 
   return outcome;
-}, {}, {}, [{a:4711, b:4712, c:4713}], "Object.hasOwn # 1")).run();
+}, this, {}, [{a:4711, b:4712, c:4713}], "Object.hasOwn # 1")).run();
 
 
 
@@ -46,7 +46,7 @@
   for(var property in b) outcome = outcome + " " + property + ":" + b[property] + "-" + Object.prototype.hasOwnProperty.call(b, property);
 
   return outcome;
-}, {}, {}, [(function(){
+}, this, {}, [(function(){
 
   function A() {
     this.a = "[a]";

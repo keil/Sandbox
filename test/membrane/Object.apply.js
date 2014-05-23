@@ -17,7 +17,7 @@
   var outcome = "";
   var outcome = "" + object.f() + object.g()() + object.h().x + object.h().y;
   return outcome;
-}, {}, {}, [{
+}, this, {}, [{
   f:function() { 
     return "4711";},
 g:function() {

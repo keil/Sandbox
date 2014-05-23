@@ -20,7 +20,7 @@
   outcome += (new object.h()).x;
   outcome += (new object.h()).y;
   return outcome;
-}, {}, {}, [{
+}, this, {}, [{
   f:function() { 
     this.a = "4711";},
 g:function() {

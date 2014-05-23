@@ -27,4 +27,4 @@
   for(var p in m) outcome = outcome + p;
   for(var p in n) outcome = outcome + p;
   return outcome;
-}, {}, {}, [{a:4711, b:4712, c:{x:4713, y:4714}}], "Object.getOwnPropertyNames")).run();
+}, this, {}, [{a:4711, b:4712, c:{x:4713, y:4714}}], "Object.getOwnPropertyNames")).run();

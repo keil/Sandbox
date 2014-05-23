@@ -21,5 +21,8 @@
 // prototype
 load("test/behavior/prototype.js");
 
+// decompile
+load("test/behavior/decompile.js");
+
 // eval
 load("test/behavior/eval.js");
