@@ -743,6 +743,9 @@ function Sandbox(params) {
   globalArg = (globalArg!==undefined) ? globalArg : new Object();
   thisArg = (thisArg!==undefined) ? thisArg : globalArg;
 
+// TODO, arguments ?
+// pop first elememnts
+
   return evaluate(fun, globalArg, thisArg, arguments);
   }, this);
 

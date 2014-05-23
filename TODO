@@ -1,46 +1,62 @@
-* Benchmark
-  - Ocaten Becnhmark
+*General*
 
-* Effects
-  - Methods of Read Effects
-  - Conflict detection
-  - Check with Origin
+ - rename traget to origin
+
+*Sandbox*
+
+ - diff/ commit/ conflicts
+
+
+*Benchmark*
+
+- Ocaten Benchmark
+- JS Bench
+
+
+*Effects*
+
+- Conflict detection
+
 
 *Test
 
+ - Test function which is called twice and which writes values
+   (e.g. a counter)
 
 
+*Behavior*
+
+ - What to do of (name in target)===false?
+   Because of access chains prevent break out or return undefined.
+   Test this.
+
+ - Wrap/Decompile functions
+   ~ no return wrap
+   ~ decompile in proxy required because of an external value
 
 
+*Demo*
 
-TEST
+ - Demo with confusing behavior
+   ~ for..in (enumerate/iterate)
+   ~ freeze
+   ~ seal
+   ~ isExtensible
+   ~ typeof/instanceof in combination with Object.GetPrototypeOf and A.prototype
 
-Get with prototype
-Hs and in with prototype
+*Eval*
 
-for .. in loop
-
-test enumerate mit prototype
-
-teste, function welche in der sbx zweimal aufgerufen werden und dabei werte ueberschreiben
-
-teste instanceof
-
-
-#1 Configuration
-
-#1.10 Verbose
-#1.20 Decompile/ Membrane/ NativePath
+js> print(Function.prototype.toString.apply(eval));
+ function eval() {
+     [native code]
+ }
 
 
-#10 Transactions
+*Rollback*
 
-# Eval in Sandbox
-#
-# Test propery get in prototypes
-#
+ - Implement the possibility to be transparent with respect to the normal execution and to rollback effects.
 
 
-Test evaluation of a functon twice, with counter
+*valueOf*
 
-restrict snadbox access in a way that if the property dies not exist, than terminate or throw an exception
+ - Use valueOf to wrap primitive values.
