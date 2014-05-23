@@ -27,6 +27,12 @@
  * - membrane
  *   Implements a sandbox membrane. (default: true)
  *
+ * - effect
+ *   Enables effect logging. (default: true)
+ *
+ * - metahandler
+ *   Implements a proxy meta handler. (default: true)
+ *
  * - nativepassthrough
  *   Tells the sandbox to do not decompile natice functins. (default: true)
  *
@@ -60,6 +66,12 @@ function Sandbox(params) {
    * (default: true)
    */
   var __effect__ = configure("effect", true);
+
+  /*
+   * MetaHandler
+   * (default: true)
+   */
+  var __metahandler__ = configure("metahandler", true);
 
   /*
    * Native Function pass-through
@@ -207,11 +219,22 @@ function Sandbox(params) {
         var scope = cloneObject(target);
       }
 
-      // TODO
-      // * implement a meta handler
-      // * meta handler checks if the trap is implemented and throws an exception otherwise
+      function make(handler) {
+        // meta handler ?
+        if(!__metahandler__) return handler;
 
-      var proxy = new Proxy(scope, new Membrane(global, target, scope));
+        var metahandler = {
+          get: function(target, name) {
+            log("Call Trap: "+name);
+            if(name in handler) return target[name];
+            else throw new ReferenceError("Trap "+name+" not implemented.");
+          }
+        };
+        return new Proxy(handler, metahandler)
+      }
+
+      var handler = make(new Membrane(global, target, scope))
+        var proxy = new Proxy(scope, handler);
       cache.set(target, proxy);
       return proxy;
     }
@@ -276,17 +299,17 @@ function Sandbox(params) {
     var properties = new Set();
 
     /** Returns true if the property was touched by the sandbox, false otherwise
-     */
+    */
     function affected(property) {
       return properties.has(property);
     }
     /** Returns true if the property was not touched by the sandbox, false otherwise
-     */
+    */
     function unaffected(property) {
       return !affected(property);
     }
     /** Flags a property as touched
-     */
+    */
     function touch(scope, name) {
       if(unaffected(name)) {
         // TODO
@@ -356,7 +379,7 @@ function Sandbox(params) {
       return Object.keys(scope);
     }
     /** target, name -> PropertyDescriptor | undefined
-     */
+    */
     function doGetOwnPropertyDescriptor(scope, name) {
       if(affected(name)) {
         return Object.getOwnPropertyDescriptor(scope, name);
@@ -367,7 +390,7 @@ function Sandbox(params) {
       }
     }
     /** target -> [String]
-     */
+    */
     function doGetOwnPropertyNames(scope) {
       // NOTE: Matthias Keil (May 21 2014)
       // The order of
@@ -383,7 +406,7 @@ function Sandbox(params) {
     //              |_|      
 
     /** target, name -> PropertyDescriptor | undefined
-     */
+    */
     this.getOwnPropertyDescriptor = function(scope, name) {
       logc("getOwnPropertyDescriptor", name);
       trace(new Effect.GetOwnPropertyDescriptor(target, name));
@@ -391,7 +414,7 @@ function Sandbox(params) {
       return doGetOwnPropertyDescriptor(scope, name);
     };
     /** target -> [String]
-     */
+    */
     this.getOwnPropertyNames = function(scope) {
       logc("getOwnPropertyNames");
       trace(new Effect.GetOwnPropertyNames(target));
@@ -514,13 +537,13 @@ function Sandbox(params) {
 
       // TODO, is it required to wrap this and argments
       // or only when calling an external evaluate
-      
-//      return wrap(evaluate(scope, global, (thisArg===undefined) ? global : thisArg, argsArray), global);
+
+      //      return wrap(evaluate(scope, global, (thisArg===undefined) ? global : thisArg, argsArray), global);
 
       // TODO
       // * do the same in construct and with argsArray
       thisArg = (thisArg===undefined) ? global : thisArg;
-        //thisArg = global;
+      //thisArg = global;
 
       return scope.apply(wrap(thisArg, global), wrap(argsArray, global));
     };
@@ -758,19 +781,19 @@ function Sandbox(params) {
     print("ADD -- " + effect)
 
 
-    if(effect instanceof Effect.Read) {
-      update(readset, effect.target, effect);
-      update(effectset, effect.target, effect);
+      if(effect instanceof Effect.Read) {
+        update(readset, effect.target, effect);
+        update(effectset, effect.target, effect);
 
-    } else if(effect instanceof Effect.Write) {
-      update(writeset, effect.target, effect);
-      update(effectset, effect.target, effect);
-    } 
+      } else if(effect instanceof Effect.Write) {
+        update(writeset, effect.target, effect);
+        update(effectset, effect.target, effect);
+      } 
 
     function update(set, target, effect) {
-        if(!set.has(target))
-          set.set(target, []);
-        return set.get(target).push(effect);
+      if(!set.has(target))
+        set.set(target, []);
+      return set.get(target).push(effect);
     }
   }
 
@@ -789,7 +812,7 @@ function Sandbox(params) {
     else return [];
   }, this);
 
-   // conflict ?
+  // conflict ?
 
 
 }
