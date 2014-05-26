@@ -381,15 +381,14 @@ function Sandbox(params) {
     function doDefineProperty(scope, name, desc) {
       touch(scope, name);
 
-      print("# NAME: " + name);
-      print("# DESC: " + Xdump(desc));
-      print("# CURR: " + Xdump(Object.getOwnPropertyDescriptor(scope, name)));
+//      print("# NAME: " + name);
+//      print("# DESC: " + Xdump(desc));
+//      print("# CURR: " + Xdump(Object.getOwnPropertyDescriptor(scope, name)));
       Object.defineProperty(scope, name, desc);
-     print("# CURR: " + Xdump(Object.getOwnPropertyDescriptor(scope, name)));
+//     print("# CURR: " + Xdump(Object.getOwnPropertyDescriptor(scope, name)));
 
 
 
-      quit();
 
 
       return Object.defineProperty(scope, name, desc);
@@ -426,10 +425,9 @@ function Sandbox(params) {
         return Object.getOwnPropertyDescriptor(scope, name);
       } else {
         var desc = Object.getOwnPropertyDescriptor(scope, name);
-
-
-      //  if (desc !== undefined) desc.value = wrap(desc.value, global);
-        // TODO, required to wrap desc, is a line of traget?
+        if (desc.value !== undefined) desc.value = wrap(desc.value, global);
+        if (desc.get !== undefined) desc.get = wrap(desc.get, global);
+        if (desc.set !== undefined) desc.set = wrap(desc.set, global);
         return desc;
       }
     }

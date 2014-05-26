@@ -31,66 +31,22 @@ load('test/metahandler.js');
 
 // ==================================================
 
-
-  var object = {a:4711, b:4711};
-  var handler = new MetaHandler({
-    getOwnPropertyDescriptor: function(target, name) {
-      return Object.getOwnPropertyDescriptor(target, name);
-    },
-      defineProperty: function(target, name, desc) {
-        print("XXXXXX");
-        print(dump(desc));
-        return Object.defineProperty(target, name, desc);
-      }
-  });
-  var proxy = new Proxy(object, handler);
-
-  var desc = {value:5};
-  //print(dump(desc));
-
-  print("a)"+dump(Object.getOwnPropertyDescriptor(object, "a")));
-  print("b)"+dump(Object.getOwnPropertyDescriptor(object, "b")));
-  
-  Object.defineProperty(proxy, "a", desc);
-  Object.defineProperty(object, "b", desc);
-
-  print("a)"+dump(Object.getOwnPropertyDescriptor(proxy, "a")));
-  print("b)"+dump(Object.getOwnPropertyDescriptor(proxy, "b")));
-  print("a)"+dump(Object.getOwnPropertyDescriptor(object, "a")));
-  print("b)"+dump(Object.getOwnPropertyDescriptor(object, "b")));
+// TODO, test
+// value in get property descriptor
 
 
 
   
+this.isFrozen = function(target) {
+      return Object.isFrozen(target);
+    };
+    this.isSealed = function(target) {
+      return Object.isSealed(target);
+    };
+    this.isExtensible = function(target) {
+      return Object.isExtensible(target);
+    };
 
-
-
-
-
-
-
-function dump(pd) {
-    if(pd===undefined) return "undefined";
-    return " value:" + pd.value + " writeable:" + pd.writeable + " enumerable: " + pd.enumerable + " configurable:" + pd.configurable + " get:"+pd.get + " set:"+pd.set;
-  }
-
-
-
-quit();
-
-
-// Make a effect demo
-
-//load("test/membrane/Object.has.js");
-//load("test/membrane/Object.hasOwn.js");
-
-
-//load("test/behavior/eval.js");
-//load("test/behavior/decompile.js");
-
-
-// Test haldler calls
-//load("demo/handler.js");
 
 // Test effect system
 //load("demo/effect.js");

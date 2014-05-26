@@ -1,3 +1,8 @@
+* Limitations*
+
+a) getOwnPropertyDescriptor
+
+
 *Strict Mode*
 
  Normal Mode: if this===undefined use the global object as this
