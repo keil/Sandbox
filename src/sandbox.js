@@ -566,10 +566,10 @@ function Sandbox(params) {
       
       // Note: 
       // The function in scope is already decompiled.
-     // return scope.apply(wrap(thisArg, global), wrap(argsArray, global));
+      return scope.apply(wrap(thisArg, global), wrap(argsArray, global));
      //
-      var ren = scope.apply(wrap(thisArg, global), wrap(argsArray, global));
-      return wrapper.wrapThis(ren, global);
+     // var ren = scope.apply(wrap(thisArg, global), wrap(argsArray, global));
+     // return wrapper.wrapThis(ren, global);
 
 
 //      return evaluate(scope, global, thisArg, argsArray);
@@ -627,8 +627,14 @@ function Sandbox(params) {
     if(!(__decompile__))
       return fun;
 
-    var body = "(" + fun.toString() + ")"; 
+//    var body = "(" + fun.toString() + ")"; 
+//    var sbxed = eval("(function() { with(env) { return " + body + " }})();");
+
+    //env["__sbx__"]=env;
+    //var body = ("(" + fun.toString() + ")").replace(/this/g, "that"); 
+    var body = "(function() {'use strict'; return " + ("(" + fun.toString() + ")") + "})();"
     var sbxed = eval("(function() { with(env) { return " + body + " }})();");
+
 
     return sbxed;
   }

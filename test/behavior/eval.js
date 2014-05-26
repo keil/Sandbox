@@ -13,65 +13,27 @@
  * http://www.informatik.uni-freiburg.de/~keilr/
  */
 
+(new Testcase(function(F) {
+  var f = F();
+  var outcome = "";
+  var x = "4711";
+  outcome+=(x);
+  outcome+=(this.x);
+  outcome+=f.apply(this);
+  outcome+=(x);
+  outcome+=(this.x);
 
-
-
-
-
-// TODO TEST this with outside created f
-// test when f is defined outside// access throught get
-
-
-/*
-
-   (new Testcase(function(F) {
-   var f = F();
-   var outcome = "";
-   var x = "4711";
-   outcome+=(x);
-   outcome+=(this.x);
-   outcome+=f();
-   outcome+=(x);
-   outcome+=(this.x);
-
-   return outcome;
-   }, this, {x:4711}, [(function() {
-   var x = "4711X ";
-   return function() {
-   var outcome = " IN(";
-   outcome+=(x);
-   outcome+=(this.x);
-   eval("x=4712");
-   eval("this.x=4714");
-   outcome+=(x);
-   outcome+=(this.x);
-   return outcome+") ";
-   };
-   })], "eval")).run();
-   */
-/*
-   (new Testcase(function(f) {
-   var outcome = "";
-   var x = "4711";
-
-   outcome+=(x);
-   outcome+=(this.x);
-   outcome+=f();
-   outcome+=(x);
-   outcome+=(this.x);
-
-   return outcome;
-   }, {x:4711}, {x:4711}, [(function() {
-   var x = "4711";
-   return function() {
-   var outcome = " IN(";
-   outcome+=(x);
-   outcome+=(this.x);
-   eval("x=4712");
-   eval("this.x=4712");
-   outcome+=(x);
-   outcome+=(this.x);
-   return outcome+") ";
-   };
-   })()], "eval")).run();
-   */
+  return outcome;
+}, this, {x:4711}, [(function() {
+  var x = "4711X ";
+  return function() {
+    var outcome = " IN(";
+    outcome+=(x);
+    outcome+=(this.x);
+    //    eval("x=4712");
+    //    eval("this.x=4714");
+    outcome+=(x);
+    outcome+=(this.x);
+    return outcome+") ";
+  };
+})], "eval")).run();

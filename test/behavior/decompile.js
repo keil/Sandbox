@@ -12,7 +12,7 @@
  * Author Matthias Keil
  * http://www.informatik.uni-freiburg.de/~keilr/
  */
-/*
+
 var id = "[Global]";
 
 (new Testcase(function() {
@@ -21,7 +21,6 @@ var id = "[Global]";
 
   return outcome;
 }, this, {id:"[This]"}, [], "decompile # 1", true)).run();
-
 
 (function() {
 
@@ -43,10 +42,6 @@ var id = "[Global]";
   return outcome;
 }, this, {id:"[This]"}, [], "decompile # 3", true)).run();
 
-
-
-
-
 var uid = "[Global UID]";
 
 (new Testcase(function(f) {
@@ -56,8 +51,6 @@ var uid = "[Global UID]";
 }, this, {uid:"[This UID]"}, [function() {
   return uid;
 }], "decompile # 4", true)).run();
-
-
 
 var uid = "[Global UID]";
 
@@ -93,18 +86,15 @@ var uid = "[Global UID]";
   };
 }], "decompile # 6.2", true)).run();
 
-
-
-
 var uid = "[Global UID]";
 
 (new Testcase(function(f) {
   var outcome = "";
   outcome+=this.uid;
-  outcome+=f()();
+  outcome+=f().apply(this);
   return outcome;
 }, this, {uid:"[This UID]"}, [function() {
-   return function() {
+  return function() {
     return this.uid;
   };
 }], "decompile # 7", true)).run();
@@ -143,10 +133,6 @@ var uuid = "[Global UID]";
   };
 })], "decompile # 8.2", false)).run();
 
-
-
-
-
 var uuid = "[Global]";
 var ref = "X";
 
@@ -155,23 +141,10 @@ var ref = "X";
   var uuid = "[Local]";
   var outcome = "";
   outcome+=g();
-//  outcome+=g.apply(this);
   return outcome;
 }, {isProxy:isProxy,uuid:"[Global]"}, {uuid:"[This]"}, [(function() {
   var uuid = "[Closure] ";
   return (function() {
-   
-// Make extended demo
-
-   // return isProxy(this);
-   // return this.uuid;
-
-    // Wert muss heir hinkommen ohne dass es gewrap wird
-    // Frage, hab ich hier ungeschuetzen zugriff auf externe werte ?
-    //
-
-    // todo, es duerfen halt nue ungeschuetzte objecte zurueckgegeben werden
-
     var pre = this.uuid;
     this.uuid="[New]";
     var post = this.uuid;
@@ -202,15 +175,6 @@ ref = "X";
 })], "decompile # 8.2.2", false)).run();
 
 
-//print(uuid);
-//print(this.uuid);
-
-*/
-
-
-
-
-
 var uuid = "[Global UID]";
 var ref = "X";
 
@@ -218,134 +182,93 @@ var ref = "X";
   var g = f;
   var uuid = "[Local]";
   var outcome = "";
-//  outcome+=g();
+  //  outcome+=g();
   outcome+=g.apply(this);
   return outcome;
 }, {isProxy:isProxy,uuid:"[SBX Global]"}, {uuid:"[This]"}, [(function() {
   var uuid = "[Closure] ";
   return (function() {
-   
-// Make extended demo
-
-   // return isProxy(this);
-   // return this.uuid;
-
-    // Wert muss heir hinkommen ohne dass es gewrap wird
-    // Frage, hab ich hier ungeschuetzen zugriff auf externe werte ?
-    //
-
-    // todo, es duerfen halt nue ungeschuetzte objecte zurueckgegeben werden
-
     var pre = this.uuid;
     this.uuid="[New]";
     var post = this.uuid;
-    return pre+post+isProxy(this);
-  })();
-})], "decompile # 8.2", false)).run();
-
-//print(uuid);
-//print(this.uuid);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-quit();
+    return pre+post
+  }).apply(this);
+})], "decompile # 8.3", false)).run();
 
 
 (new Testcase(function(F) {
   var f = F();
   var outcome = "";
   var x = "[LOCAL]";
-//  outcome+=" /"+(x);
-//  outcome+=" /"+(this.x);
-  outcome+=" /"+f();
-//  outcome+=" /"+f.call(this);
-//  outcome+=" /"+(x);
-//  outcome+=" /"+(this.x);
+  outcome+=" /"+(x);
+  outcome+=" /"+(this.x);
+  //  outcome+=" /"+f();
+  outcome+=" /"+f.call(this);
+  outcome+=" /"+(x);
+  outcome+=" /"+(this.x);
   return outcome;
 }, {id:"[Global]"}, {x:"[This]"}, [(function() {
   var x = "[FUNCTION] ";
   return function() {
     var outcome = " IN(";
-//    outcome+=" /"+(x);
+    outcome+=" /"+(x);
     outcome+=" /"+(this.x);
     x="[4711]";
     this.x="[4712]";
-//    outcome+=" /"+(x);
+    outcome+=" /"+(x);
     outcome+=" /"+(this.x);
     return outcome+") ";
   };
-})], "decompile # 1", false)).run();
-
-print(x);
-print(this.x);
-
-
-
-quit();
-
+})], "decompile # 9.1", false)).run();
 
 (new Testcase(function(F) {
   var f = F();
   var outcome = "";
   var x = "[LOCAL]";
-//  outcome+=" /"+(x);
-//  outcome+=" /"+(this.x);
-//  outcome+=" /"+f();
+  outcome+=" /"+(x);
+  outcome+=" /"+(this.x);
+  //  outcome+=" /"+f();
   outcome+=" /"+f.call(this);
-//  outcome+=" /"+(x);
-//  outcome+=" /"+(this.x);
+  outcome+=" /"+(x);
+  outcome+=" /"+(this.x);
   return outcome;
 }, this, {x:"[THIS]"}, [(function() {
   var x = "[FUNCTION] ";
   return function() {
     var outcome = " IN(";
-//    outcome+=" /"+(x);
+    //    outcome+=" /"+(x);
     outcome+=" /"+(this.x);
     x="[4711]";
     this.x="[4712]";
-//    outcome+=" /"+(x);
+    //    outcome+=" /"+(x);
     outcome+=" /"+(this.x);
     return outcome+") ";
   };
-})], "decompile # 1")).run();
-
-
+})], "decompile # 9.2")).run();
 
 (new Testcase(function(F) {
   var f = F();
-//  var f = F.apply(this);
+  var f = F.apply(this);
 
   var outcome = "";
   var x = "[LOCAL]";
-//  outcome+=" /"+(x);
-//  outcome+=" /"+(this.x);
-  outcome+=" /"+f();
-//  outcome+=" /"+f.call(this);
-//  outcome+=" /"+(x);
-//  outcome+=" /"+(this.x);
+  outcome+=" /"+(x);
+  outcome+=" /"+(this.x);
+  //outcome+=" /"+f();
+  outcome+=" /"+f.call(this);
+  outcome+=" /"+(x);
+  outcome+=" /"+(this.x);
   return outcome;
 }, {}, {x:"[THIS]"}, [(function() {
   var x = "[FUNCTION] ";
   return function() {
     var outcome = " IN(";
-//    outcome+=" /"+(x);
+    outcome+=" /"+(x);
     outcome+=" /"+(this.x);
     x="[4711]";
     this.x="[4712]";
-//    outcome+=" /"+(x);
+    outcome+=" /"+(x);
     outcome+=" /"+(this.x);
     return outcome+") ";
   };
-})], "decompile # 2")).run();
-
+})], "decompile # 9.3")).run();
