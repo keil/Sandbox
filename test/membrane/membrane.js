@@ -42,8 +42,7 @@ load("test/membrane/Object.enumerate.js");
 load("test/membrane/Object.get.js"); 
 
 // Object.getOwnPropertyDescriptor
-// TODO: Not tested
-//load("test/membrane/Object.getOwnPropertyDescriptor.js");
+load("test/membrane/Object.getOwnPropertyDescriptor.js");
 
 // Object.getOwnPropertyNames
 load("test/membrane/Object.getOwnPropertyNames.js");
@@ -95,5 +94,4 @@ load("test/membrane/Object.set.js");
 // TODO
 
 // Object.getPrototypeOf
-// TODO: Not tested
-// load("test/membrane/Object.getPrototypeOf.js");
+load("test/membrane/Object.getPrototypeOf.js");
