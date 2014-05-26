@@ -273,8 +273,13 @@ function Sandbox(params) {
     // ** object[property] = wrap(target[property], global);
 
     for (var property in target) {
-      if (target.hasOwnProperty(property)) clone[property] = target[property];
+      if (target.hasOwnProperty(property)) {
+        var descriptor = Object.getOwnPropertyDescriptor(target, property);
+        Object.defineProperty(clone, property, descriptor);
+      }   
+       // clone[property] = target[property];
     }
+//    return target;
     return clone;
   }
 
@@ -375,6 +380,18 @@ function Sandbox(params) {
     */
     function doDefineProperty(scope, name, desc) {
       touch(scope, name);
+
+      print("# NAME: " + name);
+      print("# DESC: " + Xdump(desc));
+      print("# CURR: " + Xdump(Object.getOwnPropertyDescriptor(scope, name)));
+      Object.defineProperty(scope, name, desc);
+     print("# CURR: " + Xdump(Object.getOwnPropertyDescriptor(scope, name)));
+
+
+
+      quit();
+
+
       return Object.defineProperty(scope, name, desc);
     }
     /** target, name -> boolean
@@ -409,7 +426,10 @@ function Sandbox(params) {
         return Object.getOwnPropertyDescriptor(scope, name);
       } else {
         var desc = Object.getOwnPropertyDescriptor(scope, name);
-        if (desc !== undefined) desc.value = wrap(desc.value, global);
+
+
+      //  if (desc !== undefined) desc.value = wrap(desc.value, global);
+        // TODO, required to wrap desc, is a line of traget?
         return desc;
       }
     }

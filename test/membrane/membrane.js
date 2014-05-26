@@ -60,11 +60,11 @@ load("test/membrane/Object.isExtensible.js");
 
 // Object.isFrozen
 // Note: Proxy Trap does not exist
-//load("test/membrane/Object.isFrozen.js");
+load("test/membrane/Object.isFrozen.js");
 
 // Object.isSealed
 // Note: Proxy Trap does not exist
-// load("test/membrane/Object.isSealed.js");
+load("test/membrane/Object.isSealed.js");
 
 // Object.iterate
 // Note: Proxy Trap ist not implemented
@@ -96,4 +96,4 @@ load("test/membrane/Object.set.js");
 
 // Object.getPrototypeOf
 // TODO: Not tested
-//load("test/membrane/Object.getPrototypeOf.js");
+// load("test/membrane/Object.getPrototypeOf.js");

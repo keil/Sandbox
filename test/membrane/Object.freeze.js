@@ -15,14 +15,13 @@
 
 (new Testcase(function(object) {
   Object.freeze(object.c);
-
   // NOTE: Trap is not implemented.
 
   object.a = "~";
   delete object.b;
   object.x = "~";
 
-  object.c.x = "~";
+//  object.c.x = "~";
   delete object.c.y;
   object.c.z = "~";
 
