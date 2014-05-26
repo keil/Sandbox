@@ -143,13 +143,15 @@ var uuid = "[Global UID]";
   };
 })], "decompile # 8.2", false)).run();
 
-*/
 
-var uuid = "[Global UID]";
+
+
+
+var uuid = "[Global]";
 var ref = "X";
 
 (new Testcase(function(f) {
-  var g = f;
+  var g = f();
   var uuid = "[Local]";
   var outcome = "";
   outcome+=g();
@@ -171,7 +173,71 @@ var ref = "X";
     // todo, es duerfen halt nue ungeschuetzte objecte zurueckgegeben werden
 
     var pre = this.uuid;
-//    this.uuid="[New]";
+    this.uuid="[New]";
+    var post = this.uuid;
+    return pre+post;
+  });
+})], "decompile # 8.2.1", false)).run();
+
+
+
+uuid = "[Global]";
+ref = "X";
+
+(new Testcase(function(f) {
+  var g = f();
+  var uuid = "[Local]";
+  var outcome = "";
+  outcome+=g();
+  outcome+=g.apply(this);
+  return outcome;
+}, {isProxy:isProxy,uuid:"[Global]"}, {uuid:"[This]"}, [(function() {
+  var uuid = "[Closure] ";
+  return (function() {
+    var pre = this.uuid;
+    this.uuid="[New]";
+    var post = this.uuid;
+    return pre+post;
+  });
+})], "decompile # 8.2.2", false)).run();
+
+
+//print(uuid);
+//print(this.uuid);
+
+*/
+
+
+
+
+
+var uuid = "[Global UID]";
+var ref = "X";
+
+(new Testcase(function(f) {
+  var g = f;
+  var uuid = "[Local]";
+  var outcome = "";
+//  outcome+=g();
+  outcome+=g.apply(this);
+  return outcome;
+}, {isProxy:isProxy,uuid:"[SBX Global]"}, {uuid:"[This]"}, [(function() {
+  var uuid = "[Closure] ";
+  return (function() {
+   
+// Make extended demo
+
+   // return isProxy(this);
+   // return this.uuid;
+
+    // Wert muss heir hinkommen ohne dass es gewrap wird
+    // Frage, hab ich hier ungeschuetzen zugriff auf externe werte ?
+    //
+
+    // todo, es duerfen halt nue ungeschuetzte objecte zurueckgegeben werden
+
+    var pre = this.uuid;
+    this.uuid="[New]";
     var post = this.uuid;
     return pre+post+isProxy(this);
   })();
@@ -179,6 +245,11 @@ var ref = "X";
 
 //print(uuid);
 //print(this.uuid);
+
+
+
+
+
 
 
 

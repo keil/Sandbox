@@ -566,7 +566,11 @@ function Sandbox(params) {
       
       // Note: 
       // The function in scope is already decompiled.
-      return scope.apply(wrap(thisArg, global), wrap(argsArray, global));
+     // return scope.apply(wrap(thisArg, global), wrap(argsArray, global));
+     //
+      var ren = scope.apply(wrap(thisArg, global), wrap(argsArray, global));
+      return wrapper.wrapThis(ren, global);
+
 
 //      return evaluate(scope, global, thisArg, argsArray);
     };

@@ -19,6 +19,9 @@ load("src/misc.js");
 load("src/out.js");
 load("src/shell.js");
 
+// TODO
+load("src/this.js");
+
 load("src/effect.js");
 load("src/sandbox.js");
 
@@ -35,7 +38,7 @@ load("test/behavior/decompile.js");
 
 var thisArg = {}
 var global = this;
-
+/*
 function m() {
   print("@1.1 " + (this===thisArg));
   print("@1.2 " + (this===global));
@@ -54,7 +57,21 @@ var c = function() { return eval("with({this:thisArg}){(function() {print(\"@1.1
 print("-");
 thisArg.n = c.apply(thisArg);
 thisArg.n()();
+*/
 
+
+function m() {
+  print("M:"+(this===global));
+function n() {
+  print("N:"+(this===global));
+} n();
+}
+
+with({global:{}})
+m.apply({});
+
+//var myDebugger = new Debugger;
+var myDebugger = new Debugger(m);
 
 
 quit();
