@@ -21,7 +21,7 @@ load("src/out.js");
 load("src/shell.js");
 
 // TODO
-load("src/this.js");
+//load("src/this.js");
 
 load("src/effect.js");
 load("src/sandbox.js");
@@ -31,67 +31,47 @@ load('test/metahandler.js');
 
 // ==================================================
 
-// TODO, test
-// value in get property descriptor
+var obj = {x:1, y:1};
+
+function f() {
+  obj.x=2;
+}
+
+function g() {
+  obj.z=(obj.x*obj.y);
+}
+
+var params = {verbose:true,out:ShellOut()};
+var sbx1 = new Sandbox(params);
+var sbx2 = new Sandbox(params);
+
+//f();
+//g();
+
+sbx1.apply(f,this,this,[]);
+//sbx1.getEffects(this).foreach(function(i, eft) print(eft));
+sbx1.getEffects(obj).foreach(function(i, eft) print(eft));
+
+sbx2.apply(g,this,this,[]);
+sbx2.getEffects(obj).foreach(function(i, eft) print(eft));
+
+print("a) "+obj.x);
+print("b) "+obj.y);
+print("c) "+obj.z);
+
+
+//sbx2.getWriteEffects(obj)[0].commit();
+//print("c) "+obj.z);
 
 
 
-  
-this.isFrozen = function(target) {
-      return Object.isFrozen(target);
-    };
-    this.isSealed = function(target) {
-      return Object.isSealed(target);
-    };
-    this.isExtensible = function(target) {
-      return Object.isExtensible(target);
-    };
+// TODO:
+// get all effects
+// writeeffects
+// effect als getter
 
 
-// Test effect system
-//load("demo/effect.js");
-
-/*
-  var object = {};
-  var handler = new MetaHandler({
-    preventExtensions: function(target) {
-      return Object.preventExtensions(target);
-    },
-      isExtensible: function(target) {
-        return Object.isExtensible(target);
-      }
-  });
-  var proxy = new Proxy(object, handler);
-
-  
-  print(Object.isFrozen(proxy));
-  print(Object.isFrozen(object));
-
-  Object.preventExtensions(object);
-  Object.freeze(proxy);
-
-  print(Object.isExtensible(proxy));
-  print(Object.isExtensible(object));
-
-  print(Object.isFrozen(proxy));
-  print(Object.isFrozen(object));
-
-  print(Object.isSealed(proxy));
-  print(Object.isSealed(object));
-*/
-
-//load("test/membrane/Object.getPrototypeOf.js");
-
-//load("test/membrane/Object.freeze.js");
-load("test/membrane/Object.getOwnPropertyDescriptor.js");
-//load("test/membrane/Object.seal.js");
-
-
-
-
-
-
-
+// TODO, conflict
 
 // ==================================================
 
