@@ -17,15 +17,10 @@
 
   var f = object.f;
   var o = new f();
-  print("!!! " + (o instanceof f));
-
-  print(Object.getPrototypeOf((new f()).toString()));
 
   var outcome = "";
-  //  outcome += ((new f()) instanceof f);
-  //  outcome += ((new object.f()) instanceof object.f);
-  //  outcome += ((new (new object.g()).b()) instanceof (new object.g()).b);
-  //  outcome += ((new object.h()) instanceof object.h);
+  outcome += Object.getPrototypeOf(f);
+  outcome += Object.getPrototypeOf(o);
   return outcome;
 }, this, {}, [{
   f:function() { 
@@ -43,13 +38,12 @@ h:function() {
 
   var f = object.f;
   var o = new f();
-  print("!!! " + (o instanceof f));
 
   var outcome = "";
-  //  outcome += ((new f()) instanceof f);
-  //  outcome += ((new object.f()) instanceof object.f);
-  //  outcome += ((new (new object.g()).b()) instanceof (new object.g()).b);
-  //  outcome += ((new object.h()) instanceof object.h);
+  outcome += ((new f()) instanceof f);
+  outcome += ((new object.f()) instanceof object.f);
+  outcome += ((new (new object.g()).b()) instanceof (new object.g()).b);
+  outcome += ((new object.h()) instanceof object.h);
   return outcome;
 }, this, {}, [{
   f:function() { 

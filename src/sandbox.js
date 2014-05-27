@@ -21,6 +21,9 @@
  * - verbose
  *   Enables verbose mode. (default: false)
  *
+ * - statistic
+ *   Enables statistic. (default: false)
+ *
  * - decompile
  *   Decompiles functions. (default: true)
  *
@@ -48,6 +51,12 @@ function Sandbox(params) {
    * (default: false)
    */
   var __verbose__ = configure("verbose", false);
+
+  /** 
+   * Enable Statistic
+   * (default: false)
+   */
+  var __statistic__ = configure("statistic", false);
 
   /*
    * Decompile
@@ -128,7 +137,9 @@ function Sandbox(params) {
   var statistic = new Statistic();
 
   function increment(op) {
-    statistic.increment(op);
+    if(__statistic__) {
+      statistic.increment(op);
+    }
   }
 
   //     _     _      _   _          
@@ -201,6 +212,8 @@ function Sandbox(params) {
       return target;
     }
 
+    increment("wrap");
+
     if(target===undefined)
       throw new ReferenceError("Target is undefined.");
     if(global===undefined)
@@ -210,11 +223,6 @@ function Sandbox(params) {
     if(!(__membrane__))
       return target;
 
-    // TODO
-    // * wrap eval to support it
-    // * test the support of eval when behaviot/eval succeeds
-    // ** Access to Math.abd
-    // ** ...
     if(isEval(target)) {
       throw new Error("eval not supported");
     }
@@ -229,9 +237,11 @@ function Sandbox(params) {
     // If target already wrapped, return cached proxy
     if(cache.has(target)) {
       log("Cache hit.");
+      increment("Cache hit");
       return cache.get(target);
     } else {
       log("Cache miss.");
+      increment("Cache miss");
 
       // decompiles function or clones object
       // to preserve typeof/ instanceof
@@ -647,6 +657,7 @@ function Sandbox(params) {
    */
   function decompile(fun, env) {
     logc("decompile", fun);
+    increment("decompile");
 
     if(!(fun instanceof Function))
       throw new TypeError("fun");
@@ -657,14 +668,13 @@ function Sandbox(params) {
     if(!(__decompile__))
       return fun;
 
-//    var body = "(" + fun.toString() + ")"; 
-//    var sbxed = eval("(function() { with(env) { return " + body + " }})();");
+    // Note: Roman Matthias Keil
+    // * use strict mode only
+    // var body = "(" + fun.toString() + ")"; 
+    // var sbxed = eval("(function() { with(env) { return " + body + " }})();");
 
-    //env["__sbx__"]=env;
-    //var body = ("(" + fun.toString() + ")").replace(/this/g, "that"); 
     var body = "(function() {'use strict'; return " + ("(" + fun.toString() + ")") + "})();"
     var sbxed = eval("(function() { with(env) { return " + body + " }})();");
-
 
     return sbxed;
   }

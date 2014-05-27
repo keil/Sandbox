@@ -64,19 +64,6 @@ print("c) "+obj.z);
 //sbx2.getWriteEffects(obj)[0].commit();
 //print("c) "+obj.z);
 
-var s = new Statistic();
-print(s);
-s.increment("BUH");
-s.increment("BUH");
-s.increment("BUH");
-s.increment("Lala");
-s.increment("L");
-s.increment("BUH");
-print(s);
-
-print(s.keys());
-print(s.get("L"));
-
 // TODO:
 // get all effects
 // writeeffects
