@@ -1,12 +1,5 @@
 *General*
 
- - remove global object from apply and bind
-
- - rename traget to origin
-
- - implement decompile cache
-   WeakMap: Function -> Global -> Sbxed
-
  - Cleanup Log
    Do not use full function output
 

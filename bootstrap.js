@@ -13,16 +13,12 @@
  * http://www.informatik.uni-freiburg.de/~keilr/
  */
 
-
 load("lib/padding.js")
 
 load("src/misc.js");
 load("src/out.js");
 load("src/shell.js");
 load("src/statistic.js");
-
-// TODO
-//load("src/this.js");
 
 load("src/effect.js");
 load("src/sandbox.js");
