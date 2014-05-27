@@ -35,14 +35,14 @@ load('test/metahandler.js');
 var obj = {x:1, y:1};
 
 function f() {
-  obj.x=2;
+  obj.z=2;
 }
 
 function g() {
   obj.z=(obj.x*obj.y);
 }
 
-var params = {verbose:true,out:ShellOut()};
+var params = {verbose:false,out:ShellOut()};
 var sbx1 = new Sandbox(this,params);
 var sbx2 = new Sandbox(this,params);
 
@@ -51,10 +51,10 @@ var sbx2 = new Sandbox(this,params);
 
 sbx1.apply(f,this,[]);
 //sbx1.getEffects(this).foreach(function(i, eft) print(eft));
-sbx1.effectsOf(obj).foreach(function(i, eft) print(eft));
+sbx1.effectsOf(obj).foreach(function(i, eft) print("SBX1: "+eft));
 
 sbx2.apply(g,this,[]);
-sbx2.effectsOf(obj).foreach(function(i, eft) print(eft));
+sbx2.effectsOf(obj).foreach(function(i, eft) print("SBX2: "+eft));
 
 print("a) "+obj.x);
 print("b) "+obj.y);
@@ -67,6 +67,9 @@ sbx2.commit();
 //print(sbx2.writeOf(obj)[0]);
 //sbx2.writeOf(obj)[0].commit();
 print("c) "+obj.z);
+
+print("C? " + (sbx1.conflictOf(sbx2, obj)));
+
 
 // TODO:
 // get all effects

@@ -18,7 +18,7 @@ var params = {
   out:ShellOut(),
   statistic:false,
   decompile:true,
-  membrabe:true,
+  membrabe:false,
   effect:false
 };
 
