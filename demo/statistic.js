@@ -18,7 +18,7 @@ var sbxS = new Sandbox(this, {verbose:false, statistic:true, out:ShellOut()});
 
 var o = {};
 var of = function() {
-  print("Ich hasse mich!");
+  print(".");
 }
 o.f=of;
 o.g=of;

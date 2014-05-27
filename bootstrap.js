@@ -29,8 +29,8 @@ load('test/metahandler.js');
 // ==================================================
 
 
-load("demo/statistic.js");
-quit();
+//load("demo/statistic.js");
+//quit();
 
 var obj = {x:1, y:1};
 
@@ -43,22 +43,24 @@ function g() {
 }
 
 var params = {verbose:true,out:ShellOut()};
-var sbx1 = new Sandbox(params);
-var sbx2 = new Sandbox(params);
+var sbx1 = new Sandbox(this,params);
+var sbx2 = new Sandbox(this,params);
 
 //f();
 //g();
 
-sbx1.apply(f,this,this,[]);
+sbx1.apply(f,this,[]);
 //sbx1.getEffects(this).foreach(function(i, eft) print(eft));
-sbx1.getEffects(obj).foreach(function(i, eft) print(eft));
+sbx1.effectsOf(obj).foreach(function(i, eft) print(eft));
 
-sbx2.apply(g,this,this,[]);
-sbx2.getEffects(obj).foreach(function(i, eft) print(eft));
+sbx2.apply(g,this,[]);
+sbx2.effectsOf(obj).foreach(function(i, eft) print(eft));
 
 print("a) "+obj.x);
 print("b) "+obj.y);
 print("c) "+obj.z);
+
+sbx1.effects.foreach(function(i, eft) print("--> " + eft));
 
 
 //sbx2.getWriteEffects(obj)[0].commit();

@@ -16,10 +16,10 @@
 var params = {
   verbose:false,
   out:ShellOut(),
-  statistic:true,
+  statistic:false,
   decompile:true,
   membrabe:true,
-  effect:true
+  effect:false
 };
 
 function getNewSandbox() {

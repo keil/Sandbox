@@ -210,7 +210,10 @@ function Sandbox(global, params) {
    * @return JavaScript Proxy 
    */
   function wrap(target) { 
-    logc("wrap", (typeof target) + "=" + target);
+    // TODO
+    // * asking fo the type results in "too much recursion"
+    //logc("wrap", (typeof target) + "=" + target);
+    logc("wrap");
 
     // If target is a primitive value, then return target
     if (target !== Object(target)) {
@@ -784,17 +787,21 @@ function Sandbox(global, params) {
   return bind(fun, thisArg, argsArray);
   }, this);
 
-  // _______                             _   _                 
-  //|__   __|                           | | (_)                
-  //   | |_ __ __ _ _ __  ___  __ _  ___| |_ _  ___  _ __  ___ 
-  //   | | '__/ _` | '_ \/ __|/ _` |/ __| __| |/ _ \| '_ \/ __|
-  //   | | | | (_| | | | \__ \ (_| | (__| |_| | (_) | | | \__ \
-  //   |_|_|  \__,_|_| |_|___/\__,_|\___|\__|_|\___/|_| |_|___/
+  // ______  __  __          _       
+  //|  ____|/ _|/ _|        | |      
+  //| |__  | |_| |_ ___  ___| |_ ___ 
+  //|  __| |  _|  _/ _ \/ __| __/ __|
+  //| |____| | | ||  __/ (__| |_\__ \
+  //|______|_| |_| \___|\___|\__|___/   
 
   var readset = new WeakMap();
   var writeset = new WeakMap();
 
   var effectset = new WeakMap();
+
+  var readeffects = [];
+  var writeeffects = [];
+  var effects = [];
 
   /** saves an sandbox effect
    * @param effect Effect
@@ -811,11 +818,14 @@ function Sandbox(global, params) {
     if(effect instanceof Effect.Read) {
       update(readset, effect.target, effect);
       update(effectset, effect.target, effect);
-
+      readeffects.push(effect);
+      effects.push(effect);
     } else if(effect instanceof Effect.Write) {
       update(writeset, effect.target, effect);
       update(effectset, effect.target, effect);
-    } 
+      writeeffects.push(effect);
+      effects.push(effect);
+    }
 
     function update(set, target, effect) {
       if(!set.has(target))
@@ -824,20 +834,20 @@ function Sandbox(global, params) {
     }
   }
 
-  /** Get Effects
+  /** Get Read Effects
    * @param target JavaScript Obejct
    * @return JavaScript Array [Effect]
    */
-  __define("getReadEffects", function(target) {
+  __define("readOf", function(target) {
     if(readset.has(target)) return readset.get(target);
     else return [];
   }, this);
 
-  /** Get Effects
+  /** Get Write  Effects
    * @param target JavaScript Obejct
    * @return JavaScript Array [Effect]
    */
-  __define("getWriteEffects", function(target) {
+  __define("writeOf", function(target) {
     if(writeset.has(target)) return writeset.get(target);
     else return [];
   }, this);
@@ -846,9 +856,31 @@ function Sandbox(global, params) {
    * @param target JavaScript Obejct
    * @return JavaScript Array [Effect]
    */
-  __define("getEffects", function(target) {  
+  __define("effectsOf", function(target) {  
     if(effectset.has(target)) return effectset.get(target);
     else return [];
+  }, this);
+
+  /** Get All Read Effects
+   * @return JavaScript Array [Effect]
+   */
+  __getter("readeffects", function() {
+    return readeffects;
+  }, this);
+
+  /** Get All Write Effects
+   * @return JavaScript Array [Effect]
+   */
+  __getter("writeeffects", function() {
+    return writeeffects;
+  }, this);
+
+  /** Get All Effects
+   * @param target JavaScript Obejct
+   * @return JavaScript Array [Effect]
+   */
+  __getter("effects", function() {
+    return effects;
   }, this);
 
   //  _____ _        _   _     _   _      
