@@ -153,7 +153,9 @@ function Sandbox(global, params) {
   // \_/|_\___/_\__,_|\__|_\___/_||_|
 
   function violation(msg) {
-    // TODO, is it better to return undefined ?
+    // TODO
+    // * Signal a violation or 
+    // * return undefined
     throw new Error("Unauthorized Access: "+msg);
   }
 
@@ -358,9 +360,7 @@ function Sandbox(global, params) {
     function touch(scope, name) {
       if(unaffected(name)) {
         // TODO
-        // *PreStateSnapshot */
-        // update current scope required ?
-        // scope[name]=origin[name];
+        // * PreStateSnapshot 
         properties.add(name);
       }
     }
@@ -377,8 +377,7 @@ function Sandbox(global, params) {
       var has = (affected(name)) ? (name in scope) : (name in origin);
 
       // TODO
-      // is violation the right way
-      // otherwise return true and say get to return undefined
+      // return true and say get to return undefined
       if(has===false) violation(name);
 
       return (affected(name)) ? (name in scope) : (name in origin);
@@ -391,6 +390,8 @@ function Sandbox(global, params) {
     /** target, name, receiver -> any
     */
     function doGet(scope, name) {
+      // TODO
+      // * return undefined is has says false
       return (affected(name)) ? scope[name] : wrap(origin[name]);
     }
     /** target, name, val, receiver -> boolean
