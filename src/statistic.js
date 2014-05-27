@@ -13,7 +13,7 @@
  * http://www.informatik.uni-freiburg.de/~keilr/
  */
 
-/** Statistix 
+/** Statistic 
  * Sandbox Statistic.
  */
 function Statistic() {

@@ -270,7 +270,7 @@ function Sandbox(global, params) {
       }
 
       var handler = make(new Membrane(target))
-      var proxy = new Proxy(scope, handler);
+        var proxy = new Proxy(scope, handler);
       cache.set(target, proxy);
       return proxy;
     }
@@ -300,9 +300,9 @@ function Sandbox(global, params) {
         var descriptor = Object.getOwnPropertyDescriptor(target, property);
         Object.defineProperty(clone, property, descriptor);
       }   
-       // clone[property] = target[property];
+      // clone[property] = target[property];
     }
-//    return target;
+    //    return target;
     return clone;
   }
 
@@ -639,7 +639,7 @@ function Sandbox(global, params) {
       throw new TypeError("fun");
     if(!(env instanceof Object))
       throw new TypeError("env");
-    
+
     // Decompile ?
     if(!(__decompile__))
       return fun;
@@ -807,14 +807,14 @@ function Sandbox(global, params) {
     if(!(effect instanceof Effect.Effect))
       throw new Error("No effect object.");
 
-      if(effect instanceof Effect.Read) {
-        update(readset, effect.target, effect);
-        update(effectset, effect.target, effect);
+    if(effect instanceof Effect.Read) {
+      update(readset, effect.target, effect);
+      update(effectset, effect.target, effect);
 
-      } else if(effect instanceof Effect.Write) {
-        update(writeset, effect.target, effect);
-        update(effectset, effect.target, effect);
-      } 
+    } else if(effect instanceof Effect.Write) {
+      update(writeset, effect.target, effect);
+      update(effectset, effect.target, effect);
+    } 
 
     function update(set, target, effect) {
       if(!set.has(target))
@@ -823,7 +823,7 @@ function Sandbox(global, params) {
     }
   }
 
-   /** Get Effects
+  /** Get Effects
    * @param target JavaScript Obejct
    * @return JavaScript Array [Effect]
    */
@@ -832,7 +832,7 @@ function Sandbox(global, params) {
     else return [];
   }, this);
 
-   /** Get Effects
+  /** Get Effects
    * @param target JavaScript Obejct
    * @return JavaScript Array [Effect]
    */
