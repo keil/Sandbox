@@ -14,6 +14,8 @@
  */
 
 /** JavaScript Sandbox
+ *
+ * @param global The Snadbox Global Object
  * @param params Object
  *
  * Sandbox Optione
@@ -43,8 +45,11 @@
  *   Instance for the output. (default: new Out())
  *
  */
-function Sandbox(params) {
-  if(!(this instanceof Sandbox)) return new Sandbox(params);
+function Sandbox(XglobalX, params) {
+  if(!(this instanceof Sandbox)) return new Sandbox(global, params);
+
+  if(!(XglobalX instanceof Object))
+    throw new TypeError("No Global Object.");
 
   /** 
    * Verbose Mode
@@ -646,11 +651,6 @@ function Sandbox(params) {
   //\__,_\___\__\___/_|_|_| .__/_|_\___|
   //                      |_|           
 
-//  var funstore = new WeakMap();
-// TODO
-//  function 
-
-
   /** decompile
    * Decompiles functions.
    * @param fun JavaScript Function
@@ -684,25 +684,22 @@ function Sandbox(params) {
   /** evaluate
    * Evaluates the given function.
    * @param fun JavaScript Function
-   * @param globalArg The current Global Object
    * @param thisArg The current this Object
    * @param argsArray The Function arguments
    * @return Any
    */
-  function evaluate(fun, globalArg, thisArg, argsArray) {
+  function evaluate(fun, thisArg, argsArray) {
     logc("evaluate", fun);
 
-    if(!(globalArg instanceof Object))
-      throw new TypeError("globalArg");
     if(!(thisArg instanceof Object))
       throw new TypeError("thisArg");
     if(!(argsArray instanceof Array))
       throw new TypeError("argsArray");
 
     // sandboxed function
-    var sbxed = decompile(fun, wrap(globalArg, globalArg));
+    var sbxed = decompile(fun, wrap(XglobalX, XglobalX));
     // apply constructor function
-    var val = sbxed.apply(wrap(thisArg, globalArg), wrap(argsArray, globalArg));
+    var val = sbxed.apply(wrap(thisArg, XglobalX), wrap(argsArray, XglobalX));
     // return val
     return val;
   }
@@ -714,20 +711,18 @@ function Sandbox(params) {
    * @param argsArray The Function arguments
    * @return Object
    */
-  function construct(fun, globalArg, argsArray) {
+  function construct(fun, argsArray) {
     logc("construct", fun);
 
-    if(!(globalArg instanceof Object))
-      throw new TypeError("globalArg");
     if(!(argsArray instanceof Array))
       throw new TypeError("argsArray");
 
     // sandboxed function
-    var sbxed = decompile(fun, wrap(globalArg, globalArg));
+    var sbxed = decompile(fun, wrap(XglobalX, XglobalX));
     // new this reference
-    var thisArg = wrap(Object.create(fun.prototype), globalArg);
+    var thisArg = wrap(Object.create(fun.prototype), XglobalX);
     // apply function
-    var val = sbxed.apply(thisArg, wrap(argsArray, globalArg)); 
+    var val = sbxed.apply(thisArg, wrap(argsArray, XglobalX)); 
     // return thisArg | val
     return (val instanceof Object) ? val : thisArg;
   }
@@ -740,23 +735,21 @@ function Sandbox(params) {
    * @param argsArray The Function arguments
    * @return Any
    */
-  function bind(fun, globalArg, thisArg, argsArray) {
+  function bind(fun, thisArg, argsArray) {
     logc("bind", fun);
 
-    if(!(globalArg instanceof Object))
-      throw new TypeError("globalArg");
     if(!(thisArg instanceof Object))
       throw new TypeError("thisArg");
     if(!(argsArray instanceof Array))
       throw new TypeError("argsArray");
 
     // sandboxed function
-    var sbxed = decompile(fun, wrap(globalArg, globalArg));
+    var sbxed = decompile(fun, wrap(XglobalX, XglobalX));
     // bind thisArg
-    var bound = sbxed.bind(wrap(thisArg, globalArg));
+    var bound = sbxed.bind(wrap(thisArg, XglobalX));
     // bind arguments
     for(var arg in argsArray) {
-      bound = bound.bind(null, wrap(arg, globalArg));
+      bound = bound.bind(null, wrap(arg, XglobalX));
     }
     // return bound function
     return bound;
@@ -768,16 +761,15 @@ function Sandbox(params) {
   ///_/ \_\ .__/ .__/_|\_, |
   //      |_|  |_|     |__/ 
 
-  __define("apply", function(fun, globalArg, thisArg, argsArray) {
+  __define("apply", function(fun, thisArg, argsArray) {
 
     if(!(fun instanceof Function))
     throw new TypeError("No function object.");
 
-  globalArg = (globalArg!==undefined) ? globalArg : new Object();
-  thisArg = (thisArg!==undefined) ? thisArg : globalArg;
+  thisArg = (thisArg!==undefined) ? thisArg : XglobalX;
   argsArray = (argsArray!==undefined) ? argsArray : new Array();
 
-  return evaluate(fun, globalArg, thisArg, argsArray);
+  return evaluate(fun, thisArg, argsArray);
   }, this);
 
   //  ___      _ _ 
@@ -785,25 +777,22 @@ function Sandbox(params) {
   //| (__/ _` | | |
   // \___\__,_|_|_|
 
-  __define("call", function(fun, globalArg, thisArg) {
+  __define("call", function(fun, thisArg) {
 
     if(!(fun instanceof Function))
     throw new TypeError("No function object.");
 
-  globalArg = (globalArg!==undefined) ? globalArg : new Object();
-  thisArg = (thisArg!==undefined) ? thisArg : globalArg;
+  thisArg = (thisArg!==undefined) ? thisArg : XglobalX;
 
   var argsArray = [];
   for(var i=0; i<arguments.length;i++) argsArray[i]=arguments[i];
 
   // pop fun
   domain.pop();
-  // pop globalArg
-  domain.pop();
   // pop thisArg
   domain.pop();
 
-  return evaluate(fun, globalArg, thisArg, argsArray);
+  return evaluate(fun, thisArg, argsArray);
   }, this);
 
   // ___ _         _ 
@@ -811,16 +800,15 @@ function Sandbox(params) {
   //| _ \ | ' \/ _` |
   //|___/_|_||_\__,_|
 
-  __define("bind", function(fun, globalArg, thisArg, argsArray) {
+  __define("bind", function(fun, thisArg, argsArray) {
 
     if(!(fun instanceof Function))
     throw new TypeError("No function object.");
 
-  globalArg = (globalArg!==undefined) ? globalArg : new Object();
-  thisArg = (thisArg!==undefined) ? thisArg : globalArg;
+  thisArg = (thisArg!==undefined) ? thisArg : XglobalX;
   argsArray = (argsArray!==undefined) ? argsArray : new Array();
 
-  return bind(fun, globalArg, thisArg, argsArray);
+  return bind(fun, thisArg, argsArray);
   }, this);
 
   // _______                             _   _                 

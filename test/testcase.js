@@ -25,10 +25,10 @@ function Testcase(fun, globalArg, thisArg, argsArray, name, quitOnExit) {
   }
 
   function run() {
-    var sbx = new Sandbox(params);
+    var sbx = new Sandbox(globalArg, params);
 
     try{
-      var outcomeA = sbx.apply(fun, globalArg, thisArg, argsArray);
+      var outcomeA = sbx.apply(fun, thisArg, argsArray);
     } catch(e) {
       var outcomeA = e.toString() + "\n" + e.stack;
     }
