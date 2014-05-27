@@ -205,10 +205,9 @@ function Sandbox(XglobalX, params) {
    * Wraps a target object.
    *
    * @param target The Target Object.
-   * @param global The current Global Object.
    * @return JavaScript Proxy 
    */
-  function wrap(target, global) { 
+  function wrap(target) { 
     logc("wrap", (typeof target) + "=" + target);
 
     // If target is a primitive value, then return target
@@ -220,8 +219,6 @@ function Sandbox(XglobalX, params) {
 
     if(target===undefined)
       throw new ReferenceError("Target is undefined.");
-    if(global===undefined)
-      throw new ReferenceError("Global is undefined."); 
 
     // Membrane ? 
     if(!(__membrane__))
@@ -252,7 +249,7 @@ function Sandbox(XglobalX, params) {
       // and to make an iterable image for loops
       if(target instanceof Function) {
         log("target instanceOf Function");
-        var scope = cloneFunction(target, global)
+        var scope = cloneFunction(target)
       } else {
         log("target instanceOf Object");
         var scope = cloneObject(target);
@@ -272,7 +269,7 @@ function Sandbox(XglobalX, params) {
         return new Proxy(handler, metahandler)
       }
 
-      var handler = make(new Membrane(global, target, scope))
+      var handler = make(new Membrane(target))
       var proxy = new Proxy(scope, handler);
       cache.set(target, proxy);
       return proxy;
@@ -296,7 +293,7 @@ function Sandbox(XglobalX, params) {
 
     // TODO
     // * discuss flag about building shadow trees
-    // ** object[property] = wrap(target[property], global);
+    // ** object[property] = wrap(target[property]);
 
     for (var property in target) {
       if (target.hasOwnProperty(property)) {
@@ -316,13 +313,13 @@ function Sandbox(XglobalX, params) {
    * @param target JavaScript Function
    * @return JavaScript Function
    */
-  function cloneFunction(target, global) {
+  function cloneFunction(target) {
     log("Clone Function.");
 
     if(!(target instanceof Function))
       throw new Error("No JavaScript Function.");
 
-    var clone = decompile(target, wrap(global, global));
+    var clone = decompile(target, wrap(XglobalX));
     clone.prototype = target.prototype;
     return clone;
   }
@@ -337,9 +334,9 @@ function Sandbox(XglobalX, params) {
    *
    * @param global The current Global Object.
    */
-  function Membrane(global, target) {
-    if(!(global instanceof Object))
-      throw new TypeError("global");
+  function Membrane(target) {
+    if(!(target instanceof Object))
+      throw new TypeError("No Target Object.");
 
     /*
      * List of effected properties
@@ -394,7 +391,7 @@ function Sandbox(XglobalX, params) {
     /** target, name, receiver -> any
     */
     function doGet(scope, name) {
-      return (affected(name)) ? scope[name] : wrap(target[name], global);
+      return (affected(name)) ? scope[name] : wrap(target[name]);
     }
     /** target, name, val, receiver -> boolean
     */
@@ -451,9 +448,9 @@ function Sandbox(XglobalX, params) {
         return Object.getOwnPropertyDescriptor(scope, name);
       } else {
         var desc = Object.getOwnPropertyDescriptor(scope, name);
-        if (desc.value !== undefined) desc.value = wrap(desc.value, global);
-        if (desc.get !== undefined) desc.get = wrap(desc.get, global);
-        if (desc.set !== undefined) desc.set = wrap(desc.set, global);
+        if (desc.value !== undefined) desc.value = wrap(desc.value);
+        if (desc.get !== undefined) desc.get = wrap(desc.get);
+        if (desc.set !== undefined) desc.set = wrap(desc.set);
         return desc;
       }
     }
@@ -603,12 +600,12 @@ function Sandbox(XglobalX, params) {
       logc("apply", scope);
       trace(new Effect.Apply(target, thisArg, argsArray));
 
-      thisArg = (thisArg!==undefined) ? thisArg : global;
+      thisArg = (thisArg!==undefined) ? thisArg : XglobalX;
       argsArray = (argsArray!==undefined) ? argsArray : new Array();
 
       // Note: 
       // The function in scope is already decompiled.
-      return scope.apply(wrap(thisArg, global), wrap(argsArray, global));
+      return scope.apply(wrap(thisArg), wrap(argsArray));
      //
      // var ren = scope.apply(wrap(thisArg, global), wrap(argsArray, global));
      // return wrapper.wrapThis(ren, global);
@@ -629,12 +626,12 @@ function Sandbox(XglobalX, params) {
       // it is still an object inside the sandbox
       // therefore it it no need to wrap the objet
       // target is deompiled ?
-      var thisArg = wrap(Object.create(target.prototype), global);
+      var thisArg = wrap(Object.create(target.prototype));
       // var thisArg = Object.create(scope)al);
       // apply function
-      var val = scope.apply(thisArg, wrap(argsArray, global));
+      var val = scope.apply(thisArg, wrap(argsArray));
       // return thisArg | val
-      return (val instanceof Object) ? wrap(val, global) : thisArg;
+      return (val instanceof Object) ? wrap(val) : thisArg;
     };
   };
 
@@ -697,9 +694,9 @@ function Sandbox(XglobalX, params) {
       throw new TypeError("argsArray");
 
     // sandboxed function
-    var sbxed = decompile(fun, wrap(XglobalX, XglobalX));
+    var sbxed = decompile(fun, wrap(XglobalX));
     // apply constructor function
-    var val = sbxed.apply(wrap(thisArg, XglobalX), wrap(argsArray, XglobalX));
+    var val = sbxed.apply(wrap(thisArg), wrap(argsArray));
     // return val
     return val;
   }
@@ -707,7 +704,6 @@ function Sandbox(XglobalX, params) {
   /** Construct
    * Evaluates the given constructor.
    * @param fun JavaScript Function
-   * @param globalArg The current Global Object
    * @param argsArray The Function arguments
    * @return Object
    */
@@ -718,11 +714,11 @@ function Sandbox(XglobalX, params) {
       throw new TypeError("argsArray");
 
     // sandboxed function
-    var sbxed = decompile(fun, wrap(XglobalX, XglobalX));
+    var sbxed = decompile(fun, wrap(XglobalX));
     // new this reference
-    var thisArg = wrap(Object.create(fun.prototype), XglobalX);
+    var thisArg = wrap(Object.create(fun.prototype));
     // apply function
-    var val = sbxed.apply(thisArg, wrap(argsArray, XglobalX)); 
+    var val = sbxed.apply(thisArg, wrap(argsArray)); 
     // return thisArg | val
     return (val instanceof Object) ? val : thisArg;
   }
@@ -730,7 +726,6 @@ function Sandbox(XglobalX, params) {
   /** bind
    * Binds the given function in the sandbox.
    * @param fun JavaScript Function
-   * @param globalArg The current Global Object
    * @param thisArg The current this Object
    * @param argsArray The Function arguments
    * @return Any
@@ -744,12 +739,12 @@ function Sandbox(XglobalX, params) {
       throw new TypeError("argsArray");
 
     // sandboxed function
-    var sbxed = decompile(fun, wrap(XglobalX, XglobalX));
+    var sbxed = decompile(fun, wrap(XglobalX));
     // bind thisArg
-    var bound = sbxed.bind(wrap(thisArg, XglobalX));
+    var bound = sbxed.bind(wrap(thisArg));
     // bind arguments
     for(var arg in argsArray) {
-      bound = bound.bind(null, wrap(arg, XglobalX));
+      bound = bound.bind(null, wrap(arg));
     }
     // return bound function
     return bound;
