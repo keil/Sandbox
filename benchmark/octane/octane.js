@@ -14,9 +14,14 @@
  */
 
 var params = {
-  verbose:true,
+  verbose:false,
   out:ShellOut(),
+  statistic:true,
   decompile:true,
   membrabe:true,
   effect:true
 };
+
+function getNewSandbox() {
+  return new Sandbox(this, params);
+}

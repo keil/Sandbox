@@ -25,9 +25,6 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-// TODO
-var __global__=this;
-
 // Performance.now is used in latency benchmarks, the fallback is Date.now.
 var performance = performance || {};
 performance.now = (function() {
@@ -55,9 +52,12 @@ function Benchmark(name, doWarmup, doDeterministic, deterministicIterations,
   this.doDeterministic = doDeterministic;
   this.deterministicIterations = deterministicIterations;
 
-  var sbx = new Sandbox(params);
-  this.run = sbx.bind(run, __global__);
-  //this.run = run;
+  // Note: Matthias Keil
+  // Extend Benchmark to use an Sandbox
+  var sbx = getNewSandbox();
+  this.run = sbx.bind(run);
+  // Original Code is:
+  // this.run = run;
 
   this.Setup = setup ? setup : function() { };
   this.TearDown = tearDown ? tearDown : function() { };

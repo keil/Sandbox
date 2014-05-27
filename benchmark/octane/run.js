@@ -28,8 +28,8 @@
 var base_dir = 'benchmark/octane/';
 load(base_dir + 'base.js');
 
-/*load(base_dir + 'richards.js');
-load(base_dir + 'deltablue.js');
+load(base_dir + 'richards.js');
+/*load(base_dir + 'deltablue.js');
 load(base_dir + 'crypto.js');
 load(base_dir + 'raytrace.js');
 load(base_dir + 'earley-boyer.js');
@@ -53,6 +53,7 @@ var success = true;
 
 function PrintResult(name, result) {
   print(name + ': ' + result);
+  if(result instanceof Error) print(result.stack);
 }
 
 
