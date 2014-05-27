@@ -120,12 +120,24 @@ function Sandbox(params) {
     }
   }
 
+  //    _        _   _    _   _    
+  // __| |_ __ _| |_(_)__| |_(_)__ 
+  //(_-<  _/ _` |  _| (_-<  _| / _|
+  ///__/\__\__,_|\__|_/__/\__|_\__|
+
+  var statistic = new Statistic();
+
+  function increment(op) {
+    statistic.increment(op);
+  }
+
   //     _     _      _   _          
   //__ _(_)___| |__ _| |_(_)___ _ _  
   //\ V / / _ \ / _` |  _| / _ \ ' \ 
   // \_/|_\___/_\__,_|\__|_\___/_||_|
 
   function violation(msg) {
+    // TODO, is it better to return undefined ?
     throw new Error("Unauthorized Access: "+msg);
   }
 
@@ -864,6 +876,19 @@ function Sandbox(params) {
   __define("getEffects", function(target) {  
     if(effectset.has(target)) return effectset.get(target);
     else return [];
+  }, this);
+
+  //  _____ _        _   _     _   _      
+  // / ____| |      | | (_)   | | (_)     
+  //| (___ | |_ __ _| |_ _ ___| |_ _  ___ 
+  // \___ \| __/ _` | __| / __| __| |/ __|
+  // ____) | || (_| | |_| \__ \ |_| | (__ 
+  //|_____/ \__\__,_|\__|_|___/\__|_|\___|
+
+  /** Statistic
+  */
+  __define("statistic", function() {
+    return statistic;
   }, this);
 }
 

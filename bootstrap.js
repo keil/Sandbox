@@ -19,6 +19,7 @@ load("lib/padding.js")
 load("src/misc.js");
 load("src/out.js");
 load("src/shell.js");
+load("src/statistic.js");
 
 // TODO
 //load("src/this.js");
@@ -63,8 +64,15 @@ print("c) "+obj.z);
 //sbx2.getWriteEffects(obj)[0].commit();
 //print("c) "+obj.z);
 
-
-
+var s = new Statistic();
+print(s);
+s.increment("BUH");
+s.increment("BUH");
+s.increment("BUH");
+s.increment("Lala");
+s.increment("L");
+s.increment("BUH");
+print(s);
 // TODO:
 // get all effects
 // writeeffects

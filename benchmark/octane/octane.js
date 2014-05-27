@@ -13,7 +13,7 @@
  * http://www.informatik.uni-freiburg.de/~keilr/
  */
 
-var args = {
+var params = {
   verbose:true,
   out:ShellOut(),
   decompile:true,
