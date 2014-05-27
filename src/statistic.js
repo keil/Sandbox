@@ -21,6 +21,14 @@ function Statistic() {
 
   var statistic = {};
 
+  __define("get", function(op) {
+    return statistic[op];
+  }, this);
+
+  __define("keys", function() {
+    return Object.keys(statistic);
+  }, this);
+
   __define("increment", function(op) {
     if(statistic[op]===undefined) statistic[op]=0;
     statistic[op]++;

@@ -73,6 +73,10 @@ s.increment("Lala");
 s.increment("L");
 s.increment("BUH");
 print(s);
+
+print(s.keys());
+print(s.get("L"));
+
 // TODO:
 // get all effects
 // writeeffects
