@@ -32,6 +32,10 @@ load('test/metahandler.js');
 
 // ==================================================
 
+
+load("demo/statistic.js");
+quit();
+
 var obj = {x:1, y:1};
 
 function f() {

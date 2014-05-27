@@ -25,7 +25,7 @@ function Statistic() {
     return statistic[op];
   }, this);
 
-  __define("keys", function() {
+  __getter("keys", function() {
     return Object.keys(statistic);
   }, this);
 

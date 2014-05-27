@@ -1,5 +1,7 @@
 *General*
 
+ - remove global object from apply and bind
+
  - rename traget to origin
 
  - implement decompile cache

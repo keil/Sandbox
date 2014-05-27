@@ -166,7 +166,6 @@ function Sandbox(params) {
    * @return true, if fun is a native function, false otherwise
    */
   function isNative(fun) {
-    print(fun);
     if(!(fun instanceof Function)) return false;
     else return (FunctionPrototypeToString.apply(fun).indexOf('[native code]') > -1);
   }
@@ -269,7 +268,7 @@ function Sandbox(params) {
       }
 
       var handler = make(new Membrane(global, target, scope))
-        var proxy = new Proxy(scope, handler);
+      var proxy = new Proxy(scope, handler);
       cache.set(target, proxy);
       return proxy;
     }
@@ -602,8 +601,6 @@ function Sandbox(params) {
       thisArg = (thisArg!==undefined) ? thisArg : global;
       argsArray = (argsArray!==undefined) ? argsArray : new Array();
 
-      print("@@@@@@@@@@@@ "+thisArg.uuid);
-      
       // Note: 
       // The function in scope is already decompiled.
       return scope.apply(wrap(thisArg, global), wrap(argsArray, global));
@@ -648,7 +645,12 @@ function Sandbox(params) {
   /// _` / -_) _/ _ \ '  \| '_ \ | / -_)
   //\__,_\___\__\___/_|_|_| .__/_|_\___|
   //                      |_|           
- 
+
+//  var funstore = new WeakMap();
+// TODO
+//  function 
+
+
   /** decompile
    * Decompiles functions.
    * @param fun JavaScript Function
@@ -673,7 +675,7 @@ function Sandbox(params) {
     // var body = "(" + fun.toString() + ")"; 
     // var sbxed = eval("(function() { with(env) { return " + body + " }})();");
 
-    var body = "(function() {'use strict'; return " + ("(" + fun.toString() + ")") + "})();"
+    var body = "(function() {'use strict'; return " + ("(" + fun.toString() + ")") + "})();";
     var sbxed = eval("(function() { with(env) { return " + body + " }})();");
 
     return sbxed;
@@ -897,9 +899,7 @@ function Sandbox(params) {
 
   /** Statistic
   */
-  __define("statistic", function() {
-    return statistic;
-  }, this);
+  __define("statistic", statistic, this);
 }
 
 // ___               _ _               ___ ___  

@@ -66,3 +66,10 @@ function __define(name, property, target) {
     enumerable: true
   });
 }
+
+function __getter(name, getter, target) {
+  Object.defineProperty(target, name, {
+    get: getter,
+    enumerable: true
+  });
+}
