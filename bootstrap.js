@@ -62,9 +62,11 @@ print("c) "+obj.z);
 
 sbx1.effects.foreach(function(i, eft) print("--> " + eft));
 
-
-//sbx2.getWriteEffects(obj)[0].commit();
-//print("c) "+obj.z);
+//sbx2.commitOf(obj);
+sbx2.commit();
+//print(sbx2.writeOf(obj)[0]);
+//sbx2.writeOf(obj)[0].commit();
+print("c) "+obj.z);
 
 // TODO:
 // get all effects

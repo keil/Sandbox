@@ -20,28 +20,29 @@
 //                    |__/ 
 //
 
-Array.prototype.foreach = function( callback ) {
+Object.defineProperty(Array.prototype, "foreach", {value: function( callback ) {
   for( var k=0; k<this .length; k++ ) {
     callback( k, this[ k ] );
   }
-}
+},enumerable:false});
 
 // Array Remove - By John Resig (MIT Licensed)
-Array.prototype.remove = function(from, to) {
+Object.defineProperty(Array.prototype, "remove", {value: function(from, to) {
   var rest = this.slice((to || from) + 1 || this.length);
   this.length = from < 0 ? this.length + from : from;
   return this.push.apply(this, rest);
-};
+}, enumerable:false});
 
-Array.prototype.clone = function() {
+Object.defineProperty(Array.prototype, "clone", {value: function() {
   return this.slice(0);
-};
+}, enumerable:false});
 
-Array.prototype.clear = function() {
+Object.defineProperty(Array.prototype, "clear", {value: function() {
   while (this.length > 0) {
     this.pop();
   }
-};
+}, enumerable:false});
+
 
 // ___                  
 //|   \ _  _ _ __  _ __ 
@@ -63,13 +64,13 @@ function __dump(value) {
 function __define(name, property, target) {
   Object.defineProperty(target, name, {
     get: function () { return property; },
-    enumerable: true
+  enumerable: true
   });
 }
 
 function __getter(name, getter, target) {
   Object.defineProperty(target, name, {
     get: getter,
-    enumerable: true
+  enumerable: true
   });
 }

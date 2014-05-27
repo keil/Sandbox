@@ -876,12 +876,95 @@ function Sandbox(global, params) {
   }, this);
 
   /** Get All Effects
-   * @param target JavaScript Obejct
    * @return JavaScript Array [Effect]
    */
   __getter("effects", function() {
     return effects;
   }, this);
+
+
+  // TODO
+  // * conflict
+  // * commit
+  // * diff
+  // ** hasDiff(target)
+  // * give read effect target to compare with origin ?
+
+
+  __define("conflict", function(sbx) {
+    if(!(sbx instanceof Sandbox)) throw new TypeError("No Sandbox.");
+
+    // TODO
+    // * algorithm
+    
+  }, this);
+
+
+    __define("conflictOf", function(sbx, target) {
+    if(!(sbx instanceof Sandbox)) throw new TypeError("No Sandbox.");
+
+    var effects
+
+    /* Conflicts
+     *
+     * GlobalReadEffects
+     *
+     * keys
+     * ..
+     *
+     * PropertyEffects
+     * get x.a
+     *
+     *
+     *
+     *
+     *
+     *
+     * read target.a; write target.a (define..)
+     *
+     * read keys, .. ; write target.a (define..)
+     * 
+     *
+     *
+     *
+     *
+     */
+
+
+    // unterteilung con effects in 
+
+    // TODO
+    // * algorithm
+    
+  }, this);
+
+
+
+
+
+  /** Commit All Effects
+   * @return JavaScript Array [Effect]
+   */
+  __define("commit", function() {
+    for(i in writeeffects) {
+      var effect = writeeffects[i];
+      if(effect instanceof Effect.Effect) effect.commit();
+    }
+  }, this);
+
+  /** Commit All Effects Of
+   * @return JavaScript Array [Effect]
+   */
+  __define("commitOf", function(target) {
+    var effects = writeset.get(target);
+    for(var i in effects) {
+      var effect = effects[i];
+      if(effect instanceof Effect.Effect) effect.commit();
+    }
+  }, this);
+
+
+
 
   //  _____ _        _   _     _   _      
   // / ____| |      | | (_)   | | (_)     
