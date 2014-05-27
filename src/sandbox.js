@@ -45,10 +45,10 @@
  *   Instance for the output. (default: new Out())
  *
  */
-function Sandbox(XglobalX, params) {
+function Sandbox(global, params) {
   if(!(this instanceof Sandbox)) return new Sandbox(global, params);
 
-  if(!(XglobalX instanceof Object))
+  if(!(global instanceof Object))
     throw new TypeError("No Global Object.");
 
   /** 
@@ -319,7 +319,7 @@ function Sandbox(XglobalX, params) {
     if(!(target instanceof Function))
       throw new Error("No JavaScript Function.");
 
-    var clone = decompile(target, wrap(XglobalX));
+    var clone = decompile(target, wrap(global));
     clone.prototype = target.prototype;
     return clone;
   }
@@ -332,11 +332,11 @@ function Sandbox(XglobalX, params) {
   /** Membrabe(global)
    * Implements a sandbox membrane.
    *
-   * @param global The current Global Object.
+   * @param origin The current Global Object.
    */
-  function Membrane(target) {
-    if(!(target instanceof Object))
-      throw new TypeError("No Target Object.");
+  function Membrane(origin) {
+    if(!(origin instanceof Object))
+      throw new TypeError("No Origin (Target) Object.");
 
     /*
      * List of effected properties
@@ -360,7 +360,7 @@ function Sandbox(XglobalX, params) {
         // TODO
         // *PreStateSnapshot */
         // update current scope required ?
-        // scope[name]=target[name];
+        // scope[name]=origin[name];
         properties.add(name);
       }
     }
@@ -374,24 +374,24 @@ function Sandbox(XglobalX, params) {
     /** target, name -> boolean
     */
     function doHas(scope, name) {
-      var has = (affected(name)) ? (name in scope) : (name in target);
+      var has = (affected(name)) ? (name in scope) : (name in origin);
 
       // TODO
       // is violation the right way
       // otherwise return true and say get to return undefined
       if(has===false) violation(name);
 
-      return (affected(name)) ? (name in scope) : (name in target);
+      return (affected(name)) ? (name in scope) : (name in origin);
     }
     /** target, name -> boolean
     */
     function doHasOwn(scope, name) {
-      return (affected(name)) ? Object.prototype.hasOwnProperty.call(scope, name) : Object.prototype.hasOwnProperty.call(target, name);
+      return (affected(name)) ? Object.prototype.hasOwnProperty.call(scope, name) : Object.prototype.hasOwnProperty.call(origin, name);
     }
     /** target, name, receiver -> any
     */
     function doGet(scope, name) {
-      return (affected(name)) ? scope[name] : wrap(target[name]);
+      return (affected(name)) ? scope[name] : wrap(origin[name]);
     }
     /** target, name, val, receiver -> boolean
     */
@@ -403,17 +403,9 @@ function Sandbox(XglobalX, params) {
     */
     function doDefineProperty(scope, name, desc) {
       touch(scope, name);
-
-//      print("# NAME: " + name);
-//      print("# DESC: " + Xdump(desc));
-//      print("# CURR: " + Xdump(Object.getOwnPropertyDescriptor(scope, name)));
-      Object.defineProperty(scope, name, desc);
-//     print("# CURR: " + Xdump(Object.getOwnPropertyDescriptor(scope, name)));
-
-
-
-
-
+      // Note: Matthias Keil
+      // Object.defineProperty is not equivalent to the behavior 
+      // described in the ECMA Standard
       return Object.defineProperty(scope, name, desc);
     }
     /** target, name -> boolean
@@ -447,7 +439,7 @@ function Sandbox(XglobalX, params) {
       if(affected(name)) {
         return Object.getOwnPropertyDescriptor(scope, name);
       } else {
-        var desc = Object.getOwnPropertyDescriptor(scope, name);
+        var desc = Object.getOwnPropertyDescriptor(origin, name);
         if (desc.value !== undefined) desc.value = wrap(desc.value);
         if (desc.get !== undefined) desc.get = wrap(desc.get);
         if (desc.set !== undefined) desc.set = wrap(desc.set);
@@ -474,7 +466,7 @@ function Sandbox(XglobalX, params) {
     */
     this.getOwnPropertyDescriptor = function(scope, name) {
       logc("getOwnPropertyDescriptor", name);
-      trace(new Effect.GetOwnPropertyDescriptor(target, name));
+      trace(new Effect.GetOwnPropertyDescriptor(origin, name));
 
       return doGetOwnPropertyDescriptor(scope, name);
     };
@@ -482,7 +474,7 @@ function Sandbox(XglobalX, params) {
     */
     this.getOwnPropertyNames = function(scope) {
       logc("getOwnPropertyNames");
-      trace(new Effect.GetOwnPropertyNames(target));
+      trace(new Effect.GetOwnPropertyNames(origin));
 
       return doGetOwnPropertyNames(scope);
     };
@@ -490,7 +482,7 @@ function Sandbox(XglobalX, params) {
     */
     this.defineProperty = function(scope, name, desc) {
       logc("defineProperty", name);
-      trace(new Effect.DefineProperty(target, name, desc));
+      trace(new Effect.DefineProperty(origin, name, desc));
 
       return doDefineProperty(scope, name, desc);
     };
@@ -498,7 +490,7 @@ function Sandbox(XglobalX, params) {
     */
     this.deleteProperty = function(scope, name) {
       logc("deleteProperty", name);
-      trace(new Effect.DeleteProperty(target, name));
+      trace(new Effect.DeleteProperty(origin, name));
 
       return doDelete(scope, name);
     };
@@ -506,7 +498,7 @@ function Sandbox(XglobalX, params) {
     */
     this.freeze = function(scope) {
       logc("freeze");
-      trace(new Effect.Freeze(target));
+      trace(new Effect.Freeze(origin));
 
       return Object.freeze(scope);
     };
@@ -514,7 +506,7 @@ function Sandbox(XglobalX, params) {
     */
     this.seal = function(scope) {
       logc("seal");
-      trace(new Effect.Seal(target));
+      trace(new Effect.Seal(origin));
 
       return Object.seal(scope);
     };
@@ -522,7 +514,7 @@ function Sandbox(XglobalX, params) {
     */
     this.preventExtensions = function(scope) {
       logc("preventExtensions");
-      trace(new Effect.PreventExtensions(target));
+      trace(new Effect.PreventExtensions(origin));
 
       return Object.preventExtensions(scope);
     };
@@ -530,7 +522,7 @@ function Sandbox(XglobalX, params) {
     */
     this.isExtensible = function(scope) {
       logc("isExtensible");
-      trace(new Effect.IsExtensible(target));
+      trace(new Effect.IsExtensible(origin));
 
       return Object.isExtensible(scope);
     };
@@ -538,7 +530,7 @@ function Sandbox(XglobalX, params) {
     */
     this.has = function(scope, name) {
       logc("has", name);
-      trace(new Effect.Has(target, name));
+      trace(new Effect.Has(origin, name));
 
       return doHas(scope, name);
     };
@@ -546,7 +538,7 @@ function Sandbox(XglobalX, params) {
     */
     this.hasOwn = function(scope, name) {
       logc("hasOwn", name);
-      trace(new Effect.HasOwn(target, name));
+      trace(new Effect.HasOwn(origin, name));
 
       return doHasOwn(scope, name);
     };
@@ -554,7 +546,7 @@ function Sandbox(XglobalX, params) {
     */
     this.get = function(scope, name, receiver) {
       logc("get", name);
-      trace(new Effect.Get(target, name, receiver));
+      trace(new Effect.Get(origin, name, receiver));
 
       return doGet(scope, name);
     };
@@ -562,7 +554,7 @@ function Sandbox(XglobalX, params) {
     */
     this.set = function(scope, name, value, receiver) {
       logc("set", name);
-      trace(new Effect.Set(target, name, value, receiver));
+      trace(new Effect.Set(origin, name, value, receiver));
 
       return doSet(scope, name, value);
     };
@@ -570,7 +562,7 @@ function Sandbox(XglobalX, params) {
     */
     this.enumerate = function(scope) {
       logc("enumerate");
-      trace(new Effect.Enumerate(target));
+      trace(new Effect.Enumerate(origin));
 
       // NOTE: Trap is never called
       // return doEnumnerate(scope);
@@ -580,7 +572,7 @@ function Sandbox(XglobalX, params) {
     */
     this.iterate = function(scope) {
       logc("iterate");
-      trace(new Effect.Iterate(target));
+      trace(new Effect.Iterate(origin));
 
       // NOTE: Trap is never called
       // return doIterate(scope);
@@ -590,7 +582,7 @@ function Sandbox(XglobalX, params) {
     */
     this.keys = function(scope) {
       logc("keys");
-      trace(new Effect.Keys(target));
+      trace(new Effect.Keys(origin));
 
       return doKeys(scope);
     };
@@ -598,40 +590,25 @@ function Sandbox(XglobalX, params) {
     */
     this.apply = function(scope, thisArg, argsArray) {
       logc("apply", scope);
-      trace(new Effect.Apply(target, thisArg, argsArray));
+      trace(new Effect.Apply(origin, thisArg, argsArray));
 
-      thisArg = (thisArg!==undefined) ? thisArg : XglobalX;
+      thisArg = (thisArg!==undefined) ? thisArg : global;
       argsArray = (argsArray!==undefined) ? argsArray : new Array();
 
       // Note: 
       // The function in scope is already decompiled.
       return scope.apply(wrap(thisArg), wrap(argsArray));
-     //
-     // var ren = scope.apply(wrap(thisArg, global), wrap(argsArray, global));
-     // return wrapper.wrapThis(ren, global);
-
-
-//      return evaluate(scope, global, thisArg, argsArray);
     };
     /** target, args -> object
     */
     this.construct = function(scope, thisArg, argsArray) {
       logc("construct");
-      trace(new Effect.Construct(target, thisArg, argsArray));
+      trace(new Effect.Construct(origin, thisArg, argsArray));
 
-      // TODO, is it required to decompile the function ?
-      // OR move this back to the seperated function!
-      // new this reference
-      // TODO is it required to wrap the this arg ?
-      // it is still an object inside the sandbox
-      // therefore it it no need to wrap the objet
-      // target is deompiled ?
-      var thisArg = wrap(Object.create(target.prototype));
-      // var thisArg = Object.create(scope)al);
-      // apply function
+      var thisArg = wrap(Object.create(origin.prototype));
       var val = scope.apply(thisArg, wrap(argsArray));
       // return thisArg | val
-      return (val instanceof Object) ? wrap(val) : thisArg;
+      return (val instanceof Object) ? val : thisArg;
     };
   };
 
@@ -694,7 +671,7 @@ function Sandbox(XglobalX, params) {
       throw new TypeError("argsArray");
 
     // sandboxed function
-    var sbxed = decompile(fun, wrap(XglobalX));
+    var sbxed = decompile(fun, wrap(global));
     // apply constructor function
     var val = sbxed.apply(wrap(thisArg), wrap(argsArray));
     // return val
@@ -714,7 +691,7 @@ function Sandbox(XglobalX, params) {
       throw new TypeError("argsArray");
 
     // sandboxed function
-    var sbxed = decompile(fun, wrap(XglobalX));
+    var sbxed = decompile(fun, wrap(global));
     // new this reference
     var thisArg = wrap(Object.create(fun.prototype));
     // apply function
@@ -739,7 +716,7 @@ function Sandbox(XglobalX, params) {
       throw new TypeError("argsArray");
 
     // sandboxed function
-    var sbxed = decompile(fun, wrap(XglobalX));
+    var sbxed = decompile(fun, wrap(global));
     // bind thisArg
     var bound = sbxed.bind(wrap(thisArg));
     // bind arguments
@@ -761,7 +738,7 @@ function Sandbox(XglobalX, params) {
     if(!(fun instanceof Function))
     throw new TypeError("No function object.");
 
-  thisArg = (thisArg!==undefined) ? thisArg : XglobalX;
+  thisArg = (thisArg!==undefined) ? thisArg : global;
   argsArray = (argsArray!==undefined) ? argsArray : new Array();
 
   return evaluate(fun, thisArg, argsArray);
@@ -777,7 +754,7 @@ function Sandbox(XglobalX, params) {
     if(!(fun instanceof Function))
     throw new TypeError("No function object.");
 
-  thisArg = (thisArg!==undefined) ? thisArg : XglobalX;
+  thisArg = (thisArg!==undefined) ? thisArg : global;
 
   var argsArray = [];
   for(var i=0; i<arguments.length;i++) argsArray[i]=arguments[i];
@@ -800,7 +777,7 @@ function Sandbox(XglobalX, params) {
     if(!(fun instanceof Function))
     throw new TypeError("No function object.");
 
-  thisArg = (thisArg!==undefined) ? thisArg : XglobalX;
+  thisArg = (thisArg!==undefined) ? thisArg : global;
   argsArray = (argsArray!==undefined) ? argsArray : new Array();
 
   return bind(fun, thisArg, argsArray);
