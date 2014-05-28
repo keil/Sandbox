@@ -28,6 +28,35 @@ load('test/metahandler.js');
 
 // ==================================================
 
+var params = {
+  verbose:true,
+  out:ShellOut(),
+//  metahandler:false
+}
+
+
+
+function A() {
+  this.x=0;
+}
+A.prototype.f = function(a) {
+  this.x=a;
+}
+
+function g() {
+  var a = new A();
+  print("1) "+a.x);
+  //a.f(1);
+  //print("2) "+a.x);
+}
+var sbx = new Sandbox(this, params);
+
+
+
+sbx.apply(g);
+print('---');
+g();
+
 
 
 (function() {
@@ -155,30 +184,7 @@ load('test/metahandler.js');
   // undefined fields are (e.g.  enumerable and configurable) are set to false
   // When forwarding pd to the proxy target those fields get also be updated 
 
-})();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+});
 
 
 
@@ -197,7 +203,7 @@ quit();
 
 
 
-
+/*
 //load("demo/statistic.js");
 //quit();
 
@@ -247,6 +253,7 @@ print("C? " + (sbx1.conflictOf(sbx2, obj)));
 
 
 // TODO, conflict
+*/
 
 // ==================================================
 

@@ -156,7 +156,7 @@ function Sandbox(global, params) {
     // TODO
     // * Signal a violation or 
     // * return undefined
-    throw new Error("Unauthorized Access: "+msg);
+    //throw new Error("Unauthorized Access: "+msg);
   }
 
   // _    _  _      _   _         ___             _   _          
@@ -275,7 +275,7 @@ function Sandbox(global, params) {
       }
 
       var handler = make(new Membrane(target))
-        var proxy = new Proxy(scope, handler);
+      var proxy = new Proxy(scope, handler);
       cache.set(target, proxy);
       return proxy;
     }
@@ -325,7 +325,7 @@ function Sandbox(global, params) {
       throw new Error("No JavaScript Function.");
 
     var clone = decompile(target, wrap(global));
-    clone.prototype = target.prototype;
+    clone.prototype = wrap(target.prototype);
     return clone;
   }
 
@@ -570,7 +570,7 @@ function Sandbox(global, params) {
 
       // NOTE: Trap is never called
       // return doEnumnerate(scope);
-      throw new Error("Unimplemented Trap enumerate.");
+      //throw new Error("Unimplemented Trap enumerate.");
     };
     /** target -> iterator
     */
@@ -609,7 +609,9 @@ function Sandbox(global, params) {
       logc("construct");
       trace(new Effect.Construct(origin, thisArg, argsArray));
 
-      var thisArg = wrap(Object.create(origin.prototype));
+      // TODO
+      var thisArg = Object.create(scope.prototype);
+//      var thisArg = Object.create(wrap(origin.prototype));
       var val = scope.apply(thisArg, wrap(argsArray));
       // return thisArg | val
       return (val instanceof Object) ? val : thisArg;
@@ -636,7 +638,7 @@ function Sandbox(global, params) {
    * @return JavaScript Function
    */
   function decompile(fun, env) {
-    logc("decompile", fun);
+    logc("decompile", fun.name);
     increment("decompile");
 
     if(!(fun instanceof Function))

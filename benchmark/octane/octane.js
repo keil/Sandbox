@@ -14,7 +14,7 @@
  */
 
 var params = {
-  verbose:false,
+  verbose:true,
   out:ShellOut(),
   statistic:false,
   decompile:true,
