@@ -35,6 +35,9 @@
  * - effect
  *   Enables effect logging. (default: true)
  *
+ * - transparent
+ *   Tells the sandbox to be transparent. (default: false)
+ *
  * - metahandler
  *   Implements a proxy meta handler. (default: true)
  *
@@ -80,6 +83,12 @@ function Sandbox(global, params) {
    * (default: true)
    */
   var __effect__ = configure("effect", true);
+
+  /*
+   * Transparent
+   * (default: false)
+   */
+  var __transparent__ = configure("transparent", false);
 
   /*
    * MetaHandler
@@ -288,6 +297,11 @@ function Sandbox(global, params) {
    */
   function cloneObject(target) {
     log("Clone Object.");
+
+    // transparent ?
+    if(__transparent__)
+      return target;
+
 
     if(!(target instanceof Object))
       throw new Error("No JavaScript Object.");
@@ -985,12 +999,6 @@ function Sandbox(global, params) {
     else 
       return false;
   }
-
-
-  // TODO
-  // * diff/ diffOf
-  // * rollback/ rollbackOf
-
 
   /** Rollback Of
    * @param target JavaScript Object

@@ -35,6 +35,7 @@ var __params__ = {
   decompile:true,         // Decompile
   membrane:true,          // Membrane
   effect:true,            // Effect
+  transparent:false,      // Transparent
   metahandler:true,       // MetaHandler
   nativepassthrough:true, // Native Function pass-through
   out:ShellOut()          // Output
@@ -49,9 +50,8 @@ var __params__ = {
 //load("demo/commit.js");
 //load("demo/conflict.js");
 //load("demo/diff.js");
-load("demo/rollback.js");
-
-
+//load("demo/rollback.js");
+load("demo/transparent.js");
 
 
 /*
