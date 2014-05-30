@@ -1,18 +1,21 @@
+*Reset*
+ - But this is similar to the use of new Sandbox?
+ - Partial reset of a value
+
+*Carbon Copy*
+
+ - scope and target are identical
+ - but the effect system can restore values
+ - TEST THIS
+
+
 *Rollback*
 
-- including flag
+ - Effect e on x,
+   = set x to the state before e
 
-
-*General*
-
- - Return of undefined
-
- - Cleanup Log
-   Do not use full function output
-
-*Sandbox*
-
- - diff/ commit/ conflicts
+ - Sandbox,
+   = set a sandbox value to the outside value
 
 
 *Benchmark*

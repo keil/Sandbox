@@ -50,30 +50,10 @@ sbx.writeeffectsOf(this).foreach(function(i, e) {
 });
 sbx.apply(show);
 
+sbx.rollback(o)
+sbx.apply(show);
 
-//effects[0].rollback
-
-
-
-/*
-
-var wects = sbx.writeeffects;
-print(";;; Read Effects");
-wects.foreach(function(i, e) {print(e)});
-print("\n");
-
-
-wects[0].commit();
-print("o.x) " + o.x, ", o.y) " + o.y + ", o.z) " + o.z + ", z) " + z);
-
-sbx.commitOf(o);
-print("o.x) " + o.x, ", o.y) " + o.y + ", o.z) " + o.z + ", z) " + z);
-
-sbx.commit();
-print("o.x) " + o.x, ", o.y) " + o.y + ", o.z) " + o.z + ", z) " + z);
-
-// Note
-// There is not flag to store if an effect is alredy commited
-//
-
-*/
+sbx.apply(f);
+sbx.apply(show);
+sbx.rollback();
+sbx.apply(show);

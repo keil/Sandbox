@@ -53,9 +53,15 @@ var Effect = (function() {
   // \ \/\/ / '_| |  _/ -_) | _||  _|  _/ -_) _|  _|
   //  \_/\_/|_| |_|\__\___| |___|_| |_| \___\__|\__|
 
-  function Write(cmd, target, name) {
-    if(!(this instanceof Write)) return new Write(cmd, target);
+  function Write(cmd, target, scope) {
+    if(!(this instanceof Write)) return new Write(cmd, target, scope);
     else Effect.call(this, cmd, target);
+
+    if(!(scope instanceof Object))
+      throw new TypeError("No scope object.");
+
+    // define target    
+    __define("scope", scope, this);
   }
   Write.prototype = new Effect("", {});
   Write.prototype.commit = function() {
@@ -191,9 +197,9 @@ var Effect = (function() {
   // \ \/\/ / '_| |  _/ -_) | _||  _|  _/ -_) _|  _(_-<
   //  \_/\_/|_| |_|\__\___| |___|_| |_| \___\__|\__/__/
 
-  function Set(target, name, value, receiver) {
-    if(!(this instanceof Set)) return new Set(target, name, value, receiver);
-    else Write.call(this, "set [name="+name+"]", target, name, value, receiver);
+  function Set(target, scope, name, value, receiver) {
+    if(!(this instanceof Set)) return new Set(target, scope, name, value, receiver);
+    else Write.call(this, "set [name="+name+"]", target, scope);
 
     // define name
     __define("name", name, this);
@@ -202,16 +208,18 @@ var Effect = (function() {
     // define receiver
     __define("receiver", receiver, this);
 
+    // define origin
+    __define("origin", target[name], this);
     // define commit
     __define("commit", function() {
       return target[name]=value;
     }, this);
-
-    // define origin
-    __define("origin", target[name], this);
+     
+    // define snapshot
+    __define("snapshot", scope[name], this);
     // define rollback
     __define("rollback", function() {
-      return target[name]=this.origin;
+      return scope[name]=this.snapshot;
     }, this);
 
     // define diff
@@ -219,29 +227,31 @@ var Effect = (function() {
       return (target[name]===this.origin);
     }, this);
   }
-  Set.prototype = new Write("", {});
+  Set.prototype = new Write("", {}, {});
 
   /** target, name, propertyDescriptor -> any
   */
-  function DefineProperty(target, name, desc) {
-    if(!(this instanceof DefineProperty)) return new DefineProperty(target, name, desc);
-    else Write.call(this, "defineProperty [name="+name+"]", target, name);
+  function DefineProperty(target, scope, name, desc) {
+    if(!(this instanceof DefineProperty)) return new DefineProperty(target, scope, name, desc);
+    else Write.call(this, "defineProperty [name="+name+"]", target, scope);
 
     // define name
     __define("name", name, this);
     // define desc
     __define("desc", desc, this);
 
+    // define origin
+    __define("origin", Object.getOwnPropertyDescriptor(target, name), this);
     // define commit
     __define("commit", function() {
       return Object.defineProperty(target, name, desc);
     }, this);
 
-    // define origin
-    __define("origin", Object.getOwnPropertyDescriptor(target, name), this);
+    // define snapshot
+    __define("snapshot", Object.getOwnPropertyDescriptor(scope, name), this);
     // define rollback
     __define("rollback", function() {
-      return Object.defineProperty(target, name, this.origin);
+      return Object.defineProperty(target, name, this.snapshot);
     }
     , this);
 
@@ -250,26 +260,29 @@ var Effect = (function() {
       return (target[name]===this.origin);
     }, this);
   }
-  DefineProperty.prototype = new Write("", {});
+  DefineProperty.prototype = new Write("", {}, {});
 
   /** target, name -> boolean
   */
-  function DeleteProperty(target, name) {
-    if(!(this instanceof DeleteProperty)) return new DeleteProperty(target, name);
-    else Write.call(this, "deleteProperty [name="+name+"]", target, name);
+  function DeleteProperty(target, scope, name) {
+    if(!(this instanceof DeleteProperty)) return new DeleteProperty(target, scope, name);
+    else Write.call(this, "deleteProperty [name="+name+"]", target, scope);
 
     // define name
     __define("name", name, this);
+
+    // define origin
+    __define("origin", (Object.prototype.hasOwnProperty.call(target, name) ? target[name] : undefined), this);
     // define commit
     __define("commit", function() {
       return (delete target[name]);
     }, this);
 
-    // define origin
-    __define("origin", (Object.prototype.hasOwnProperty.call(target, name) ? target[name] : undefined), this);
+    // define snapshot
+    __define("snapshot", (Object.prototype.hasOwnProperty.call(scope, name) ? scope[name] : undefined), this);
     // define rollback
     __define("rollback", function() {
-      return (target[name]=this.origin);
+      return (target[name]=this.snapshot);
     }
     , this);
 
@@ -278,21 +291,23 @@ var Effect = (function() {
       return (Object.prototype.hasOwnProperty.call(target, name) ? target[name] : undefined)===this.origin;
     }, this);
   }
-  DeleteProperty.prototype = new Write("", {});
+  DeleteProperty.prototype = new Write("", {}, {});
 
   /** target -> boolean
   */
-  function Freeze(target) {
-    if(!(this instanceof Freeze)) return new Freeze(target);
-    else Write.call(this, "freeze", target);
+  function Freeze(target, scope) {
+    if(!(this instanceof Freeze)) return new Freeze(target, scope);
+    else Write.call(this, "freeze", target, scope);
 
+    // define origin
+    __define("origin", Object.isFrozen(target), this);
     // define commit
     __define("commit", function() {
       return Object.freeze(target);
     }, this);
 
-    // define origin
-    __define("origin", Object.isFrozen(target), this);
+    // define snapshot
+    __define("snapshot", Object.isFrozen(scope), this);
     // define rollback
     __define("rollback", function() {
       throw new Error("Rollback not possible");
@@ -304,21 +319,23 @@ var Effect = (function() {
       return (Object.isFrozen(target)===this.origin);
     }, this);
   }
-  Freeze.prototype = new Write("", {});
+  Freeze.prototype = new Write("", {}, {});
 
   /** target -> boolean
   */
-  function Seal(target) {
-    if(!(this instanceof Seal)) return new Seal(target);
-    else Write.call(this, "seal", target);
+  function Seal(target, scope) {
+    if(!(this instanceof Seal)) return new Seal(target, scope);
+    else Write.call(this, "seal", target, scope);
 
+    // define origin
+    __define("origin", Object.isSealed(target), this);
     // define commit
     __define("commit", function() {
       return Object.seal(target);
     }, this);
 
-    // define origin
-    __define("origin", Object.isSealed(target), this);
+    // define snapshot
+    __define("snapshot", Object.isSealed(scope), this);
     // define rollback
     __define("rollback", function() {
       throw new Error("Rollback not possible");
@@ -329,21 +346,23 @@ var Effect = (function() {
       return (Object.isSealed(target)===this.origin);
     }, this);
   }
-  Seal.prototype = new Write("", {});
+  Seal.prototype = new Write("", {}, {});
 
   /** target -> boolean
   */
-  function PreventExtensions(target) {
-    if(!(this instanceof PreventExtensions)) return new PreventExtensions(target);
-    else Write.call(this, "preventExtensions", target);
+  function PreventExtensions(target, scope) {
+    if(!(this instanceof PreventExtensions)) return new PreventExtensions(target, scope);
+    else Write.call(this, "preventExtensions", target, scope);
 
+    // define origin
+    __define("origin", Object.isExtensible(target), this);
     // define commit
     __define("commit", function() {
       return Object.preventExtensions(target);
     }, this);
 
-    // define origin
-    __define("origin", Object.isExtensible(target), this);
+    // define snapshot
+    __define("snapshot", Object.isExtensible(scope), this);
     // define rollback
     __define("rollback", function() {
       throw new Error("Rollback not possible");
@@ -354,7 +373,7 @@ var Effect = (function() {
       return (Object.isExtensible(target)===this.origin);
     }, this);
   }
-  PreventExtensions.prototype = new Write("", {});
+  PreventExtensions.prototype = new Write("", {}, {});
 
   //  ___           __ _ _    _   
   // / __|___ _ _  / _| (_)__| |_ 

@@ -471,7 +471,7 @@ function Sandbox(global, params) {
     */
     this.defineProperty = function(scope, name, desc) {
       logc("defineProperty", name);
-      trace(new Effect.DefineProperty(origin, name, desc));
+      trace(new Effect.DefineProperty(origin, scope, name, desc));
 
       return doDefineProperty(scope, name, desc);
     };
@@ -479,7 +479,7 @@ function Sandbox(global, params) {
     */
     this.deleteProperty = function(scope, name) {
       logc("deleteProperty", name);
-      trace(new Effect.DeleteProperty(origin, name));
+      trace(new Effect.DeleteProperty(origin, scope, name));
 
       return doDelete(scope, name);
     };
@@ -487,7 +487,7 @@ function Sandbox(global, params) {
     */
     this.freeze = function(scope) {
       logc("freeze");
-      trace(new Effect.Freeze(origin));
+      trace(new Effect.Freeze(origin, scope));
 
       return Object.freeze(scope);
     };
@@ -495,7 +495,7 @@ function Sandbox(global, params) {
     */
     this.seal = function(scope) {
       logc("seal");
-      trace(new Effect.Seal(origin));
+      trace(new Effect.Seal(origin, scope));
 
       return Object.seal(scope);
     };
@@ -503,7 +503,7 @@ function Sandbox(global, params) {
     */
     this.preventExtensions = function(scope) {
       logc("preventExtensions");
-      trace(new Effect.PreventExtensions(origin));
+      trace(new Effect.PreventExtensions(origin, scope));
 
       return Object.preventExtensions(scope);
     };
@@ -543,7 +543,7 @@ function Sandbox(global, params) {
     */
     this.set = function(scope, name, value, receiver) {
       logc("set", name);
-      trace(new Effect.Set(origin, name, value, receiver));
+      trace(new Effect.Set(origin, scope, name, value, receiver));
 
       return doSet(scope, name, value);
     };
@@ -992,6 +992,26 @@ function Sandbox(global, params) {
   // * rollback/ rollbackOf
 
 
+  /** Rollback Of
+   * @param target JavaScript Object
+   */
+  __define("rollbackOf", function(target) {
+    var es = this.writeeffectsOf(target);
+
+    for(var e in es) {
+      es[e].rollback();
+    }
+  }, this);
+
+  /** Rollback
+  */
+  __define("rollback", function(target) {
+    var es = writeeffects;
+
+    for(var e in es) {
+      es[e].rollback();
+    }
+  }, this);
 
   /** Has Difference With
    * @param target JavaScript Object
