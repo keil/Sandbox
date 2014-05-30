@@ -1,3 +1,5 @@
+* No rollback in freeze seal because if missin trap
+
 * Limitations*
 
 a) getOwnPropertyDescriptor

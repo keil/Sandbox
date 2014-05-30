@@ -991,6 +991,74 @@ function Sandbox(global, params) {
   // * diff/ diffOf
   // * rollback/ rollbackOf
 
+
+
+  /** Has Difference With
+   * @param target JavaScript Object
+   * return true|false
+   */
+  __define("hasDifferenceWith", function(target) {
+    var es = this.writeeffectsOf(target);
+
+    var difference = false;
+    for(var e in es) {
+      var result =  es[e].diff;
+      log("check " + es[e] + " = " + result);
+      difference = (result) ? true : difference;
+    }
+    return difference;
+  }, this);
+
+  /** Has Difference
+   * return true|false
+   */
+  __define("hasDifference", function() {
+    var difference = false;
+    for(var i in targets) {
+      difference = (this.hasDifferenceWith(targets[i])) ? true : difference;
+    }
+    return difference;
+
+  }, this);
+
+  /** Differences Of
+   * @param target JavaScript Object
+   * return [Differences]
+   */
+  __define("differencesOf", function(target) {
+    var sbxA = this;
+    var es = this.effectsOf(target);
+
+    var differences = [];
+    for(var e in es) {
+      var result =  es[e].diff;
+      log("check " + es[e] + " = " + result);
+      if(result) differences.push(new Effect.Difference(sbxA, es[e]));
+    }
+    return differences;
+  }, this);
+
+  /** Differences 
+   * return [Differences]
+   */
+  __define("differences", function() {
+    var sbxA = this;
+    var es = writeeffects;
+
+    var differences = [];
+    for(var e in es) {
+      var result =  es[e].diff;
+      log("check " + es[e] + " = " + result);
+      if(result) differences.push(new Effect.Difference(sbxA, es[e]));
+    }
+    return differences;
+  }, this);
+
+   /** Conflicts
+   * @param sbx Sandbox
+   * @param target JavaScript Object
+   * return [Conflict]
+   */
    __define("conflictsOf", function(sbx, target) {
     if(!(sbx instanceof Sandbox)) throw new TypeError("No Sandbox.");
 
@@ -1011,8 +1079,10 @@ function Sandbox(global, params) {
     return conflicts;
   }, this);
 
-
-
+  /** Conflicts
+   * @param sbx Sandbox
+   * return [Conflict]
+   */
   __define("conflicts", function(sbx) {
     if(!(sbx instanceof Sandbox)) throw new TypeError("No Sandbox.");
 

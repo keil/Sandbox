@@ -211,12 +211,12 @@ var Effect = (function() {
     __define("origin", target[name], this);
     // define rollback
     __define("rollback", function() {
-      return target[name]=origin;
+      return target[name]=this.origin;
     }, this);
 
     // define diff
-    __define("diff", function() {
-      return (target[name]===origin);
+    __getter("diff", function() {
+      return (target[name]===this.origin);
     }, this);
   }
   Set.prototype = new Write("", {});
@@ -241,13 +241,13 @@ var Effect = (function() {
     __define("origin", Object.getOwnPropertyDescriptor(target, name), this);
     // define rollback
     __define("rollback", function() {
-      return Object.defineProperty(target, name, origin);
+      return Object.defineProperty(target, name, this.origin);
     }
     , this);
 
     // define diff
-    __define("diff", function() {
-      return (target[name]===origin);
+    __getter("diff", function() {
+      return (target[name]===this.origin);
     }, this);
   }
   DefineProperty.prototype = new Write("", {});
@@ -269,13 +269,13 @@ var Effect = (function() {
     __define("origin", (Object.prototype.hasOwnProperty.call(target, name) ? target[name] : undefined), this);
     // define rollback
     __define("rollback", function() {
-      return (target[name]=origin);
+      return (target[name]=this.origin);
     }
     , this);
 
     // define diff
-    __define("diff", function() {
-      return (Object.prototype.hasOwnProperty.call(target, name) ? target[name] : undefined)===origin;
+    __getter("diff", function() {
+      return (Object.prototype.hasOwnProperty.call(target, name) ? target[name] : undefined)===this.origin;
     }, this);
   }
   DeleteProperty.prototype = new Write("", {});
@@ -300,8 +300,8 @@ var Effect = (function() {
     , this);
 
     // define diff
-    __define("diff", function() {
-      return (Object.isFrozen(target)===origin);
+    __getter("diff", function() {
+      return (Object.isFrozen(target)===this.origin);
     }, this);
   }
   Freeze.prototype = new Write("", {});
@@ -325,8 +325,8 @@ var Effect = (function() {
     }, this);
 
     // define diff
-    __define("diff", function() {
-      return (Object.isSealed(target)===origin);
+    __getter("diff", function() {
+      return (Object.isSealed(target)===this.origin);
     }, this);
   }
   Seal.prototype = new Write("", {});
@@ -350,8 +350,8 @@ var Effect = (function() {
     }, this);
 
     // define diff
-    __define("diff", function() {
-      return (Object.isExtensible(target)===origin);
+    __getter("diff", function() {
+      return (Object.isExtensible(target)===this.origin);
     }, this);
   }
   PreventExtensions.prototype = new Write("", {});
@@ -402,7 +402,7 @@ var Effect = (function() {
     if(!(sbx instanceof Sandbox))
       throw new TypeError("No sandbox object.");
 
-    if(!(effect instanceof Sandbox))
+    if(!(effect instanceof Effect))
       throw new TypeError("No effect object.");
 
     // define sbx

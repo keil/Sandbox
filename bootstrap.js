@@ -47,8 +47,8 @@ var __params__ = {
 //load("demo/statistic.js");
 //load("demo/effect.js");
 //load("demo/commit.js");
-load("demo/conflict.js");
-//load("demo/diff.js");
+//load("demo/conflict.js");
+load("demo/diff.js");
 //load("demo/rollback.js");
 
 
