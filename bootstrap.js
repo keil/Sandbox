@@ -48,17 +48,9 @@ var __params__ = {
 //load("demo/effect.js");
 //load("demo/commit.js");
 //load("demo/conflict.js");
-load("demo/diff.js");
-//load("demo/rollback.js");
+//load("demo/diff.js");
+load("demo/rollback.js");
 
-
-
-
-var params = {
-  verbose:true,
-  out:ShellOut(),
-//  metahandler:false
-}
 
 
 
