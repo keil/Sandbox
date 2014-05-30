@@ -153,10 +153,11 @@ function Sandbox(global, params) {
   // \_/|_\___/_\__,_|\__|_\___/_||_|
 
   function violation(msg) {
-    // TODO
-    // * Signal a violation or 
-    // * return undefined
-    //throw new Error("Unauthorized Access: "+msg);
+    // NOTE: Matthias Keil
+    // throw new Error("Unauthorized Access: "+msg);
+    // not possible because each 
+    // write access calls has before calling set
+    log("Unauthorized Access: "+msg);
   }
 
   // _    _  _      _   _         ___             _   _          
@@ -210,9 +211,6 @@ function Sandbox(global, params) {
    * @return JavaScript Proxy 
    */
   function wrap(target) { 
-    // TODO
-    // * asking fo the type results in "too much recursion"
-    //logc("wrap", (typeof target) + "=" + target);
     logc("wrap");
 
     // If target is a primitive value, then return target
@@ -275,7 +273,7 @@ function Sandbox(global, params) {
       }
 
       var handler = make(new Membrane(target))
-      var proxy = new Proxy(scope, handler);
+        var proxy = new Proxy(scope, handler);
       cache.set(target, proxy);
       return proxy;
     }
@@ -296,18 +294,12 @@ function Sandbox(global, params) {
 
     var clone = Object.create(Object.getPrototypeOf(target));
 
-    // TODO
-    // * discuss flag about building shadow trees
-    // ** object[property] = wrap(target[property]);
-
     for (var property in target) {
       if (target.hasOwnProperty(property)) {
         var descriptor = Object.getOwnPropertyDescriptor(target, property);
         Object.defineProperty(clone, property, descriptor);
       }   
-      // clone[property] = target[property];
     }
-    //    return target;
     return clone;
   }
 
@@ -362,8 +354,6 @@ function Sandbox(global, params) {
     */
     function touch(scope, name) {
       if(unaffected(name)) {
-        // TODO
-        // * PreStateSnapshot 
         properties.add(name);
       }
     }
@@ -378,11 +368,8 @@ function Sandbox(global, params) {
     */
     function doHas(scope, name) {
       var has = (affected(name)) ? (name in scope) : (name in origin);
-
-      // TODO
-      // return true and say get to return undefined
       if(has===false) violation(name);
-
+      
       return (affected(name)) ? (name in scope) : (name in origin);
     }
     /** target, name -> boolean
@@ -393,8 +380,6 @@ function Sandbox(global, params) {
     /** target, name, receiver -> any
     */
     function doGet(scope, name) {
-      // TODO
-      // * return undefined is has says false
       return (affected(name)) ? scope[name] : wrap(origin[name]);
     }
     /** target, name, val, receiver -> boolean
@@ -567,17 +552,17 @@ function Sandbox(global, params) {
     this.enumerate = function(scope) {
       logc("enumerate");
       trace(new Effect.Enumerate(origin));
-
+      // TODO
       // NOTE: Trap is never called
       // return doEnumnerate(scope);
-      //throw new Error("Unimplemented Trap enumerate.");
+       throw new Error("Unimplemented Trap enumerate.");
     };
     /** target -> iterator
     */
     this.iterate = function(scope) {
       logc("iterate");
       trace(new Effect.Iterate(origin));
-
+      // TODO
       // NOTE: Trap is never called
       // return doIterate(scope);
       throw new Error("Unimplemented Trap iterate.");
@@ -609,9 +594,7 @@ function Sandbox(global, params) {
       logc("construct");
       trace(new Effect.Construct(origin, thisArg, argsArray));
 
-      // TODO
       var thisArg = Object.create(scope.prototype);
-//      var thisArg = Object.create(wrap(origin.prototype));
       var val = scope.apply(thisArg, wrap(argsArray));
       // return thisArg | val
       return (val instanceof Object) ? val : thisArg;
@@ -840,16 +823,16 @@ function Sandbox(global, params) {
    * @param target JavaScript Obejct
    * @return JavaScript Array [Effect]
    */
-  __define("readOf", function(target) {
+  __define("readeffectsOf", function(target) {
     if(readset.has(target)) return readset.get(target);
     else return [];
   }, this);
 
-  /** Get Write  Effects
+  /** Get Write Effects
    * @param target JavaScript Obejct
    * @return JavaScript Array [Effect]
    */
-  __define("writeOf", function(target) {
+  __define("writeeffectsOf", function(target) {
     if(writeset.has(target)) return writeset.get(target);
     else return [];
   }, this);
@@ -884,52 +867,60 @@ function Sandbox(global, params) {
     return effects;
   }, this);
 
-
-
+  /** In Read-Write Conflict
+   * @param read Read Effect
+   * @param write Write Effect
+   * @return true|false
+   */
   function inReadWriteConflict(read, write) {
-      if(!(read instanceof Effect.Read))
-        throw new TypeError("No Read Effect.");
+    if(!(read instanceof Effect.Read))
+      throw new TypeError("No Read Effect.");
 
-      if(!(write instanceof Effect.Write))
-        throw new TypeError("No Write Effect.");
+    if(!(write instanceof Effect.Write))
+      throw new TypeError("No Write Effect.");
 
-      if(read.target!==write.target)
+    if(read.target!==write.target)
+      return false;
+
+    switch(true) {
+      case (write instanceof Effect.Set):
+      case (write instanceof Effect.DefineProperty):
+      case (write instanceof Effect.DeleteProperty):
+        // property specific write effects
+        switch(true) { 
+          case (read instanceof Effect.Get):
+          case (read instanceof Effect.GetOwnPropertyDescriptor):
+          case (read instanceof Effect.Has):
+          case (read instanceof Effect.HasOwn):
+            // property specific read effects
+            return (read.name===write.name);
+            break;
+          case (read instanceof Effect.GetOwnPropertyNames):
+          case (read instanceof Effect.Enumerate):
+          case (read instanceof Effect.Iterate):
+          case (read instanceof Effect.Keys):
+          case (read instanceof Effect.Apply):
+          case (read instanceof Effect.Construct):
+          case (read instanceof Effect.IsExtensible):
+            // property unspecific read effects 
+            return true;
+            break;
+        }
+        break;
+      case (write instanceof Effect.Freeze):
+      case (write instanceof Effect.Seal):
+      case (write instanceof Effect.PreventExtensions):
+        // property unspecific write effects
         return false;
+        break;
+    }
+  }
 
-      switch(true) {
-        case (write instanceof Effect.Set):
-        case (write instanceof Effect.DefineProperty):
-        case (write instanceof Effect.DeleteProperty):
-           // property specific write effects
-          switch(true) { 
-            case (read instanceof Effect.Get):
-            case (read instanceof Effect.GetOwnPropertyDescriptor):
-            case (read instanceof Effect.Has):
-            case (read instanceof Effect.HasOwn):
-              // property specific read effects
-              return (read.name===write.name);
-              break;
-            case (read instanceof Effect.GetOwnPropertyNames):
-            case (read instanceof Effect.Enumerate):
-            case (read instanceof Effect.Iterate):
-            case (read instanceof Effect.Keys):
-            case (read instanceof Effect.Apply):
-            case (read instanceof Effect.Construct):
-            case (read instanceof Effect.IsExtensible):
-              // property unspecific read effects 
-              return true;
-              break;
-          }
-          break;
-        case (write instanceof Effect.Freeze):
-        case (write instanceof Effect.Seal):
-        case (write instanceof Effect.PreventExtensions):
-          // property unspecific write effects
-          return false;
-          break;
-          }
-      }
-
+  /** In Write-Write Conflict
+   * @param write Write Effect
+   * @param writep Write Effect
+   * @return true|false
+   */
   function inWriteWriteConflict(write, writep) {
     if(!(write instanceof Effect.Write))
       throw new TypeError("No Write Effect.");
@@ -937,8 +928,8 @@ function Sandbox(global, params) {
     if(!(writep instanceof Effect.Write))
       throw new TypeError("No Write Effect.");
 
-     if(write.target!==writep.target)
-       return false;
+    if(write.target!==writep.target)
+      return false;
 
     switch(true) {
       case (write instanceof Effect.Set):
@@ -969,7 +960,11 @@ function Sandbox(global, params) {
     }
   }
 
-
+  /** In Conflict
+   * @param e Effect
+   * @[aram f Effect
+   * @return true|false
+   */
   function inConflict(e, f) {
     if((e instanceof Effect.Read) && (f instanceof Effect.Read))
       return false;
@@ -985,11 +980,17 @@ function Sandbox(global, params) {
 
 
   // TODO
-  // * conflicts
-  // * commit
-  // * differenced
-  // ** hasDiff(target)
-  // * give read effect target to compare with origin ?
+  // * diff/ diffOf
+  // * rollback/ rollbackOf
+
+   __define("conflictsOf", function(sbx) {
+    if(!(sbx instanceof Sandbox)) throw new TypeError("No Sandbox.");
+
+    // TODO
+    // * algorithm
+
+  }, this);
+
 
 
   __define("conflicts", function(sbx) {
@@ -997,11 +998,18 @@ function Sandbox(global, params) {
 
     // TODO
     // * algorithm
-    
+
   }, this);
 
 
-    __define("conflictOf", function(sbx, target) {
+
+
+  /** Conflict Of
+   * @param sbx Sandbox
+   * @param target JavaScript Object
+   * return true|false
+   */
+  __define("conflictOf", function(sbx, target) {
     if(!(sbx instanceof Sandbox)) throw new TypeError("No Sandbox.");
 
     var es = this.effectsOf(target);
@@ -1009,49 +1017,33 @@ function Sandbox(global, params) {
 
     var conflict = false;
     for(var e in es) {
-        for(var f in fs) {
-          print("compare " + es[e] + " - " + fs[f] + " = " + inConflict(es[e], fs[f]));
-          conflict = (inConflict(es[e], fs[f])) ? true : conflict;
-        }
+      for(var f in fs) {
+        var result = (inConflict(es[e], fs[f]));
+        log("compare " + es[e] + " - " + fs[f] + " = " + result);
+        conflict = (result) ? true : conflict;
+      }
     }
     return conflict;
-
-    /* Conflicts
-     *
-     * GlobalReadEffects
-     *
-     * keys
-     * ..
-     *
-     * PropertyEffects
-     * get x.a
-     *
-     *
-     *
-     *
-     *
-     *
-     * read target.a; write target.a (define..)
-     *
-     * read keys, .. ; write target.a (define..)
-     * 
-     *
-     *
-     *
-     *
-     */
-
-
-    // unterteilung con effects in 
-
-    // TODO
-    // * algorithm
-    
   }, this);
 
 
+ /** Conflict Of
+   * @param sbx Sandbox
+   * @param target JavaScript Object
+   * return true|false
+   */
+  __define("conflict", function(sbx) {
+    if(!(sbx instanceof Sandbox)) throw new TypeError("No Sandbox.");
 
+    print(Object.keys(effectset));
 
+    var conflict = false;
+    for(var e in effects) {
+      conflict = (conflictOf(sbx, e.target)) ? true : conflict;
+    }
+    return conflict;
+
+  }, this);
 
   /** Commit All Effects
    * @return JavaScript Array [Effect]

@@ -28,6 +28,20 @@ load('test/metahandler.js');
 
 // ==================================================
 
+// default sandbox parameters
+var __params__ = {
+  verbose:true,           // Verbose Mode
+  statistic:true,         // Enable Statistic
+  decompile:true,         // Decompile
+  membrane:true,          // Membrane
+  effect:true,            // Effect
+  metahandler:true,       // MetaHandler
+  nativepassthrough:true, // Native Function pass-through
+  out:ShellOut()          // Output
+}
+
+// ==================================================
+
 var params = {
   verbose:true,
   out:ShellOut(),
@@ -109,7 +123,7 @@ g();
   // call trap: preventExtensions
   // call trap: getOwnPropertyNames   
 
-});
+})();
 
 
 (function() {
