@@ -38,9 +38,8 @@ sbxB.apply(g);
 print("x) " + x, ", y) " + y + ", z) " + z);
 print("o.x) " + o.x, ", o.y) " + o.y + ", o.z) " + o.z);
 
-
-print("InClonflict(o): " + (sbxA.conflictOf(sbxB, o)));
-//print("InClonflict(o): " + (sbxB.conflictOf(sbxA, o)));
+print("InClonflict(o): " + (sbxA.inConflictWith(sbxB, o)));
+//print("InClonflict(o): " + (sbxB.inConflictWith(sbxA, o)));
 
 //var coftso = sbxA.conflictsOf(sbxB, o);
 //print(";;; Conflicts of o");
@@ -48,8 +47,8 @@ print("InClonflict(o): " + (sbxA.conflictOf(sbxB, o)));
 //print("\n");
 
 
-print("InClonflict: " + (sbxA.conflict(sbxB)));
-//print("InClonflict: " + (sbxB.conflict(sbxA)));
+print("InClonflict: " + (sbxA.inConflict(sbxB)));
+//print("InClonflict: " + (sbxB.inCconflict(sbxA)));
 
 //var cofts = sbxA.conflicts(sbxB);
 //print(";;; All Conflicts");

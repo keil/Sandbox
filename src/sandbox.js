@@ -1028,7 +1028,7 @@ function Sandbox(global, params) {
    * @param target JavaScript Object
    * return true|false
    */
-  __define("conflictOf", function(sbx, target) {
+  __define("inConflictWith", function(sbx, target) {
     if(!(sbx instanceof Sandbox)) throw new TypeError("No Sandbox.");
 
     var es = this.effectsOf(target);
@@ -1051,12 +1051,12 @@ function Sandbox(global, params) {
    * @param target JavaScript Object
    * return true|false
    */
-  __define("conflict", function(sbx) {
+  __define("inConflict", function(sbx) {
     if(!(sbx instanceof Sandbox)) throw new TypeError("No Sandbox.");
 
     var conflict = false;
     for(var i in targets) {
-      conflict = (this.conflictOf(sbx, targets[i])) ? true : conflict;
+      conflict = (this.inConflictWith(sbx, targets[i])) ? true : conflict;
     }
     return conflict;
 
