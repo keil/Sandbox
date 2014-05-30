@@ -33,21 +33,19 @@ function show() {
 }
 
 var sbx = new Sandbox(this, __params__);
-sbx.apply(f);
-sbx.apply(f);
-sbx.apply(g);
+//sbx.apply(f);
+//sbx.apply(f);
+//sbx.apply(g);
+//print("x) " + x, ", y) " + y + ", z) " + z);
 
-sbx.call(f);
-sbx.call(f);
-sbx.call(g);
+//sbx.call(f);
+//sbx.call(f);
+//sbx.call(g);
+////print("x) " + x, ", y) " + y + ", z) " + z);
 
-var sbxf = sbx.bind(f);
-var sbxg = sbx.bind(g);
-sbxf();
-sbxf();
-sbxg();
-
-
-sbx.statistic.keys.foreach(function(i, op) {
-  print(op+": "+sbx.statistic.get(op));
-});
+//var sbxf = sbx.bind(f);
+//var sbxg = sbx.bind(g);
+//sbxf();
+//sbxf();
+//sbxg();
+//print("x) " + x, ", y) " + y + ", z) " + z);

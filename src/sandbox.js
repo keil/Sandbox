@@ -749,9 +749,9 @@ function Sandbox(global, params) {
   for(var i=0; i<arguments.length;i++) argsArray[i]=arguments[i];
 
   // pop fun
-  domain.pop();
+  argsArray.pop();
   // pop thisArg
-  domain.pop();
+  argsArray.pop();
 
   return evaluate(fun, thisArg, argsArray);
   }, this);
@@ -788,12 +788,16 @@ function Sandbox(global, params) {
   var writeeffects = [];
   var effects = [];
 
+  var readtargets = [];
+  var writetargets = [];
+  var targets = [];
+
   /** saves an sandbox effect
    * @param effect Effect
    */
   function trace(effect) {
     logc("trace", effect.toString());
-
+  
     // Effect Logging ?
     if(!__effect__) return true;
 
@@ -805,11 +809,15 @@ function Sandbox(global, params) {
       update(effectset, effect.target, effect);
       readeffects.push(effect);
       effects.push(effect);
+      readtargets.push(effect.target);
+      targets.push(effect.target);
     } else if(effect instanceof Effect.Write) {
       update(writeset, effect.target, effect);
       update(effectset, effect.target, effect);
       writeeffects.push(effect);
       effects.push(effect);
+      writetargets.push(effect.target);
+      targets.push(effect.target);
     }
 
     function update(set, target, effect) {
@@ -983,12 +991,24 @@ function Sandbox(global, params) {
   // * diff/ diffOf
   // * rollback/ rollbackOf
 
-   __define("conflictsOf", function(sbx) {
+   __define("conflictsOf", function(sbx, target) {
     if(!(sbx instanceof Sandbox)) throw new TypeError("No Sandbox.");
 
-    // TODO
-    // * algorithm
+    var sbxA = this;
+    var sbxB = sbx;
 
+    var es = this.effectsOf(target);
+    var fs = sbx.effectsOf(target);
+
+    var conflicts = [];
+    for(var e in es) {
+      for(var f in fs) {
+        var result = (inConflict(es[e], fs[f]));
+        log("compare " + es[e] + " - " + fs[f] + " = " + result);
+        if(result) conflicts.push(new Effect.Conflict(sbxA, es[e], sbxB, fs[f]));
+      }
+    }
+    return conflicts;
   }, this);
 
 
@@ -996,13 +1016,12 @@ function Sandbox(global, params) {
   __define("conflicts", function(sbx) {
     if(!(sbx instanceof Sandbox)) throw new TypeError("No Sandbox.");
 
-    // TODO
-    // * algorithm
-
+    var conflicts = [];
+    for(var i in targets) {
+      conflicts = conflicts.concat(this.conflictsOf(sbx, targets[i]))
+    }
+    return conflicts;
   }, this);
-
-
-
 
   /** Conflict Of
    * @param sbx Sandbox
@@ -1035,11 +1054,9 @@ function Sandbox(global, params) {
   __define("conflict", function(sbx) {
     if(!(sbx instanceof Sandbox)) throw new TypeError("No Sandbox.");
 
-    print(Object.keys(effectset));
-
     var conflict = false;
-    for(var e in effects) {
-      conflict = (conflictOf(sbx, e.target)) ? true : conflict;
+    for(var i in targets) {
+      conflict = (this.conflictOf(sbx, targets[i])) ? true : conflict;
     }
     return conflict;
 

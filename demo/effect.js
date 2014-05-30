@@ -13,65 +13,53 @@
  * http://www.informatik.uni-freiburg.de/~keilr/
  */
 
-var n1=4711;
-var n2=4712;
-var o={p:true, q:false};
+var x = 1;
+var y = 1;
+var z = 1;
 
-var sbx = new Sandbox({verbose:true, out:ShellOut()});
+var o = {x:0, y:0}
 
-function ff() {
-  n1 = "[4711]";
-  n2;
-  o.p;
-  o.q=true;
-}
+function f() {
+  o.x = x;
+  o.y = y;
+  o.z = z;
+ }
 
-function gg() {
-  //  print(">> " + n1);
-  //  print(">> " + n2);
-}
+var sbx = new Sandbox(this, __params__);
+sbx.apply(f);
 
-//ff();
-sbx.apply(ff, this);
-sbx.apply(gg, this);
-
-print("> " + n1);
-print("> " + n2);
-
-var rects = sbx.getReadEffects(this);
+var rects = sbx.readeffectsOf(this);
 print(";;; Read Effects");
 rects.foreach(function(i, e) {print(e)});
 print("\n");
 
-var wects = sbx.getWriteEffects(this);
+var wects = sbx.writeeffectsOf(this);
 print(";;; Write Effects");
 wects.foreach(function(i, e) {print(e)});
 print("\n");
 
-/*
-   var ects = sbx.getEffects(this);
-   print(";;; All Effects");
-   ects.foreach(function(i, e) {print(e)});
-   print("\n");
-   */
+var ects = sbx.effectsOf(this);
+print(";;; All Effects");
+ects.foreach(function(i, e) {print(e)});
+print("\n");
 
-var rectso = sbx.getReadEffects(o);
+var rectso = sbx.readeffectsOf(o);
 print(";;; Read Effects of o");
 rectso.foreach(function(i, e) {print(e)});
 print("\n");
 
-var wectso = sbx.getWriteEffects(o);
+var wectso = sbx.writeeffectsOf(o);
 print(";;; Write Effects of o");
 wectso.foreach(function(i, e) {print(e)});
 print("\n");
 
+var ects = sbx.effectsOf(o);
+print(";;; All Effects of o");
+ects.foreach(function(i, e) {print(e)});
+print("\n");
 
-print("? "+o.p);
-print("? "+o.q);
-
-print(wectso[0]);
-wectso[0].commit();
-
-print("? "+o.p);
-print("? "+o.q);
-
+// Note:
+// - sbx.readeffects
+// - sbx.readeffects
+// - sbx.effets
+// returns a list og all effects

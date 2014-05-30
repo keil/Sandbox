@@ -356,6 +356,67 @@ var Effect = (function() {
   }
   PreventExtensions.prototype = new Write("", {});
 
+  //  ___           __ _ _    _   
+  // / __|___ _ _  / _| (_)__| |_ 
+  //| (__/ _ \ ' \|  _| | / _|  _|
+  // \___\___/_||_|_| |_|_\__|\__|
+
+  function Conflict(sbxA, effectA, sbxB, effectB) {
+
+    if(!(sbxA instanceof Sandbox))
+      throw new TypeError("No sandbox object.");
+    if(!(sbxB instanceof Sandbox))
+      throw new TypeError("No sandbox object.");
+
+    if(!(effectA instanceof Effect))
+      throw new TypeError("No effect object.");
+    if(!(effectB instanceof Effect))
+       throw new TypeError("No effect object.");
+
+    // define sbxA
+    __define("sbxA", sbxA, this);
+    // define sbxB
+    __define("sbxB", sbxB, this);
+    // define effectA
+    __define("effectA", effectA, this);
+    // define effectB
+    __define("effectB", effectB, this);
+
+    // define toString
+    __define("toString", function() {
+      return "Confict: "
+      + effectA.toString() + "@" + sbxA.id
+      + " - "
+      + effectB.toString() + "@" + sbxB.id;
+    }, this);
+  }
+
+  // ___  _  __  __                         
+  //|   \(_)/ _|/ _|___ _ _ ___ _ _  __ ___ 
+  //| |) | |  _|  _/ -_) '_/ -_) ' \/ _/ -_)
+  //|___/|_|_| |_| \___|_| \___|_||_\__\___|
+
+  function Difference(sbx, effect) {
+
+    
+    if(!(sbx instanceof Sandbox))
+      throw new TypeError("No sandbox object.");
+
+    if(!(effect instanceof Sandbox))
+      throw new TypeError("No effect object.");
+
+    // define sbx
+    __define("sbx", sbx, this);
+    // define effect
+    __define("effect", effect, this);
+
+    // define toString
+    __define("toString", function() {
+      return "Difference: "
+      + effect.toString() + "@" + sbx.id;
+    }, this);
+  }
+
   // ___  __  __        _      
   //| __|/ _|/ _|___ __| |_ ___
   //| _||  _|  _/ -_) _|  _(_-<
@@ -390,6 +451,10 @@ var Effect = (function() {
   __define("Freeze", Freeze, Effects);
   __define("Seal", Seal, Effects);
   __define("PreventExtensions", PreventExtensions, Effects);
+
+  // Core Effects
+  __define("Conflict", Conflict, Effects);
+  __define("Difference", Difference, Effects);
 
   return Effects;
 
