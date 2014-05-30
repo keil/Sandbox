@@ -45,7 +45,7 @@ print("\n");
 
 
 sbx.writeeffectsOf(this).foreach(function(i, e) {
-  print("Rollback: " + e);
+  print("Rollback: " + e + "/" + e.origin);
   e.rollback()
 });
 sbx.apply(show);
