@@ -26,11 +26,36 @@ function f() {
   z = x+y+z;
 }
 
+function show() {
+  var s1 = "x) " + x + ", y) " + y + ", z) " + z;
+  var s2 = "o.x) " + o.x + ", o.y) " + o.y + ", o.z) " + o.z;
+  var prints = print;
+  prints(s1);
+  prints(s2);
+}
+
 var sbx = new Sandbox(this, __params__);
 sbx.apply(f);
+sbx.apply(show);
 
-print("o.x) " + o.x, ", o.y) " + o.y + ", o.z) " + o.z + ", z) " + z);
+var effects = sbx.writeeffects;
+print(";;; Read Effects");
+effects.foreach(function(i, e) {print(e)});
+print("\n");
 
+
+sbx.writeeffectsOf(this).foreach(function(i, e) {
+  print("Rollback: " + e);
+  e.rollback()
+});
+sbx.apply(show);
+
+
+//effects[0].rollback
+
+
+
+/*
 
 var wects = sbx.writeeffects;
 print(";;; Read Effects");
@@ -49,3 +74,6 @@ print("o.x) " + o.x, ", o.y) " + o.y + ", o.z) " + o.z + ", z) " + z);
 
 // Note
 // There is not flag to store if an effect is alredy commited
+//
+
+*/
