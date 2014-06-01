@@ -30,15 +30,15 @@ load('test/metahandler.js');
 
 // default sandbox parameters
 var __params__ = {
-  verbose:true,           // Verbose Mode
-  statistic:true,         // Enable Statistic
-  decompile:true,         // Decompile
-  membrane:true,          // Membrane
-  effect:true,            // Effect
-  transparent:false,      // Transparent
-  metahandler:true,       // MetaHandler
+  verbose:true,           // Verbose Mode (default: false)
+  statistic:true,         // Enable Statistic (default: false)
+  decompile:true,         // Decompile (default: true)
+  membrane:true,          // Membrane (default: true)
+  effect:true,            // Effect (default: true)
+  transparent:false,      // Transparent  (default: false)
+  metahandler:false,      // MetaHandler (default: true)
   nativepassthrough:true, // Native Function pass-through
-  out:ShellOut()          // Output
+  out:ShellOut()          // Output (default: true)
 }
 
 // ==================================================
@@ -51,10 +51,10 @@ var __params__ = {
 //load("demo/conflict.js");
 //load("demo/diff.js");
 //load("demo/rollback.js");
-load("demo/transparent.js");
+//load("demo/transparent.js");
 
 
-/*
+
 
 function A() {
   this.x=0;
@@ -66,10 +66,10 @@ A.prototype.f = function(a) {
 function g() {
   var a = new A();
   print("1) "+a.x);
-  //a.f(1);
+  a.f(1);
   //print("2) "+a.x);
 }
-var sbx = new Sandbox(this, params);
+var sbx = new Sandbox(this, __params__);
 
 
 
@@ -79,7 +79,6 @@ g();
 
 
 
-*/
 
 
 

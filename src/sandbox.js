@@ -443,9 +443,11 @@ function Sandbox(global, params) {
         return Object.getOwnPropertyDescriptor(scope, name);
       } else {
         var desc = Object.getOwnPropertyDescriptor(origin, name);
-        if (desc.value !== undefined) desc.value = wrap(desc.value);
-        if (desc.get !== undefined) desc.get = wrap(desc.get);
-        if (desc.set !== undefined) desc.set = wrap(desc.set);
+        if(desc !== undefined) {
+          if (desc.value !== undefined) desc.value = wrap(desc.value);
+          if (desc.get !== undefined) desc.get = wrap(desc.get);
+          if (desc.set !== undefined) desc.set = wrap(desc.set);
+        }
         return desc;
       }
     }
@@ -563,7 +565,7 @@ function Sandbox(global, params) {
     };
     /** target -> [String]
     */
-    this.enumerate = function(scope) {
+    this.__enumerate__ = function(scope) {
       logc("enumerate");
       trace(new Effect.Enumerate(origin));
       // TODO
@@ -573,7 +575,7 @@ function Sandbox(global, params) {
     };
     /** target -> iterator
     */
-    this.iterate = function(scope) {
+    this.__iterate__ = function(scope) {
       logc("iterate");
       trace(new Effect.Iterate(origin));
       // TODO
