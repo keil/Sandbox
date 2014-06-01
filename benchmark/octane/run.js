@@ -28,13 +28,13 @@
 var base_dir = 'benchmark/octane/';
 load(base_dir + 'base.js');
 
-load(base_dir + 'richards.js');
+//load(base_dir + 'richards.js');
 //load(base_dir + 'deltablue.js');
 //load(base_dir + 'crypto.js');
 //load(base_dir + 'raytrace.js');
 //load(base_dir + 'earley-boyer.js');
 //load(base_dir + 'regexp.js');
-//load(base_dir + 'splay.js'); 
+load(base_dir + 'splay.js'); 
 //load(base_dir + 'navier-stokes.js');
 //load(base_dir + 'pdfjs.js');
 //load(base_dir + 'mandreel.js');

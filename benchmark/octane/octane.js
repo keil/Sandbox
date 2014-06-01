@@ -13,15 +13,6 @@
  * http://www.informatik.uni-freiburg.de/~keilr/
  */
 
-var params = {
-  verbose:true,
-  out:ShellOut(),
-  statistic:false,
-  decompile:true,
-  membrabe:false,
-  effect:false
-};
-
 function getNewSandbox() {
-  return new Sandbox(this, params);
+  return new Sandbox(this, __params__);
 }
