@@ -30,8 +30,8 @@ load('test/metahandler.js');
 
 // default sandbox parameters
 var __params__ = {
-  verbose:true,           // Verbose Mode (default: false)
-  statistic:true,         // Enable Statistic (default: false)
+  verbose:false,           // Verbose Mode (default: false)
+  statistic:false,         // Enable Statistic (default: false)
   decompile:true,         // Decompile (default: true)
   membrane:true,          // Membrane (default: true)
   effect:false,           // Effect (default: true)
@@ -43,6 +43,30 @@ var __params__ = {
 
 // ==================================================
 
+//load("benchmark/sbxbench/richards.js");
+//runRichards();
+//quit();
+/*
+
+function getNewSandbox() {
+  return new Sandbox(this, __params__);
+}
+
+var sbx = getNewSandbox();
+//this.run = sbx.bind(run);
+
+var sbxbench = "(function() { " + read("benchmark/octane2/base.js") + read("benchmark/octane2/richards.js") + read("benchmark/octane2/run.js") + "})";
+print(sbxbench);
+var sbxf = eval(sbxbench);
+
+
+sbxf();
+sbx.apply(sbxf);
+//sbxf();
+
+*/
+
+quit();
 
 //load("demo/sandbox.js");
 //load("demo/statistic.js");
