@@ -34,7 +34,7 @@ var __params__ = {
   statistic:true,         // Enable Statistic (default: false)
   decompile:true,         // Decompile (default: true)
   membrane:true,          // Membrane (default: true)
-  effect:true,            // Effect (default: true)
+  effect:false,           // Effect (default: true)
   transparent:false,      // Transparent  (default: false)
   metahandler:false,      // MetaHandler (default: true)
   nativepassthrough:true, // Native Function pass-through
