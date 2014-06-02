@@ -25,8 +25,8 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-var base_dir = 'benchmark/octane/';
-load(base_dir + 'base.js');
+//var base_dir = 'benchmark/sbxbench/';
+//load(base_dir + 'base.js');
 
 //load(base_dir + 'richards.js');
 //load(base_dir + 'deltablue.js');
@@ -34,7 +34,7 @@ load(base_dir + 'base.js');
 //load(base_dir + 'raytrace.js');
 //load(base_dir + 'earley-boyer.js');
 //load(base_dir + 'regexp.js');
-load(base_dir + 'splay.js'); 
+//load(base_dir + 'splay.js'); 
 //load(base_dir + 'navier-stokes.js');
 //load(base_dir + 'pdfjs.js');
 //load(base_dir + 'mandreel.js');

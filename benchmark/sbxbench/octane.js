@@ -13,6 +13,81 @@
  * http://www.informatik.uni-freiburg.de/~keilr/
  */
 
+var base_dir = 'benchmark/sbxbench/';
+
+var basefile = (base_dir + 'base.js');
+var runfile  = (base_dir + 'run.js');
+
+var benchmarks = [];
+
+benchmarks.push(base_dir + 'richards.js');
+benchmarks.push(base_dir + 'deltablue.js');
+benchmarks.push(base_dir + 'crypto.js');
+benchmarks.push(base_dir + 'raytrace.js');
+benchmarks.push(base_dir + 'earley-boyer.js');
+benchmarks.push(base_dir + 'regexp.js');
+benchmarks.push(base_dir + 'splay.js'); 
+benchmarks.push(base_dir + 'navier-stokes.js');
+benchmarks.push(base_dir + 'pdfjs.js');
+benchmarks.push(base_dir + 'mandreel.js');
+benchmarks.push([base_dir + 'gbemu-part1.js', base_dir + 'gbemu-part2.js']);
+benchmarks.push(base_dir + 'code-load.js');
+benchmarks.push(base_dir + 'box2d.js');
+benchmarks.push([base_dir + 'zlib.js', base_dir + 'zlib-data.js']);
+benchmarks.push(base_dir + 'typescript.js');
+benchmarks.push([base_dir + 'typescript-input.js', base_dir + 'typescript-compiler.js']);
+
+//for(var i in benchmarks) print("$$$" + benchmarks[i]);
+
+this.alert = function(str) {
+print(str);
+};
+
 function getNewSandbox() {
+  // default sandbox parameters
+  var __params__ = {
+    verbose:false,           // Verbose Mode (default: false)
+    statistic:false,         // Enable Statistic (default: false)
+    decompile:true,         // Decompile (default: true)
+    membrane:true,          // Membrane (default: true)
+    effect:false,           // Effect (default: true)
+    transparent:false,      // Transparent  (default: false)
+    metahandler:false,      // MetaHandler (default: true)
+    nativepassthrough:true, // Native Function pass-through
+    out:ShellOut()          // Output (default: true)
+  }
   return new Sandbox(this, __params__);
 }
+
+
+function makeBenchmark(benchmark) {
+  var basestr = read(basefile);
+  var runstr = read(runfile);
+
+  if(benchmark instanceof Array) {
+    var benchmarkstr = "";
+    for(var i in benchmark) benchmarkstr += read(benchmark[i]);
+  
+  } else {
+  var benchmarkstr = read(benchmark);
+  }
+
+  var str = "(function() { " + basestr + benchmarkstr + runstr + "})";
+  var fun = eval(str);
+  return fun;
+}
+
+function runBenchmark(inSandbox) {
+  for(var i in benchmarks) {
+    print("Include " + benchmarks[i]);
+    var fun = makeBenchmark(benchmarks[i]);
+    var sbx = getNewSandbox();
+    if(inSandbox) { 
+      sbx.apply(fun);
+//      print(sbx.statistics);
+    }
+    else fun();
+  }
+}
+
+runBenchmark(false);

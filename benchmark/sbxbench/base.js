@@ -51,14 +51,7 @@ function Benchmark(name, doWarmup, doDeterministic, deterministicIterations,
   this.doWarmup = doWarmup;
   this.doDeterministic = doDeterministic;
   this.deterministicIterations = deterministicIterations;
-
-  // Note: Matthias Keil
-  // Extend Benchmark to use an Sandbox
-  var sbx = getNewSandbox();
-  this.run = sbx.bind(run);
-  // Original Code is:
-  // this.run = run;
-
+  this.run = run;
   this.Setup = setup ? setup : function() { };
   this.TearDown = tearDown ? tearDown : function() { };
   this.rmsResult = rmsResult ? rmsResult : null; 
