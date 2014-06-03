@@ -47,7 +47,7 @@ function getNewSandbox() {
   // default sandbox parameters
   var __params__ = {
     verbose:false,           // Verbose Mode (default: false)
-    statistic:false,         // Enable Statistic (default: false)
+    statistic:true,         // Enable Statistic (default: false)
     decompile:true,         // Decompile (default: true)
     membrane:true,          // Membrane (default: true)
     effect:false,           // Effect (default: true)
@@ -84,10 +84,10 @@ function runBenchmark(inSandbox) {
     var sbx = getNewSandbox();
     if(inSandbox) { 
       sbx.apply(fun);
-//      print(sbx.statistics);
+      print(sbx.statistic);
     }
     else fun();
   }
 }
 
-runBenchmark(false);
+runBenchmark(true);

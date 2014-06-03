@@ -43,6 +43,18 @@ var __params__ = {
 
 // ==================================================
 
+//load("demo/sandbox.js");
+//load("demo/statistic.js");
+//load("demo/effect.js");
+//load("demo/commit.js");
+//load("demo/conflict.js");
+//load("demo/diff.js");
+//load("demo/rollback.js");
+//load("demo/transparent.js");
+
+quit();
+
+
 //load("benchmark/sbxbench/richards.js");
 //runRichards();
 //quit();
@@ -66,19 +78,7 @@ sbx.apply(sbxf);
 
 */
 
-quit();
-
-//load("demo/sandbox.js");
-//load("demo/statistic.js");
-//load("demo/effect.js");
-//load("demo/commit.js");
-//load("demo/conflict.js");
-//load("demo/diff.js");
-//load("demo/rollback.js");
-//load("demo/transparent.js");
-
-
-
+/*
 
 function A() {
   this.x=0;
@@ -107,7 +107,7 @@ g();
 
 
 
-
+*/
 
 
 
