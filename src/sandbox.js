@@ -211,6 +211,7 @@ function Sandbox(global, params) {
   //                |_|   
 
   var cache = new WeakMap();
+  var pool = new Set();
 
   /** 
    * wrap(target)
@@ -231,6 +232,8 @@ function Sandbox(global, params) {
 
     if(target===undefined)
       throw new ReferenceError("Target is undefined.");
+
+    if(pool.has(target)) return target;
 
     // Membrane ? 
     if(!(__membrane__))
@@ -281,9 +284,10 @@ function Sandbox(global, params) {
         return new Proxy(handler, metahandler)
       }
 
-      var handler = make(new Membrane(target))
-        var proxy = new Proxy(scope, handler);
+      var handler = make(new Membrane(target));
+      var proxy = new Proxy(scope, handler);
       cache.set(target, proxy);
+      pool.add(proxy);
       return proxy;
     }
   }
@@ -383,7 +387,7 @@ function Sandbox(global, params) {
     function doHas(scope, name) {
       var has = (affected(name)) ? (name in scope) : (name in origin);
       if(has===false) violation(name);
-      
+
       return (affected(name)) ? (name in scope) : (name in origin);
     }
     /** target, name -> boolean
@@ -571,7 +575,7 @@ function Sandbox(global, params) {
       // TODO
       // NOTE: Trap is never called
       // return doEnumnerate(scope);
-       throw new Error("Unimplemented Trap enumerate.");
+      throw new Error("Unimplemented Trap enumerate.");
     };
     /** target -> iterator
     */
@@ -788,6 +792,20 @@ function Sandbox(global, params) {
   return bind(fun, thisArg, argsArray);
   }, this);
 
+  //__      __             
+  //\ \    / / _ __ _ _ __ 
+  // \ \/\/ / '_/ _` | '_ \
+  //  \_/\_/|_| \__,_| .__/
+  //                 |_|   
+
+  __define("wrap", function(object) {
+
+    if(!(object instanceof Object))
+    throw new TypeError("No object.");
+
+  return wrap(object);
+  }, this);
+
   // ______  __  __          _       
   //|  ____|/ _|/ _|        | |      
   //| |__  | |_| |_ ___  ___| |_ ___ 
@@ -813,7 +831,7 @@ function Sandbox(global, params) {
    */
   function trace(effect) {
     logc("trace", effect.toString());
-  
+
     // Effect Logging ?
     if(!__effect__) return true;
 
@@ -1084,12 +1102,12 @@ function Sandbox(global, params) {
     return differences;
   }, this);
 
-   /** Conflicts
+  /** Conflicts
    * @param sbx Sandbox
    * @param target JavaScript Object
    * return [Conflict]
    */
-   __define("conflictsOf", function(sbx, target) {
+  __define("conflictsOf", function(sbx, target) {
     if(!(sbx instanceof Sandbox)) throw new TypeError("No Sandbox.");
 
     var sbxA = this;
@@ -1146,7 +1164,7 @@ function Sandbox(global, params) {
   }, this);
 
 
- /** Conflict Of
+  /** Conflict Of
    * @param sbx Sandbox
    * @param target JavaScript Object
    * return true|false
@@ -1182,9 +1200,6 @@ function Sandbox(global, params) {
       if(effect instanceof Effect.Effect) effect.commit();
     }
   }, this);
-
-
-
 
   //  _____ _        _   _     _   _      
   // / ____| |      | | (_)   | | (_)     

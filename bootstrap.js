@@ -30,8 +30,8 @@ load('test/metahandler.js');
 
 // default sandbox parameters
 var __params__ = {
-  verbose:false,           // Verbose Mode (default: false)
-  statistic:false,         // Enable Statistic (default: false)
+  verbose:false,          // Verbose Mode (default: false)
+  statistic:false,        // Enable Statistic (default: false)
   decompile:true,         // Decompile (default: true)
   membrane:true,          // Membrane (default: true)
   effect:false,           // Effect (default: true)
@@ -51,6 +51,7 @@ var __params__ = {
 //load("demo/diff.js");
 //load("demo/rollback.js");
 //load("demo/transparent.js");
+load("demo/reverse.js");
 
 quit();
 

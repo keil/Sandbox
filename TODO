@@ -1,3 +1,7 @@
+*Extend Prototype*
+
+- extend function prototype
+
 *Reset*
  - But this is similar to the use of new Sandbox?
  - Partial reset of a value
