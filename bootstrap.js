@@ -45,17 +45,6 @@ var __params__ = {
 
 var global = "uneffected";
 
-var handler = { 
-  get:function(target, name, receiver) {
-    // side effects
-    //global = "effected";
-    //target.z = "effected";
-    //throw new Error("Effect");
-
-    //return "somethin else";
-    return target[name];
-  }};
-
 function Observer(target, handler) {
   if(!target) throw new Error("Undefined target!");
   if(!handler) throw new Error("Undefined handler!");
@@ -82,14 +71,24 @@ function Observer(target, handler) {
 // ==================================================
 
 var target = {x:4711, y:4712, z:4713};
+var handler = { 
+  get:function(target, name, receiver) {
+    // side effects
+    global = "effected";
+    target.z = "effected";
+    //throw new Error("Exception");
+
+    //return "somethin else";
+
+    return target[name];
+  }};
+
 var observed = Observer(target, handler);
 
-print(observed.x);
-print(observed.y);
-print(observed.z);
-
-
-print(global);
+print("x: " + observed.x);
+print("y: " + observed.y);
+print("z: " + observed.z);
+print("g: " + global);
 
 
 

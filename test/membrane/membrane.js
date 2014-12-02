@@ -25,7 +25,7 @@ load("test/membrane/Object.apply.js");
 load("test/membrane/Object.construct.js");
 
 // Object.defineProperty
-load("test/membrane/Object.defineProperty.js");
+//load("test/membrane/Object.defineProperty.js");
 
 // Object.deleteProperty
 load("test/membrane/Object.deleteProperty.js");

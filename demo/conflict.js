@@ -47,7 +47,7 @@ print("InClonflict(o): " + (sbxA.inConflictWith(sbxB, o)));
 //print("\n");
 
 
-print("InClonflict: " + (sbxA.inConflict(sbxB)));
+////print("InClonflict: " + (sbxA.inConflict(sbxB)));
 //print("InClonflict: " + (sbxB.inCconflict(sbxA)));
 
 //var cofts = sbxA.conflicts(sbxB);

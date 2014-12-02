@@ -33,10 +33,10 @@ function show() {
 }
 
 var sbx = new Sandbox(this, __params__);
-//sbx.apply(f);
+sbx.apply(f);
 //sbx.apply(f);
 //sbx.apply(g);
-//print("x) " + x, ", y) " + y + ", z) " + z);
+print("x) " + x, ", y) " + y + ", z) " + z);
 
 //sbx.call(f);
 //sbx.call(f);
