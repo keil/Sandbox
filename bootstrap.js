@@ -43,6 +43,85 @@ var __params__ = {
 
 // ==================================================
 
+var global = "uneffected";
+
+var handler = { 
+  get:function(target, name, receiver) {
+    // side effects
+    //global = "effected";
+    //target.z = "effected";
+    //throw new Error("Effect");
+
+    //return "somethin else";
+    return target[name];
+  }};
+
+function Observer(target, handler) {
+  if(!target) throw new Error("Undefined target!");
+  if(!handler) throw new Error("Undefined handler!");
+
+  var sbx = new Sandbox(this, __params__); 
+
+  var controller = { 
+    get:function(target, name, receiver) {
+      var result = null;
+      if(handler['get']) {
+        //result = handler['get'].call(this, target, name, receiver);
+        result = sbx.call(handler['get'], this, target, name, receiver);
+      } 
+
+      //return result;
+      //when using transparent proxies, the observer would also be abel
+      //to implement another contract;
+      return (result===target[name]) ? result : target[name];
+    }};
+
+  return new Proxy(target, controller);
+}
+
+// ==================================================
+
+var target = {x:4711, y:4712, z:4713};
+var observed = Observer(target, handler);
+
+print(observed.x);
+print(observed.y);
+print(observed.z);
+
+
+print(global);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+quit();
+
 //load("demo/sandbox.js");
 //load("demo/statistic.js");
 //load("demo/effect.js");
@@ -61,11 +140,11 @@ quit();
 //quit();
 /*
 
-function getNewSandbox() {
-  return new Sandbox(this, __params__);
-}
+   function getNewSandbox() {
+   return new Sandbox(this, __params__);
+   }
 
-var sbx = getNewSandbox();
+   var sbx = getNewSandbox();
 //this.run = sbx.bind(run);
 
 var sbxbench = "(function() { " + read("benchmark/octane2/base.js") + read("benchmark/octane2/richards.js") + read("benchmark/octane2/run.js") + "})";
@@ -81,18 +160,18 @@ sbx.apply(sbxf);
 
 /*
 
-function A() {
-  this.x=0;
-}
-A.prototype.f = function(a) {
-  this.x=a;
-}
+   function A() {
+   this.x=0;
+   }
+   A.prototype.f = function(a) {
+   this.x=a;
+   }
 
-function g() {
-  var a = new A();
-  print("1) "+a.x);
-  a.f(1);
-  //print("2) "+a.x);
+   function g() {
+   var a = new A();
+   print("1) "+a.x);
+   a.f(1);
+//print("2) "+a.x);
 }
 var sbx = new Sandbox(this, __params__);
 
@@ -129,11 +208,11 @@ quit();
 var obj = {x:1, y:1};
 
 function f() {
-  obj.z=2;
+obj.z=2;
 }
 
 function g() {
-  obj.z=(obj.x*obj.y);
+obj.z=(obj.x*obj.y);
 }
 
 var params = {verbose:false,out:ShellOut()};
