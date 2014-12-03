@@ -13,6 +13,14 @@
  * http://www.informatik.uni-freiburg.de/~keilr/
  */
 
+(function() {
+  var o = {x:4711};
+  var r = (p = o.x) ? p : "error";
+  print(r);
+  print(p);
+})();
+quit();
+
 load("lib/padding.js")
 
 load("src/misc.js");
@@ -30,7 +38,7 @@ load('test/metahandler.js');
 
 // default sandbox parameters
 var __params__ = {
-  verbose:false,          // Verbose Mode (default: false)
+  verbose:true,          // Verbose Mode (default: false)
   statistic:false,        // Enable Statistic (default: false)
   decompile:true,         // Decompile (default: true)
   membrane:true,          // Membrane (default: true)
@@ -43,7 +51,20 @@ var __params__ = {
 
 // ==================================================
 
+(function(){})();
+
+
+//(function() {
+//  var o = {x:4711};
+//  var r = (p = o.x) ? p : "error";
+//  print(r);
+//  print(p);
+//});
+
+
+quit();
 var global = "uneffected";
+var global2 = "uneffected";
 
 function Observer(target, handler) {
   if(!target) throw new Error("Undefined target!");
@@ -56,13 +77,15 @@ function Observer(target, handler) {
       var result = null;
       if(handler['get']) {
         //result = handler['get'].call(this, target, name, receiver);
-        result = sbx.call(handler['get'], this, target, name, receiver);
+        //print("############"+name);
+        result = sbx.call(handler['get'], this, target, name);
       } 
 
       //return result;
       //when using transparent proxies, the observer would also be abel
       //to implement another contract;
-      return (result===target[name]) ? result : target[name];
+      return result;
+     // return (result===target[name]) ? result : target[name];
     }};
 
   return new Proxy(target, controller);
@@ -71,32 +94,65 @@ function Observer(target, handler) {
 // ==================================================
 
 var target = {x:4711, y:4712, z:4713};
-var handler = { 
+Object.defineProperty(target, "a", { get: function () {
+  print("|||||||||||||||||||| GETTER CALLED");
+  global2 = "effected";
+  return this.x; 
+}});
+
+var handler = {
+//  postGet:function(name) {
+//  },
+//  preGet:function(result) {
+//  },
+
   get:function(target, name, receiver) {
     // side effects
-    global = "effected";
-    target.z = "effected";
+    //global = "effected";
+    //target.z = "effected";
     //throw new Error("Exception");
-
     //return "somethin else";
+//    return target['adfasdf'];
+//    print("$$$$$$$$$$$$" + name);
+
+    target[name];
+    target[name];
+    target[name];
+
 
     return target[name];
+    //return "3";
   }};
 
 var observed = Observer(target, handler);
 
-print("x: " + observed.x);
-print("y: " + observed.y);
-print("z: " + observed.z);
-print("g: " + global);
+//print(observed['a']);
 
+//print("x: " + observed.x);
+//print("y: " + observed.y);
+//print("z: " + observed.z);
+//print("g: " + global);
+print("a: " + observed.a);
+//print("b: " + observed.b);
+print("g2:" + global2);
 
+/*
+var desc = Object.getOwnPropertyDescriptor(target, 'a');
+print(desc.value);
+print(desc.writable);
+print(desc.get);
+print(desc.set);
+print(desc.configurable);
+print(desc.enumerable);
 
-
-
-
-
-
+var desc = Object.getOwnPropertyDescriptor(target, 'x');
+print(desc.value);
+print(desc.writable);
+print(desc.get);
+print(desc.set);
+print(desc.configurable);
+print(desc.enumerable);
+*/
 
 
 

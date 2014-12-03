@@ -1,3 +1,18 @@
+*BUG*
+
+Side Effects possible when using getter or setter function,
+detect getter with 
+
+var desc = Object.getOwnPropertyDescriptor(target, 'a');
+print(desc.value);
+print(desc.writable);
+print(desc.get);
+print(desc.set);
+print(desc.configurable);
+print(desc.enumerable);
+
+and call in sandbox;
+
 *Extend Prototype*
 
 - extend function prototype

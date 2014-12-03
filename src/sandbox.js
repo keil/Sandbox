@@ -398,6 +398,17 @@ function Sandbox(global, params) {
     /** target, name, receiver -> any
     */
     function doGet(scope, name) {
+      // TODO, testin code
+      var getter =  (affected(name)) ? Object.getOwnPropertyDescriptor(scope, name).get : 
+        Object.getOwnPropertyDescriptor(origin, name).get;
+      print("access to: " + name);
+      print("@@@"+getter);
+
+      if(getter) return evaluate(
+          ((affected(name)) ? Object.getOwnPropertyDescriptor(scope, name).get : Object.getOwnPropertyDescriptor(origin, name).get),
+          ((affected(name)) ? scope : origin),
+          []);
+
       return (affected(name)) ? scope[name] : wrap(origin[name]);
     }
     /** target, name, val, receiver -> boolean
@@ -769,9 +780,9 @@ function Sandbox(global, params) {
   for(var i=0; i<arguments.length;i++) argsArray[i]=arguments[i];
 
   // pop fun
-  argsArray.pop();
+  argsArray.shift();
   // pop thisArg
-  argsArray.pop();
+  argsArray.shift();
 
   return evaluate(fun, thisArg, argsArray);
   }, this);
