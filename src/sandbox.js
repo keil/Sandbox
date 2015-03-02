@@ -399,10 +399,13 @@ function Sandbox(global, params) {
     */
     function doGet(scope, name) {
       // TODO, testin code
-      var getter =  (affected(name)) ? Object.getOwnPropertyDescriptor(scope, name).get : 
-        Object.getOwnPropertyDescriptor(origin, name).get;
-      print("access to: " + name);
-      print("@@@"+getter);
+      var desc =  (affected(name)) ? Object.getOwnPropertyDescriptor(scope, name) : 
+        Object.getOwnPropertyDescriptor(origin, name);
+      
+      var getter = desc ? desc.get : undefined;
+      
+      //print("access to: " + name);
+      //print("@@@"+getter);
 
       if(getter) return evaluate(
           ((affected(name)) ? Object.getOwnPropertyDescriptor(scope, name).get : Object.getOwnPropertyDescriptor(origin, name).get),

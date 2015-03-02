@@ -13,13 +13,13 @@
  * http://www.informatik.uni-freiburg.de/~keilr/
  */
 
-(function() {
+/*(function() {
   var o = {x:4711};
   var r = (p = o.x) ? p : "error";
   print(r);
   print(p);
 })();
-quit();
+quit();*/
 
 load("lib/padding.js")
 
@@ -38,16 +38,22 @@ load('test/metahandler.js');
 
 // default sandbox parameters
 var __params__ = {
-  verbose:true,          // Verbose Mode (default: false)
-  statistic:false,        // Enable Statistic (default: false)
+  verbose:false,          // Verbose Mode (default: false)
+  statistic:true,        // Enable Statistic (default: false)
   decompile:true,         // Decompile (default: true)
   membrane:true,          // Membrane (default: true)
-  effect:false,           // Effect (default: true)
+  effect:true,           // Effect (default: true)
   transparent:false,      // Transparent  (default: false)
-  metahandler:false,      // MetaHandler (default: true)
+  metahandler:false ,      // MetaHandler (default: true)
   nativepassthrough:true, // Native Function pass-through
   out:ShellOut()          // Output (default: true)
 }
+
+// ==================================================
+
+//load('demo/sandbox.js');
+load('test/default.js')
+quit();
 
 // ==================================================
 
