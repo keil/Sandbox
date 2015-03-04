@@ -53,14 +53,14 @@ print("tree: " + root);
 print("sumOf: " + sumOf(root));
 print("deptOf: " + depthOf(root));
 
-
-print("tree: " + sbx.call(Node.prototype.toString, root));
+print("tree: " + sbx.call(root.toString, root));
 print("sumOf: " + sbx.call(sumOf, this, root));
 print("deptOf: " + sbx.call(depthOf, this, root));
 
 // DIFFERENCES
 
-/*
+print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+
 print("InDifference(root): " + (sbx.hasDifferenceWith(root)));
 
 var difso = sbx.differencesOf(root);
@@ -75,7 +75,7 @@ var difs = sbx.differences();
 print(";;; All Differences");
 difs.foreach(function(i, e) {print(e)});
 print("\n");
-*/
+
 
 // effects
 
@@ -221,7 +221,7 @@ print("deptOf: " + depthOf(root));
 print("tree: " + sbx.call(Node.prototype.toString, root));
 print("sumOf: " + sbx.call(sumOf, this, root));
 print("deptOf: " + sbx.call(depthOf, this, root));*/
-
+/*
 var sbx2 = new Sandbox(this, __params__);
 
 function appendRight (node) {
@@ -232,7 +232,7 @@ function appendRight (node) {
 //appendRight(root);
 
 sbx2.call(appendRight, this, root);
-
+*/
 /*
 print("tree: " + root);
 print("sumOf: " + sumOf(root));
@@ -270,6 +270,7 @@ print("\n");
 // transparent
 print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 
+/*
 (function () {
   var __params2__ = __params__;
   __params2__.transparent = true;
@@ -293,7 +294,7 @@ print("deptOf: " + depthOf(root));
 
 
 })();
-
+*/
 
 
 
@@ -309,6 +310,7 @@ print("deptOf: " + depthOf(root));
 
 // reverse
 
+/*
 var sbx3 = new Sandbox(this, __params__);
 var sbxroot = sbx3.wrap(root);
 
@@ -341,7 +343,7 @@ print(sbx3.writeeffects);
 //print(sumOf(root));
 
 
-
+*/
 
 
 /*

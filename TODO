@@ -1,3 +1,17 @@
+- defien a diff function that checks recursiflt if differences exist, based on the write effects that are inside of teh sandbox, 
+value that are not writte are guaranteed to be idetnical.
+
+- why is differences not a getter?
+
+- wenn eine sandbox commited, read effects muessen geloescht werden, oder bei der berechnung von conflickten beachtet werden
+
+- can conflics compare values
+(maybe introduce a raw mode, that compares the values recursifly-- based on effect informations)?
+
+make sbx.conflicts(sbx2);
+to sbx.conflictsWith(sbx2);
+
+
 *BUG*
 
 Side Effects possible when using getter or setter function,
