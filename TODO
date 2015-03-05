@@ -11,6 +11,14 @@ value that are not writte are guaranteed to be idetnical.
 make sbx.conflicts(sbx2);
 to sbx.conflictsWith(sbx2);
 
+warum hat xsbx.wrap kein this argument .. sbx.wrap(sbxroot)
+anstatt sbx.wrap(sbxroot, this)
+
+
+* Reature, add an event observer, for example ACP to protext ressources ..
+
+* merge from TreatJS/ degubber/ out
+* bring new version
 
 *BUG*
 
