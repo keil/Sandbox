@@ -82,11 +82,15 @@ function runBenchmark(inSandbox) {
     print("Include " + benchmarks[i]);
     var fun = makeBenchmark(benchmarks[i]);
     var sbx = getNewSandbox();
+    try{
     if(inSandbox) { 
       sbx.apply(fun);
       print(sbx.statistic);
     }
     else fun();
+    }catch(e){
+      print(e);
+    }
   }
 }
 

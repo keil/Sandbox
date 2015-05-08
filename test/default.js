@@ -1,3 +1,29 @@
+var x = 4711;
+
+var sbx = new Sandbox({}, __params__);
+var obj = sbx.wrap({a:4711, b:4712});
+print(obj.c);
+
+var fun = sbx.wrap(function(y) {
+ return x+y;
+});
+print(fun(1));
+
+
+/*
+ * BUG, is need two different sandbox handler objects,
+ * ine for the glo9bal, that returns always true for a has requiest, 
+ * and one for notmal objects
+ *
+ */
+
+quit();
+
+
+
+
+
+
 function Node (value, left, right) {
   if(!(this instanceof Node)) return new Node (value, left, right);
 
@@ -45,7 +71,7 @@ print("sumOf: " + sumOf(root));
 print("deptOf: " + depthOf(root));
 
 
-var sbx = new Sandbox(this, __params__);
+var sbx = new Sandbox(this, __params__)
 
 sbx.call(setValue, this, root);
 

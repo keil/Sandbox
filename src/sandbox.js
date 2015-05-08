@@ -388,6 +388,8 @@ function Sandbox(global, params) {
       var has = (affected(name)) ? (name in scope) : (name in origin);
       if(has===false) violation(name);
 
+      // TODO, Bug? volation should only be thrown if scope/origin is not the global ?
+
       return (affected(name)) ? (name in scope) : (name in origin);
     }
     /** target, name -> boolean

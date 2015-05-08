@@ -38,7 +38,7 @@ load('test/metahandler.js');
 
 // default sandbox parameters
 var __params__ = {
-  verbose:false,          // Verbose Mode (default: false)
+  verbose:true,          // Verbose Mode (default: false)
   statistic:true,        // Enable Statistic (default: false)
   decompile:true,         // Decompile (default: true)
   membrane:true,          // Membrane (default: true)
@@ -50,6 +50,11 @@ var __params__ = {
 }
 
 // ==================================================
+
+
+
+
+
 
 //load('demo/sandbox.js');
 load('test/default.js')
