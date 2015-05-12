@@ -1462,7 +1462,7 @@ PDFJS.getDocument = function getDocument(source) {
   var transport = new WorkerTransport(promise);
   if (typeof source === 'string') {
     // fetch url
-    PDFJS.getPdf(
+    globalScope.PDFJS.getPdf(
       {
         url: source,
         progress: function getPDFProgress(evt) {

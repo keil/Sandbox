@@ -36,7 +36,7 @@ var NavierStokes = new BenchmarkSuite('NavierStokes', [1484000],
                                                      tearDownNavierStokes,
                                                      null,
                                                      16)]);
-
+var result = undefined;
 var solver = null;
 var nsFrameCounter = 0;
 
@@ -51,12 +51,12 @@ function runNavierStokes()
 
 function checkResult(dens) {
 
-    this.result = 0;
+    result = 0;
     for (var i=7000;i<7100;i++) {
-        this.result+=~~((dens[i]*10));
+        result+=~~((dens[i]*10));
     }
 
-    if (this.result!=77) {
+    if (result!=77) {
         throw(new Error("checksum failed"));
     }
 }

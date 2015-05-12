@@ -1337,10 +1337,10 @@ var TypeScript;
     TypeScript.UnaryExpression = UnaryExpression;    
     var CallExpression = (function (_super) {
         __extends(CallExpression, _super);
-        function CallExpression(nodeType, target, arguments) {
+        function CallExpression(nodeType, target, argumentsArray) {
                 _super.call(this, nodeType);
             this.target = target;
-            this.arguments = arguments;
+            this.arguments = argumentsArray;
             this.signature = null;
             this.minChar = this.target.minChar;
         }
@@ -1828,12 +1828,12 @@ var TypeScript;
     var internalId = 0;
     var FuncDecl = (function (_super) {
         __extends(FuncDecl, _super);
-        function FuncDecl(name, bod, isConstructor, arguments, vars, scopes, statics, nodeType) {
+        function FuncDecl(name, bod, isConstructor, argumentsArray, vars, scopes, statics, nodeType) {
                 _super.call(this, nodeType);
             this.name = name;
             this.bod = bod;
             this.isConstructor = isConstructor;
-            this.arguments = arguments;
+            this.arguments = argumentsArray;
             this.vars = vars;
             this.scopes = scopes;
             this.statics = statics;

@@ -20,22 +20,22 @@ var runfile  = (base_dir + 'run.js');
 
 var benchmarks = [];
 
-benchmarks.push(base_dir + 'richards.js');
-benchmarks.push(base_dir + 'deltablue.js');
-benchmarks.push(base_dir + 'crypto.js');
-benchmarks.push(base_dir + 'raytrace.js');
-benchmarks.push(base_dir + 'earley-boyer.js');
-benchmarks.push(base_dir + 'regexp.js');
-benchmarks.push(base_dir + 'splay.js'); 
-benchmarks.push(base_dir + 'navier-stokes.js');
-benchmarks.push(base_dir + 'pdfjs.js');
-benchmarks.push(base_dir + 'mandreel.js');
-benchmarks.push([base_dir + 'gbemu-part1.js', base_dir + 'gbemu-part2.js']);
-benchmarks.push(base_dir + 'code-load.js');
-benchmarks.push(base_dir + 'box2d.js');
-benchmarks.push([base_dir + 'zlib.js', base_dir + 'zlib-data.js']);
-benchmarks.push(base_dir + 'typescript.js');
-benchmarks.push([base_dir + 'typescript-input.js', base_dir + 'typescript-compiler.js']);
+//benchmarks.push(base_dir + 'richards.js');
+//benchmarks.push(base_dir + 'deltablue.js');
+//benchmarks.push(base_dir + 'crypto.js');
+//benchmarks.push(base_dir + 'raytrace.js');
+benchmarks.push(base_dir + 'earley-boyer.js'); // TODO
+//benchmarks.push(base_dir + 'regexp.js');
+//benchmarks.push(base_dir + 'splay.js'); 
+//benchmarks.push(base_dir + 'navier-stokes.js');
+//benchmarks.push(base_dir + 'pdfjs.js');
+//benchmarks.push(base_dir + 'mandreel.js');
+//benchmarks.push([base_dir + 'gbemu-part1.js', base_dir + 'gbemu-part2.js']);
+
+//benchmarks.push(base_dir + 'code-load.js'); //Error: eval not supported
+//benchmarks.push(base_dir + 'box2d.js');
+//benchmarks.push([base_dir + 'zlib.js', base_dir + 'zlib-data.js']); //Error: eval not supported
+//benchmarks.push([base_dir + 'typescript-input.js', base_dir + 'typescript-compiler.js', base_dir + 'typescript.js']);
 
 //for(var i in benchmarks) print("$$$" + benchmarks[i]);
 
@@ -72,7 +72,8 @@ function makeBenchmark(benchmark) {
   var benchmarkstr = read(benchmark);
   }
 
-  var str = "(function() { " + basestr + benchmarkstr + runstr + "})";
+  // TODO, add strcit mode
+  var str = "(function() { \"use strict\";\n " + basestr + benchmarkstr + runstr + "})";
   var fun = eval(str);
   return fun;
 }
@@ -81,6 +82,7 @@ function runBenchmark(inSandbox) {
   for(var i in benchmarks) {
     print("Include " + benchmarks[i]);
     var fun = makeBenchmark(benchmarks[i]);
+    //print(fun); prints the function
     var sbx = getNewSandbox();
     try{
     if(inSandbox) { 
@@ -90,8 +92,10 @@ function runBenchmark(inSandbox) {
     else fun();
     }catch(e){
       print(e);
+      print("\n");
+      print(e.stack);
     }
   }
 }
 
-runBenchmark(true);
+runBenchmark(false);

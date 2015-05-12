@@ -36,7 +36,7 @@ function setupGameboy() {
     throw "TypedArrayUnsupported";
   }
   decoded_gameboy_rom = base64_decode(gameboy_rom);
-  rom = null;
+  var rom = null;
 }
 
 function runGameboy() {
@@ -280,9 +280,11 @@ function base64_decode(data) {
       }
       //Check for the '=' character after the loop, so we don't hose it up.
       if (sixbits[3] >= 0x40) {
-        decode64.length -= 1;
+        //decode64.length -= 1;
+        print(decode64.length);
+        //decode64.pop();
         if (sixbits[2] >= 0x40) {
-          decode64.length -= 1;
+          //decode64.length -= 1;
         }
       }
     }

@@ -1077,98 +1077,99 @@ function sc_Char(c) {
 }
 sc_Char.lazy = new Object();
 // thanks to Eric
-sc_Char.char2readable = {
-    "\000": "#\\null",
-    "\007": "#\\bell",
-    "\010": "#\\backspace",
-    "\011": "#\\tab",
-    "\012": "#\\newline",
-    "\014": "#\\page",
-    "\015": "#\\return",
-    "\033": "#\\escape",
-    "\040": "#\\space",
-    "\177": "#\\delete",
+sc_Char.char2readable = {};
+sc_Char.char2readable["000"] = "#\\null";
+sc_Char.char2readable["007"] = "#\\bell";
+sc_Char.char2readable["010"] = "#\\backspace";
+sc_Char.char2readable["011"] = "#\\tab";
+sc_Char.char2readable["012"] = "#\\newline";
+sc_Char.char2readable["014"] = "#\\page";
+sc_Char.char2readable["015"] = "#\\return";
+sc_Char.char2readable["033"] = "#\\escape";
+sc_Char.char2readable["040"] = "#\\space";
+sc_Char.char2readable["177"] = "#\\delete";
 
   /* poeticless names */
-    "\001": "#\\soh",
-    "\002": "#\\stx",
-    "\003": "#\\etx",
-    "\004": "#\\eot",
-    "\005": "#\\enq",
-    "\006": "#\\ack",
+sc_Char.char2readable["001"] = "#\\soh";
+sc_Char.char2readable["002"] = "#\\stx";
+sc_Char.char2readable["003"] = "#\\etx";
+sc_Char.char2readable["004"] = "#\\eot";
+sc_Char.char2readable["005"] = "#\\enq";
+sc_Char.char2readable["006"] = "#\\ack";
 
-    "\013": "#\\vt",
-    "\016": "#\\so",
-    "\017": "#\\si",
+sc_Char.char2readable["013"] = "#\\vt";
+sc_Char.char2readable["016"] = "#\\so";
+sc_Char.char2readable["017"] = "#\\si";
 
-    "\020": "#\\dle",
-    "\021": "#\\dc1",
-    "\022": "#\\dc2",
-    "\023": "#\\dc3",
-    "\024": "#\\dc4",
-    "\025": "#\\nak",
-    "\026": "#\\syn",
-    "\027": "#\\etb",
+sc_Char.char2readable["020"] = "#\\dle";
+sc_Char.char2readable["021"] = "#\\dc1";
+sc_Char.char2readable["022"] = "#\\dc2";
+sc_Char.char2readable["023"] = "#\\dc3";
+sc_Char.char2readable["024"] = "#\\dc4";
+sc_Char.char2readable["025"] = "#\\nak";
+sc_Char.char2readable["026"] = "#\\syn";
+sc_Char.char2readable["027"] = "#\\etb";
 
-    "\030": "#\\can",
-    "\031": "#\\em",
-    "\032": "#\\sub",
-    "\033": "#\\esc",
-    "\034": "#\\fs",
-    "\035": "#\\gs",
-    "\036": "#\\rs",
-    "\037": "#\\us"};
+sc_Char.char2readable["030"] = "#\\can";
+sc_Char.char2readable["031"] = "#\\em";
+sc_Char.char2readable["032"] = "#\\sub";
+sc_Char.char2readable["033"] = "#\\esc";
+sc_Char.char2readable["034"] = "#\\fs";
+sc_Char.char2readable["035"] = "#\\gs";
+sc_Char.char2readable["036"] = "#\\rs";
+sc_Char.char2readable["037"] = "#\\us";
 
-sc_Char.readable2char = {
-    "null": "\000",
-    "bell": "\007",
-    "backspace": "\010",
-    "tab": "\011",
-    "newline": "\012",
-    "page": "\014",
-    "return": "\015",
-    "escape": "\033",
-    "space": "\040",
-    "delete": "\000",
-    "soh": "\001",
-    "stx": "\002",
-    "etx": "\003",
-    "eot": "\004",
-    "enq": "\005",
-    "ack": "\006",
-    "bel": "\007",
-    "bs": "\010",
-    "ht": "\011",
-    "nl": "\012",
-    "vt": "\013",
-    "np": "\014",
-    "cr": "\015",
-    "so": "\016",
-    "si": "\017",
-    "dle": "\020",
-    "dc1": "\021",
-    "dc2": "\022",
-    "dc3": "\023",
-    "dc4": "\024",
-    "nak": "\025",
-    "syn": "\026",
-    "etb": "\027",
-    "can": "\030",
-    "em": "\031",
-    "sub": "\032",
-    "esc": "\033",
-    "fs": "\034",
-    "gs": "\035",
-    "rs": "\036",
-    "us": "\037",
-    "sp": "\040",
-    "del": "\177"};
+sc_Char.readable2char = {};
+sc_Char.readable2char["null"] = "000";
+sc_Char.readable2char["bell"] = "007";
+sc_Char.readable2char["backspace"] = "010";
+sc_Char.readable2char["tab"] = "011";
+sc_Char.readable2char["newline"] = "012";
+sc_Char.readable2char["page"] = "014";
+sc_Char.readable2char["return"] = "015";
+sc_Char.readable2char["escape"] = "033";
+sc_Char.readable2char["space"] = "040";
+sc_Char.readable2char["delete"] = "000";
+sc_Char.readable2char["soh"] = "001";
+sc_Char.readable2char["stx"] = "002";
+sc_Char.readable2char["etx"] = "003";
+sc_Char.readable2char["eot"] = "004";
+sc_Char.readable2char["enq"] = "005";
+sc_Char.readable2char["ack"] = "006";
+sc_Char.readable2char["bel"] = "007";
+sc_Char.readable2char["bs"] = "010";
+sc_Char.readable2char["ht"] = "011";
+sc_Char.readable2char["nl"] = "012";
+sc_Char.readable2char["vt"] = "013";
+sc_Char.readable2char["np"] = "014";
+sc_Char.readable2char["cr"] = "015";
+sc_Char.readable2char["so"] = "016";
+sc_Char.readable2char["si"] = "017";
+sc_Char.readable2char["dle"] = "020";
+sc_Char.readable2char["dc1"] = "021";
+sc_Char.readable2char["dc2"] = "022";
+sc_Char.readable2char["dc3"] = "023";
+sc_Char.readable2char["dc4"] = "024";
+sc_Char.readable2char["nak"] = "025";
+sc_Char.readable2char["syn"] = "026";
+sc_Char.readable2char["etb"] = "027";
+sc_Char.readable2char["can"] = "030";
+sc_Char.readable2char["em"] = "031";
+sc_Char.readable2char["sub"] = "032";
+sc_Char.readable2char["esc"] = "033";
+sc_Char.readable2char["fs"] = "034";
+sc_Char.readable2char["gs"] = "035";
+sc_Char.readable2char["rs"] = "036";
+sc_Char.readable2char["us"] = "037";
+sc_Char.readable2char["sp"] = "040";
+sc_Char.readable2char["del"] = "177";
 
 sc_Char.prototype.toString = function() {
     return this.val;
 };
 // sc_toDisplayString == toString
 sc_Char.prototype.sc_toWriteString = function() {
+  print("@" + this.val);
     var entry = sc_Char.char2readable[this.val];
     if (entry)
 	return entry;
@@ -4671,6 +4672,8 @@ var const_earley;
 
 SC_DEFAULT_OUT = new sc_GenericOutputPort(function(s) {});
 SC_ERROR_OUT = SC_DEFAULT_OUT;
+
+var result;
 
 function RunBenchmark(name, count, run, warn) {
   for (var n = 0; n < count; ++n) {
