@@ -52,12 +52,17 @@ function Benchmark(name, doWarmup, doDeterministic, deterministicIterations,
   this.doDeterministic = doDeterministic;
   this.deterministicIterations = deterministicIterations;
 
+  try{
+
   // Note: Matthias Keil
   // Extend Benchmark to use an Sandbox
   var sbx = getNewSandbox();
   this.run = sbx.bind(run);
   // Original Code is:
   // this.run = run;
+  }catch(e){
+    print(e);
+  }
 
   this.Setup = setup ? setup : function() { };
   this.TearDown = tearDown ? tearDown : function() { };

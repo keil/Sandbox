@@ -47,7 +47,7 @@ function getNewSandbox() {
   // default sandbox parameters
   var __params__ = {
     verbose:false,           // Verbose Mode (default: false)
-    statistic:true,         // Enable Statistic (default: false)
+    statistic:false,         // Enable Statistic (default: false)
     decompile:true,         // Decompile (default: true)
     membrane:true,          // Membrane (default: true)
     effect:false,           // Effect (default: true)

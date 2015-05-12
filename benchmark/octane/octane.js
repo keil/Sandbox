@@ -13,6 +13,25 @@
  * http://www.informatik.uni-freiburg.de/~keilr/
  */
 
+// ==================================================
+
+// default sandbox parameters
+var __testparams__ = {
+  verbose:false,          // Verbose Mode (default: false)
+  statistic:false,        // Enable Statistic (default: false)
+  decompile:true,         // Decompile (default: true)
+  membrane:true,          // Membrane (default: true)
+  effect:false,           // Effect (default: true)
+  transparent:false,      // Transparent  (default: false)
+  metahandler:false ,      // MetaHandler (default: true)
+  nativepassthrough:true, // Native Function pass-through
+  out:ShellOut()          // Output (default: true)
+}
+
+// ==================================================
+
+
+
 function getNewSandbox() {
-  return new Sandbox(this, __params__);
+  return new Sandbox(this, __testparams__);
 }
