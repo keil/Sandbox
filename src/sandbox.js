@@ -847,10 +847,11 @@ function Sandbox(global, params) {
    */
   function trace(effect) {
     logc("trace", effect.toString());
+    increment("trace");
 
     // Effect Logging ?
     if(!__effect__) return true;
-
+ 
     if(!(effect instanceof Effect.Effect))
       throw new Error("No effect object.");
 

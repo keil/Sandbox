@@ -55,9 +55,9 @@ var __params__ = {
 
 
 
-quit();
+//quit();
 //load('demo/sandbox.js');
-load('test/default.js')
+//load('test/default.js')
 quit();
 
 // ==================================================
