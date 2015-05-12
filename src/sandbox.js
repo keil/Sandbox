@@ -51,6 +51,11 @@
 function Sandbox(global, params) {
   if(!(this instanceof Sandbox)) return new Sandbox(global, params);
 
+  /**
+   * Sandbox Core Version
+   */
+  var version = "TreatJS Sandbox 0.2.2 (PoC)";
+
   if(!(global instanceof Object))
     throw new TypeError("No Global Object.");
 
