@@ -51,11 +51,6 @@
 function Sandbox(global, params) {
   if(!(this instanceof Sandbox)) return new Sandbox(global, params);
 
-  /**
-   * Sandbox Core Version
-   */
-  var version = "TreatJS Sandbox 0.2.2 (PoC)";
-
   if(!(global instanceof Object))
     throw new TypeError("No Global Object.");
 
@@ -1271,4 +1266,17 @@ Object.defineProperty(Sandbox.prototype, "toString", {
   get: function() {
     return function() { return "[[Sandbox#" + this.id + "]]"; };
   }
+});
+
+//                _          
+//__ _____ _ _ __(_)___ _ _  
+//\ V / -_) '_(_-< / _ \ ' \ 
+// \_/\___|_| /__/_\___/_||_|
+                           
+Object.defineProperty(Sandbox, "version", {
+  value: "TreatJS Sandbox 0.2.2 (PoC)"
+});
+
+Object.defineProperty(Sandbox.prototype, "version", {
+  value: Sandbox.version
 });

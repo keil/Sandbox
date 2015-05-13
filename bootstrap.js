@@ -51,10 +51,6 @@ var __params__ = {
 
 // ==================================================
 
-
-
-
-
 //quit();
 //load('demo/sandbox.js');
 //load('test/default.js')
