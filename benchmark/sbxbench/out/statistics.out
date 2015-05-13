@@ -1,0 +1,107 @@
+./js -f bootstrap.js -f benchmark/sbxbench/octane.js
+
+
+
+*** Include benchmark/sbxbench/richards.js ***
+Richards: 2836
+----
+Score (version 9): 2836
+Statistic: wrap:164021 Cache miss:3 decompile:1 Cache hit:7 trace:328060 
+
+
+
+*** Include benchmark/sbxbench/deltablue.js ***
+DeltaBlue: 127
+----
+Score (version 9): 127
+Statistic: wrap:7348024 Cache miss:3 decompile:1 Cache hit:7 trace:14696066 
+
+
+
+*** Include benchmark/sbxbench/crypto.js ***
+Crypto: 777
+----
+Score (version 9): 777
+Statistic: wrap:2329634 Cache miss:3 decompile:1 Cache hit:1046550 trace:3629234 
+
+
+
+*** Include benchmark/sbxbench/raytrace.js ***
+RayTrace: 78.7
+----
+Score (version 9): 78.7
+Statistic: wrap:25519224 Cache miss:3 decompile:1 Cache hit:12757207 trace:38281266 
+
+
+
+*** Include benchmark/sbxbench/earley-boyer.js ***
+EarleyBoyer: 568
+----
+Score (version 9): 568
+Statistic: wrap:5465 Cache miss:3 decompile:1 Cache hit:24 trace:4194942 
+
+
+
+*** Include benchmark/sbxbench/regexp.js ***
+RegExp: 870
+----
+Score (version 9): 870
+Statistic: wrap:115474 Cache miss:3 decompile:1 Cache hit:65923 trace:230966 
+
+
+
+*** Include benchmark/sbxbench/splay.js ***
+Splay: 366
+SplayLatency: 1048
+----
+Score (version 9): 619
+Statistic: wrap:466840 Cache miss:3 decompile:1 Cache hit:232019 trace:1397701 
+
+
+
+*** Include benchmark/sbxbench/navier-stokes.js ***
+NavierStokes: 917
+----
+Score (version 9): 917
+Statistic: wrap:1839 Cache miss:3 decompile:1 Cache hit:727 trace:2978 
+
+
+
+*** Include benchmark/sbxbench/pdfjs.js ***
+PdfJS: 29.9
+----
+Score (version 9): 29.9
+Statistic: wrap:18222921 Cache miss:4 decompile:1 Cache hit:37302 trace:37477198 
+
+
+
+*** Include benchmark/sbxbench/mandreel.js ***
+Mandreel: 32.9
+MandreelLatency: 145
+----
+Score (version 9): 69.1
+Statistic: wrap:19954116 Cache miss:3 decompile:1 Cache hit:9974959 trace:29934936 
+
+
+
+*** Include benchmark/sbxbench/gbemu-part1.js,benchmark/sbxbench/gbemu-part2.js ***
+[[--end-of-text--]]
+
+Process 12713 terminated (error 002).
+Task completed after 1 hour, 28 min, 6 sec.
+Charging 5370s processor usage (191.72 Euro).
+
+Resource usage:
+Average processor load: 102%
+
+Processor idle time: 517957 sec
+Total execution time: 5286 sec
+Total processing time: 5370 sec
+Kernel mode time: 78 sec
+User mode time: 5292 sec
+
+Virtual memory size: 447 MByte
+Resident set size: 378 MByte
+Text/Data segment size: 430 MByte
+Shared memory segment: 5 MByte
+
