@@ -1,7 +1,3 @@
-./js -f bootstrap.js -f benchmark/sbxbench/octane.js
-
-
-
 *** Include benchmark/sbxbench/richards.js ***
 Richards: 2836
 ----
@@ -84,24 +80,62 @@ Statistic: wrap:19954116 Cache miss:3 decompile:1 Cache hit:9974959 trace:299349
 
 
 
+
 *** Include benchmark/sbxbench/gbemu-part1.js,benchmark/sbxbench/gbemu-part2.js ***
-[[--end-of-text--]]
+65538
+Gameboy: 2644
+----
+Score (version 9): 2644
+Statistic: wrap:467585 Cache miss:4 decompile:1 Cache hit:121250 trace:813987 
 
-Process 12713 terminated (error 002).
-Task completed after 1 hour, 28 min, 6 sec.
-Charging 5370s processor usage (191.72 Euro).
 
-Resource usage:
-Average processor load: 102%
 
-Processor idle time: 517957 sec
-Total execution time: 5286 sec
-Total processing time: 5370 sec
-Kernel mode time: 78 sec
-User mode time: 5292 sec
+*** Include benchmark/sbxbench/code-load.js ***
+CodeLoad: Error: eval not supported
+wrap@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:243:7
+doGet@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:417:7
+Membrane/this.get@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:576:7
+setupCodeLoad@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 678 > eval:484:3
+RunNextSetup@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 678 > eval:356:9
+BenchmarkSuite.prototype.RunStep@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 678 > eval:389:3
+RunStep@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 678 > eval:157:11
+BenchmarkSuite.RunSuites@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 678 > eval:173:3
+@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 678 > eval:2025:28
+evaluate@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:701:9
+Sandbox/<@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:769:3
+runBenchmark@benchmark/sbxbench/octane.js:87:7
+@benchmark/sbxbench/octane.js:99:1
 
-Virtual memory size: 447 MByte
-Resident set size: 378 MByte
-Text/Data segment size: 430 MByte
-Shared memory segment: 5 MByte
+Statistic: wrap:12 Cache miss:3 decompile:1 Cache hit:3 trace:32 
 
+
+
+*** Include benchmark/sbxbench/box2d.js ***
+Box2D: 12.9
+----
+Score (version 9): 12.9
+Statistic: wrap:24876419 Cache miss:3 decompile:1 Cache hit:7800731 trace:115579412 
+
+
+
+*** Include benchmark/sbxbench/zlib.js,benchmark/sbxbench/zlib-data.js ***
+Error: eval not supported
+
+
+wrap@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:243:7
+doGet@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:417:7
+Membrane/this.get@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:576:7
+@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 678 > eval:424:5
+evaluate@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:701:9
+Sandbox/<@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:769:3
+runBenchmark@benchmark/sbxbench/octane.js:87:7
+@benchmark/sbxbench/octane.js:99:1
+
+
+
+
+*** Include benchmark/sbxbench/typescript-input.js,benchmark/sbxbench/typescript-compiler.js,benchmark/sbxbench/typescript.js ***
+Typescript: 246
+----
+Score (version 9): 246
+Statistic: wrap:1114199 Cache miss:3 decompile:1 Cache hit:17 trace:26404297

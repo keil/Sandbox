@@ -31,7 +31,6 @@ benchmarks.push(base_dir + 'earley-boyer.js'); // TODO
 //benchmarks.push(base_dir + 'pdfjs.js');
 //benchmarks.push(base_dir + 'mandreel.js');
 //benchmarks.push([base_dir + 'gbemu-part1.js', base_dir + 'gbemu-part2.js']);
-
 //benchmarks.push(base_dir + 'code-load.js'); //Error: eval not supported
 //benchmarks.push(base_dir + 'box2d.js');
 //benchmarks.push([base_dir + 'zlib.js', base_dir + 'zlib-data.js']); //Error: eval not supported
@@ -47,7 +46,7 @@ function getNewSandbox() {
   // default sandbox parameters
   var __params__ = {
     verbose:false,           // Verbose Mode (default: false)
-    statistic:false,         // Enable Statistic (default: false)
+    statistic:true,         // Enable Statistic (default: false)
     decompile:true,         // Decompile (default: true)
     membrane:true,          // Membrane (default: true)
     effect:true,           // Effect (default: true)
@@ -80,9 +79,8 @@ function makeBenchmark(benchmark) {
 
 function runBenchmark(inSandbox) {
   for(var i in benchmarks) {
-    print("Include " + benchmarks[i]);
+    print("\n\n\n*** Include " + benchmarks[i] + " ***");
     var fun = makeBenchmark(benchmarks[i]);
-    //print(fun); prints the function
     var sbx = getNewSandbox();
     try{
     if(inSandbox) { 
