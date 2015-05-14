@@ -847,6 +847,8 @@ function Sandbox(global, params) {
   // todo, testing code
 
   var keys = [];
+  var keys2 = [];
+  var i = 0;
 
   /** saves an sandbox effect
    * @param effect Effect
@@ -854,6 +856,33 @@ function Sandbox(global, params) {
   function trace(effect) {
     logc("trace", effect.toString());
     increment("trace");
+
+    if((keys.length % 3000000)==0) {
+      print("+ " + (i = i + keys.length));
+      var tmp = keys;
+      keys = [];
+      keys2 = [];
+      //keys = [];
+    }
+
+
+    function Effectx(cmd, target) {
+      if(!(this instanceof Effectx)) return new Effectx(cmd, target);
+
+      if(!(target instanceof Object))
+        throw new TypeError("No traget object.");
+
+      this.x = 4711;
+      this.y = 4711;
+      this.z = 4711;
+    }
+    keys.push(new Effectx("test", effect));
+
+return undefined;
+
+
+
+
 
     // Effect Logging ?
     if(!__effect__) return true;
@@ -879,8 +908,8 @@ function Sandbox(global, params) {
           throw new TypeError("No traget object.");
 
         this.x = 4711;
-        //this.y = 4711;
-        //this.z = 4711;
+        this.y = 4711;
+        this.z = 4711;
 //sdfg
         //this.cmd = cmd;
        // this.date = new Date();
@@ -1323,7 +1352,7 @@ Object.defineProperty(Sandbox.prototype, "toString", {
 // \_/\___|_| /__/_\___/_||_|
                            
 Object.defineProperty(Sandbox, "version", {
-  value: "TreatJS Sandbox 0.2.2 (PoC)"
+  value: "TreatJS Sandbox 0.3.0 (PoC)"
 });
 
 Object.defineProperty(Sandbox.prototype, "version", {
