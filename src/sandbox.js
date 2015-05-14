@@ -857,11 +857,14 @@ function Sandbox(global, params) {
     logc("trace", effect.toString());
     increment("trace");
 
-    if((keys.length % 3000000)==0) {
+    
+/*
+
+    if((keys.length % 4000000)==0) {
       print("+ " + (i = i + keys.length));
-      var tmp = keys;
-      keys = [];
-      keys2 = [];
+      //var tmp = keys;
+      //keys = [];
+      //keys2 = tmp;
       //keys = [];
     }
 
@@ -876,10 +879,11 @@ function Sandbox(global, params) {
       this.y = 4711;
       this.z = 4711;
     }
-    keys.push(new Effectx("test", effect));
+    //keys.push(new Effectx("test", effect));
+    keys.push(effect);
 
-return undefined;
-
+//return undefined;
+*/
 
 
 
@@ -894,51 +898,16 @@ return undefined;
       //update(readset, effect.target, effect);
       //update(effectset, effect.target, effect);
       //readeffects.push(effect);
-      //effects.push(effect);
+      effects.push(effect);
       //readtargets.push(effect.target);
       //targets.push(effect.target);
 
       //testX = new Linked(effect, testX);
-//print(effect);
-
-      function Effectx(cmd, target) {
-        if(!(this instanceof Effectx)) return new Effectx(cmd, target);
-
-        if(!(target instanceof Object))
-          throw new TypeError("No traget object.");
-
-        this.x = 4711;
-        this.y = 4711;
-        this.z = 4711;
-//sdfg
-        //this.cmd = cmd;
-       // this.date = new Date();
-
-
-        // define timestamp
-        //__define("date", new Date(), this);
-        // define command
-        //__define("cmd", cmd, this);
-        // define target    
-        //__define("target", target, this); // TODO
-      }
-      //Effectx.prototype = {};
-      //Effectx.prototype.toString = function() {
-      //  return "[[Effect]]";
-      //}
-
-
-
-      //if(effect instanceof Effect.Read) test.set(effect.date, new Effectx());
-      keys.push(new Effectx("test", {}));
-      //keys.push(effect);
-      //test2.add(effect);
-
     } else if(effect instanceof Effect.Write) {
       //update(writeset, effect.target, effect);
       //update(effectset, effect.target, effect);
       //writeeffects.push(effect);
-      //effects.push(effect);
+      effects.push(effect);
       //writetargets.push(effect.target);
       //targets.push(effect.target);
       
