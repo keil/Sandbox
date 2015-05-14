@@ -758,7 +758,7 @@ function Sandbox(global, params) {
   ///_/ \_\ .__/ .__/_|\_, |
   //      |_|  |_|     |__/ 
 
-  __define("apply", function(fun, thisArg, argsArray) {
+  define("apply", function(fun, thisArg, argsArray) {
 
     if(!(fun instanceof Function))
     throw new TypeError("No function object.");
@@ -774,7 +774,7 @@ function Sandbox(global, params) {
   //| (__/ _` | | |
   // \___\__,_|_|_|
 
-  __define("call", function(fun, thisArg) {
+  define("call", function(fun, thisArg) {
 
     if(!(fun instanceof Function))
     throw new TypeError("No function object.");
@@ -797,7 +797,7 @@ function Sandbox(global, params) {
   //| _ \ | ' \/ _` |
   //|___/_|_||_\__,_|
 
-  __define("bind", function(fun, thisArg, argsArray) {
+  define("bind", function(fun, thisArg, argsArray) {
 
     if(!(fun instanceof Function))
     throw new TypeError("No function object.");
@@ -814,7 +814,7 @@ function Sandbox(global, params) {
   //  \_/\_/|_| \__,_| .__/
   //                 |_|   
 
-  __define("wrap", function(object) {
+  define("wrap", function(object) {
 
     if(!(object instanceof Object))
     throw new TypeError("No object.");
@@ -931,7 +931,7 @@ function Sandbox(global, params) {
    * @param target JavaScript Obejct
    * @return JavaScript Array [Effect]
    */
-  __define("readeffectsOf", function(target) {
+  define("readeffectsOf", function(target) {
     if(readset.has(target)) return readset.get(target);
     else return [];
   }, this);
@@ -940,7 +940,7 @@ function Sandbox(global, params) {
    * @param target JavaScript Obejct
    * @return JavaScript Array [Effect]
    */
-  __define("writeeffectsOf", function(target) {
+  define("writeeffectsOf", function(target) {
     if(writeset.has(target)) return writeset.get(target);
     else return [];
   }, this);
@@ -949,7 +949,7 @@ function Sandbox(global, params) {
    * @param target JavaScript Obejct
    * @return JavaScript Array [Effect]
    */
-  __define("effectsOf", function(target) {  
+  define("effectsOf", function(target) {  
     if(effectset.has(target)) return effectset.get(target);
     else return [];
   }, this);
@@ -957,21 +957,21 @@ function Sandbox(global, params) {
   /** Get All Read Effects
    * @return JavaScript Array [Effect]
    */
-  __getter("readeffects", function() {
+  getter("readeffects", function() {
     return readeffects;
   }, this);
 
   /** Get All Write Effects
    * @return JavaScript Array [Effect]
    */
-  __getter("writeeffects", function() {
+  getter("writeeffects", function() {
     return writeeffects;
   }, this);
 
   /** Get All Effects
    * @return JavaScript Array [Effect]
    */
-  __getter("effects", function() {
+  getter("effects", function() {
     return effects;
   }, this);
 
@@ -1089,7 +1089,7 @@ function Sandbox(global, params) {
   /** Rollback Of
    * @param target JavaScript Object
    */
-  __define("rollbackOf", function(target) {
+  define("rollbackOf", function(target) {
     var es = this.writeeffectsOf(target);
 
     for(var e in es) {
@@ -1099,7 +1099,7 @@ function Sandbox(global, params) {
 
   /** Rollback
   */
-  __define("rollback", function(target) {
+  define("rollback", function(target) {
     var es = writeeffects;
 
     for(var e in es) {
@@ -1111,7 +1111,7 @@ function Sandbox(global, params) {
    * @param target JavaScript Object
    * return true|false
    */
-  __define("hasDifferenceWith", function(target) {
+  define("hasDifferenceWith", function(target) {
     var es = this.writeeffectsOf(target);
 
     var difference = false;
@@ -1126,7 +1126,7 @@ function Sandbox(global, params) {
   /** Has Difference
    * return true|false
    */
-  __define("hasDifference", function() {
+  define("hasDifference", function() {
     var difference = false;
     for(var i in targets) {
       difference = (this.hasDifferenceWith(targets[i])) ? true : difference;
@@ -1139,7 +1139,7 @@ function Sandbox(global, params) {
    * @param target JavaScript Object
    * return [Differences]
    */
-  __define("differencesOf", function(target) {
+  define("differencesOf", function(target) {
     var sbxA = this;
     var es = this.effectsOf(target);
 
@@ -1155,7 +1155,7 @@ function Sandbox(global, params) {
   /** Differences 
    * return [Differences]
    */
-  __define("differences", function() {
+  define("differences", function() {
     var sbxA = this;
     var es = writeeffects;
 
@@ -1173,7 +1173,7 @@ function Sandbox(global, params) {
    * @param target JavaScript Object
    * return [Conflict]
    */
-  __define("conflictsOf", function(sbx, target) {
+  define("conflictsOf", function(sbx, target) {
     if(!(sbx instanceof Sandbox)) throw new TypeError("No Sandbox.");
 
     var sbxA = this;
@@ -1197,7 +1197,7 @@ function Sandbox(global, params) {
    * @param sbx Sandbox
    * return [Conflict]
    */
-  __define("conflicts", function(sbx) {
+  define("conflicts", function(sbx) {
     if(!(sbx instanceof Sandbox)) throw new TypeError("No Sandbox.");
 
     var conflicts = [];
@@ -1212,7 +1212,7 @@ function Sandbox(global, params) {
    * @param target JavaScript Object
    * return true|false
    */
-  __define("inConflictWith", function(sbx, target) {
+  define("inConflictWith", function(sbx, target) {
     if(!(sbx instanceof Sandbox)) throw new TypeError("No Sandbox.");
 
     var es = this.effectsOf(target);
@@ -1235,7 +1235,7 @@ function Sandbox(global, params) {
    * @param target JavaScript Object
    * return true|false
    */
-  __define("inConflict", function(sbx) {
+  define("inConflict", function(sbx) {
     if(!(sbx instanceof Sandbox)) throw new TypeError("No Sandbox.");
 
     var conflict = false;
@@ -1249,7 +1249,7 @@ function Sandbox(global, params) {
   /** Commit All Effects
    * @return JavaScript Array [Effect]
    */
-  __define("commit", function() {
+  define("commit", function() {
     for(i in writeeffects) {
       var effect = writeeffects[i];
       if(effect instanceof Effect.Effect) effect.commit();
@@ -1259,7 +1259,7 @@ function Sandbox(global, params) {
   /** Commit All Effects Of
    * @return JavaScript Array [Effect]
    */
-  __define("commitOf", function(target) {
+  define("commitOf", function(target) {
     var effects = writeset.get(target);
     for(var i in effects) {
       var effect = effects[i];
@@ -1276,7 +1276,7 @@ function Sandbox(global, params) {
 
   /** Statistic
   */
-  __define("statistic", statistic, this);
+  define("statistic", statistic, this);
 }
 
 // ___               _ _               ___ ___  

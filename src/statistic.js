@@ -21,20 +21,20 @@ function Statistic() {
 
   var statistic = {};
 
-  __define("get", function(op) {
+  define("get", function(op) {
     return statistic[op];
   }, this);
 
-  __getter("keys", function() {
+  getter("keys", function() {
     return Object.keys(statistic);
   }, this);
 
-  __define("increment", function(op) {
+  define("increment", function(op) {
     if(statistic[op]===undefined) statistic[op]=0;
     statistic[op]++;
   }, this);
 
-  __define("toString", function() {
+  define("toString", function() {
     var string = "Statistic: ";
     for(op in statistic) {
       string += op+":"+statistic[op]+" ";
