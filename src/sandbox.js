@@ -403,9 +403,9 @@ function Sandbox(global, params) {
       // TODO, testin code
       var desc =  (affected(name)) ? Object.getOwnPropertyDescriptor(scope, name) : 
         Object.getOwnPropertyDescriptor(origin, name);
-      
+
       var getter = desc ? desc.get : undefined;
-      
+
       //print("access to: " + name);
       //print("@@@"+getter);
 
@@ -857,65 +857,29 @@ function Sandbox(global, params) {
     logc("trace", effect.toString());
     increment("trace");
 
-    
-/*
-
-    if((keys.length % 4000000)==0) {
-      print("+ " + (i = i + keys.length));
-      //var tmp = keys;
-      //keys = [];
-      //keys2 = tmp;
-      //keys = [];
-    }
-
-
-    function Effectx(cmd, target) {
-      if(!(this instanceof Effectx)) return new Effectx(cmd, target);
-
-      if(!(target instanceof Object))
-        throw new TypeError("No traget object.");
-
-      this.x = 4711;
-      this.y = 4711;
-      this.z = 4711;
-    }
-    //keys.push(new Effectx("test", effect));
-    keys.push(effect);
-
-//return undefined;
-*/
-
-
-
-
     // Effect Logging ?
     if(!__effect__) return true;
- 
+
     if(!(effect instanceof Effect.Effect))
       throw new Error("No effect object.");
 
     if(effect instanceof Effect.Read) {
-      //update(readset, effect.target, effect);
-      //update(effectset, effect.target, effect);
-      //readeffects.push(effect);
-      effects.push(effect);
-      //readtargets.push(effect.target);
-      //targets.push(effect.target);
+      update(readset, effect.target, effect);
+      update(effectset, effect.target, effect);
+      readeffects.push(effect);
 
-      //testX = new Linked(effect, testX);
-    } else if(effect instanceof Effect.Write) {
-      //update(writeset, effect.target, effect);
-      //update(effectset, effect.target, effect);
-      //writeeffects.push(effect);
       effects.push(effect);
-      //writetargets.push(effect.target);
-      //targets.push(effect.target);
-      
-      //testX = new Linked(effect, testX);
-       
-      //test.set(effect.date, effect);
-      //keys.push(new Effectx());
-      //test2.add(effect);
+      readtargets.push(effect.target);
+      targets.push(effect.target);
+
+    } else if(effect instanceof Effect.Write) {
+      update(writeset, effect.target, effect);
+      update(effectset, effect.target, effect);
+      writeeffects.push(effect);
+
+      effects.push(effect);
+      writetargets.push(effect.target);
+      targets.push(effect.target);
     }
 
     function update(set, target, effect) {
@@ -1319,7 +1283,7 @@ Object.defineProperty(Sandbox.prototype, "toString", {
 //__ _____ _ _ __(_)___ _ _  
 //\ V / -_) '_(_-< / _ \ ' \ 
 // \_/\___|_| /__/_\___/_||_|
-                           
+
 Object.defineProperty(Sandbox, "version", {
   value: "TreatJS Sandbox 0.3.0 (PoC)"
 });
