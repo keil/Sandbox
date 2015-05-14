@@ -20,21 +20,24 @@ var Effect = (function() {
   //| _||  _|  _/ -_) _|  _|
   //|___|_| |_| \___\__|\__|  
 
-  function Effect(cmd, target) {
-    if(!(this instanceof Effect)) return new Get(cmd, target);
+  function Effect(target) {
+    if(!(this instanceof Effect)) return new Effect(target);
 
     if(!(target instanceof Object))
       throw new TypeError("No traget object.");
 
-    // define timestamp
-    __define("date", new Date(), this);
-    // define command
-    __define("cmd", cmd, this);
-    // define target    
-    __define("target", target, this);
-  };
+    Object.defineProperties(this, {
+      "date": {
+        value: new Date();
+      },
+      "target": {
+        value: target
+      }
+    });
+  }
+  Effect.prototype = {};
   Effect.prototype.toString = function() {
-    return "(" + this.date.getTime() + ")"+" "+this.cmd;
+    return "[[Effect]]";
   }
 
   // ___             _   ___  __  __        _   
@@ -42,28 +45,37 @@ var Effect = (function() {
   //|   / -_) _` / _` | | _||  _|  _/ -_) _|  _|
   //|_|_\___\__,_\__,_| |___|_| |_| \___\__|\__|
 
-  function Read(cmd, target) {
-    if(!(this instanceof Read)) return new Read(cmd, target);
-    else Effect.call(this, cmd, target);
+  function Read(target) {
+    if(!(this instanceof Read)) return new Read(target);
+    else Effect.call(this, target);
   }
-  Read.prototype = new Effect("", {});
+  Read.prototype = Object.create(Effect.prototype);
+  Read.prototype.toString = function() {
+    return "[[ReadEffect]]";
+  }
 
   //__      __   _ _         ___  __  __        _   
   //\ \    / / _(_) |_ ___  | __|/ _|/ _|___ __| |_ 
   // \ \/\/ / '_| |  _/ -_) | _||  _|  _/ -_) _|  _|
   //  \_/\_/|_| |_|\__\___| |___|_| |_| \___\__|\__|
 
-  function Write(cmd, target, scope) {
-    if(!(this instanceof Write)) return new Write(cmd, target, scope);
-    else Effect.call(this, cmd, target);
+  function Write(target, scope) {
+    if(!(this instanceof Write)) return new Write(target, scope);
+    else Effect.call(this, target);
 
     if(!(scope instanceof Object))
       throw new TypeError("No scope object.");
 
-    // define target    
-    __define("scope", scope, this);
+    Object.defineProperties(this, {
+      "scope": {
+        value: scope
+      }
+    });
   }
-  Write.prototype = new Effect("", {});
+  Write.prototype = Object.create(Effect.prototype);
+  Write.prototype.toString = function() {
+    return "[[WriteEffect]]";
+  }
   Write.prototype.commit = function() {
     throw new ReferenceError("Commit not implemented");
   }
@@ -71,7 +83,22 @@ var Effect = (function() {
     throw new ReferenceError("Rollback not implemented");
   }
   Write.prototype.diff = function() {
-    return new ReferenceError("Diff not implemented");
+    throw new ReferenceError("Diff not implemented");
+  }
+
+  //   _             _        ___  __  __        _   
+  //  /_\  _ __ _ __| |_  _  | __|/ _|/ _|___ __| |_ 
+  // / _ \| '_ \ '_ \ | || | | _||  _|  _/ -_) _|  _|
+  ///_/ \_\ .__/ .__/_|\_, | |___|_| |_| \___\__|\__|
+  //      |_|  |_|     |__/                          
+
+  function Apply(target) {
+    if(!(this instanceof Apply)) return new Apply(target);
+    else Effect.call(this, target);
+  }
+  Apply.prototype = Object.create(Effect.prototype);
+  Apply.prototype.toString = function() {
+    return "[[ApplyEffect]]";
   }
 
   // ___             _   ___  __  __        _      
@@ -81,143 +108,203 @@ var Effect = (function() {
 
   /** target, name, receiver -> any
   */
-  function Get(target, name, receiver) {
-    if(!(this instanceof Get)) return new Get(target, name, receiver);
-    else Read.call(this, "get [name="+name+"]", target);
+  function Get(target, name) {
+    if(!(this instanceof Get)) return new Get(target, name);
+    else Read.call(this, target);
 
-    // define name
-    __define("name", name, this);
-    // define receiver    
-    __define("receiver", receiver, this);
+    Object.defineProperties(this, {
+      "name": {
+        value: name
+      }
+    });
   }
-  Get.prototype = new Read("", {});
+  Get.prototype = Object.create(Read.prototype);
+  Get.prototype.toString = function() {
+    return "(" + this.date.getTime() + ")"+" "+"get [name="+this.name+"]"; 
+  }
 
   /** target, name -> PropertyDescriptor | undefined
   */
   function GetOwnPropertyDescriptor(target, name) {
     if(!(this instanceof GetOwnPropertyDescriptor)) return new GetOwnPropertyDescriptor(target, name);
-    else Read.call(this, "getOwnPropertyDescriptor [name="+name+"]", target);
+    else Read.call(this, target);
 
-    // define name
-    __define("name", name, this);
+    Object.defineProperties(this, {
+      "name": {
+        value: name
+      }
+    });
   }
-  GetOwnPropertyDescriptor.prototype = new Read("", {});
+  GetOwnPropertyDescriptor.prototype = Object.create(Read.prototype);
+  GetOwnPropertyDescriptor.prototype.toString = function() {
+    return "(" + this.date.getTime() + ")"+" "+"getOwnPropertyDescriptor [name="+this.name+"]"; 
+  }
 
   /** target -> [String]
   */
   function GetOwnPropertyNames(target) {
     if(!(this instanceof GetOwnPropertyNames)) return new GetOwnPropertyNames(target);
-    else Read.call(this, "getOwnPropertyNames", target);
+    else Read.call(this, target);
   }
-  GetOwnPropertyNames.prototype = new Read("", {});
+  GetOwnPropertyNames.prototype = Object.create(Read.prototype);
+  GetOwnPropertyNames.prototype.toString = function() {
+    return "(" + this.date.getTime() + ")"+" "+"getOwnPropertyNames"; 
+  }
 
   /** target, name -> boolean
   */
   function Has(target, name) {
-    if(!(this instanceof Has)) return new Has(target);
-    else Read.call(this, "has [name="+name+"]", target);
+    if(!(this instanceof Has)) return new Has(target, name);
+    else Read.call(this, target);
 
-    // define name
-    __define("name", name, this);
+    Object.defineProperties(this, {
+      "name": {
+        value: name
+      }
+    });
   }
-  Has.prototype = new Read("", {});
+  Has.prototype = Object.create(Read.prototype);
+  Has.prototype.toString = function() {
+    return "(" + this.date.getTime() + ")"+" "+"has [name="+this.name+"]"; 
+  }
 
   /** target, name -> boolean
   */
   function HasOwn(target, name) {
     if(!(this instanceof HasOwn)) return new HasOwn(target, name);
-    else Read.call(this, "hasOwn [name="+name+"]", target);
+    else Read.call(this, target);
 
-    // define name
-    __define("name", name, this);
+    Object.defineProperties(this, {
+      "name": {
+        value: name
+      }
+    });
   }
-  HasOwn.prototype = new Read("", {});
+  HasOwn.prototype = Object.create(Read.prototype);
+  HasOwn.prototype.toString = function() {
+    return "(" + this.date.getTime() + ")"+" "+"hasOwn [name="+this.name+"]"; 
+  }
 
   /** target -> [String]
   */
   function Enumerate(target) {
     if(!(this instanceof Enumerate)) return new Enumerate(target);
-    else Read.call(this, "enumerate", target);
+    else Read.call(this, target);
   }
-  Enumerate.prototype = new Read("", {});
+  Enumerate.prototype = Object.create(Read.prototype);
+  Enumerate.prototype.toString = function() {
+    return "(" + this.date.getTime() + ")"+" "+"enumerate"; 
+  }
 
   /** target -> iterator
   */
   function Iterate(target) {
     if(!(this instanceof Iterate)) return new Iterate(target);
-    else Read.call(this, "iterate", target);
+    else Read.call(this, target);
   }
-  Iterate.prototype = new Read("", {});
+  Iterate.prototype = Object.create(Read.prototype);
+  Iterate.prototype.toString = function() {
+    return "(" + this.date.getTime() + ")"+" "+"iterate"; 
+  }
 
   /** target -> [String]
   */
   function Keys(target) {
     if(!(this instanceof Keys)) return new Keys(target);
-    else Read.call(this, "keys", target);
+    else Read.call(this, target);
   }
-  Keys.prototype = new Read("", {});
-
-  /** target, thisArg, argsArray -> any
-  */
-  function Apply(target, thisArg, argsArray) {
-    if(!(this instanceof Apply)) return new Apply(target, thisArg, argsArray);
-    else Read.call(this, "apply", target);
-
-    // define name
-    __define("thisArg", thisArg, this);
-    // define name
-    __define("argsArray", argsArray, this);
+  Keys.prototype = Object.create(Read.prototype);
+  Keys.prototype.toString = function() {
+    return "(" + this.date.getTime() + ")"+" "+"keys"; 
   }
-  Apply.prototype = new Read("", {});
-
-  /** target, thisArg, argsArray -> obejct
-  */
-  function Construct(target, thisArg, argsArray) {
-    if(!(this instanceof Construct)) return new Construct(target, thisArg, argsArray);
-    else Read.call(this, "construct", target);
-
-    // define name
-    __define("thisArg", thisArg, this);
-    // define name
-    __define("argsArray", argsArray, this);
-  }
-  Construct.prototype = new Read("", {});
 
   /** target -> boolean
    * (not documented)
    */
   function IsExtensible(target) {
     if(!(this instanceof IsExtensible)) return new IsExtensible(target);
-    else Read.call(this, "isExtensible", target);
+    else Read.call(this, target);
   }
-  IsExtensible.prototype = new Read("", {});
+  IsExtensible.prototype = Object.create(Read.prototype);
+  IsExtensible.prototype.toString = function() {
+    return "(" + this.date.getTime() + ")"+" "+"isExtensible";
+  }
+
+  //   _             _        ___  __  __        _      
+  //  /_\  _ __ _ __| |_  _  | __|/ _|/ _|___ __| |_ ___
+  // / _ \| '_ \ '_ \ | || | | _||  _|  _/ -_) _|  _(_-<
+  ///_/ \_\ .__/ .__/_|\_, | |___|_| |_| \___\__|\__/__/
+  //      |_|  |_|     |__/                             
+
+  /** target, thisArg, argsArray -> any
+  */
+  function Apply(target, thisArg, argsArray) {
+    if(!(this instanceof Apply)) return new Apply(target, thisArg, argsArray);
+    else Apply.call(this, target);
+
+    Object.defineProperties(this, {
+      "thisArg": {
+        value: thisArg
+      },
+      "argsArray": {
+        value: argsArray
+      }
+    });
+  }
+  Apply.prototype = Object.create(Apply.prototype);
+  Apply.prototype.toString = function() {
+    return "(" + this.date.getTime() + ")"+" "+"apply"; 
+  }
+
+  /** target, thisArg, argsArray -> obejct
+  */
+  function Construct(target, thisArg, argsArray) {
+    if(!(this instanceof Construct)) return new Construct(target, thisArg, argsArray);
+    else Apply.call(this, target);
+
+    Object.defineProperties(this, {
+      "thisArg": {
+        value: thisArg
+      },
+      "argsArray": {
+        value: argsArray
+      }
+    });
+  }
+  Construct.prototype = Object.create(Apply.prototype);
+  Construct.prototype.toString = function() {
+    return "(" + this.date.getTime() + ")"+" "+"construct"; 
+  }
 
   //__      __   _ _         ___  __  __        _      
   //\ \    / / _(_) |_ ___  | __|/ _|/ _|___ __| |_ ___
   // \ \/\/ / '_| |  _/ -_) | _||  _|  _/ -_) _|  _(_-<
   //  \_/\_/|_| |_|\__\___| |___|_| |_| \___\__|\__/__/
 
-  function Set(target, scope, name, value, receiver) {
-    if(!(this instanceof Set)) return new Set(target, scope, name, value, receiver);
-    else Write.call(this, "set [name="+name+"]", target, scope);
+  function Set(target, scope, name, value) {
+    if(!(this instanceof Set)) return new Set(target, scope, name, value);
+    else Write.call(this, target, scope);
 
-    // define name
-    __define("name", name, this);
-    // define value
-    __define("value", value, this);
-    // define receiver
-    __define("receiver", receiver, this);
+    Object.defineProperties(this, {
+      "name": {
+        value: name
+      },
+      "value": {
+        value: value
+      },
+      "origin": {
+        value: target[name]
+      },
+      "snapshot": {
+        value: scope[name]
+      }  
+    });
 
-    // define origin
-    __define("origin", target[name], this);
     // define commit
     __define("commit", function() {
       return target[name]=value;
     }, this);
-     
-    // define snapshot
-    __define("snapshot", scope[name], this);
-    // define rollback
+
     __define("rollback", function() {
       return scope[name]=this.snapshot;
     }, this);
@@ -227,7 +314,10 @@ var Effect = (function() {
       return (target[name]===this.origin);
     }, this);
   }
-  Set.prototype = new Write("", {}, {});
+  Set.prototype = Object.create(Write.prototype);
+  Set.prototype.toString = function() {
+    return "(" + this.date.getTime() + ")"+" "+"set [name="+this.name+"]";
+  }
 
   /** target, name, propertyDescriptor -> any
   */
@@ -235,20 +325,36 @@ var Effect = (function() {
     if(!(this instanceof DefineProperty)) return new DefineProperty(target, scope, name, desc);
     else Write.call(this, "defineProperty [name="+name+"]", target, scope);
 
+    Object.defineProperties(this, {
+      "name": {
+        value: name
+      },
+      "desc": {
+        value: desc
+      },
+      "origin": {
+        value: Object.getOwnPropertyDescriptor(target, name)
+      },
+      "snapshot": {
+        value: Object.getOwnPropertyDescriptor(scope, name)
+      }  
+    });
+
+
     // define name
-    __define("name", name, this);
+    //__define("name", name, this);
     // define desc
     __define("desc", desc, this);
 
     // define origin
-    __define("origin", Object.getOwnPropertyDescriptor(target, name), this);
+    //__define("origin", Object.getOwnPropertyDescriptor(target, name), this);
     // define commit
     __define("commit", function() {
       return Object.defineProperty(target, name, desc);
     }, this);
 
     // define snapshot
-    __define("snapshot", Object.getOwnPropertyDescriptor(scope, name), this);
+    // __define("snapshot", Object.getOwnPropertyDescriptor(scope, name), this);
     // define rollback
     __define("rollback", function() {
       return Object.defineProperty(target, name, this.snapshot);
@@ -260,7 +366,10 @@ var Effect = (function() {
       return (target[name]===this.origin);
     }, this);
   }
-  DefineProperty.prototype = new Write("", {}, {});
+  DefineProperty.prototype = Object.create(Write.prototype);
+  DefineProperty.prototype.toString = function() {
+    return "(" + this.date.getTime() + ")"+" "+this.cmd;
+  }
 
   /** target, name -> boolean
   */
@@ -268,18 +377,33 @@ var Effect = (function() {
     if(!(this instanceof DeleteProperty)) return new DeleteProperty(target, scope, name);
     else Write.call(this, "deleteProperty [name="+name+"]", target, scope);
 
+
+    Object.defineProperties(this, {
+      "name": {
+        value: name
+      },
+      "origin": {
+        value: (Object.prototype.hasOwnProperty.call(target, name) ? target[name] : undefined)
+      },
+      "snapshot": {
+        value: (Object.prototype.hasOwnProperty.call(scope, name) ? scope[name] : undefined)
+      }  
+    });
+
+
+
     // define name
     __define("name", name, this);
 
     // define origin
-    __define("origin", (Object.prototype.hasOwnProperty.call(target, name) ? target[name] : undefined), this);
+    //__define("origin", (Object.prototype.hasOwnProperty.call(target, name) ? target[name] : undefined), this);
     // define commit
     __define("commit", function() {
       return (delete target[name]);
     }, this);
 
     // define snapshot
-    __define("snapshot", (Object.prototype.hasOwnProperty.call(scope, name) ? scope[name] : undefined), this);
+    //__define("snapshot", (Object.prototype.hasOwnProperty.call(scope, name) ? scope[name] : undefined), this);
     // define rollback
     __define("rollback", function() {
       return (target[name]=this.snapshot);
@@ -291,7 +415,10 @@ var Effect = (function() {
       return (Object.prototype.hasOwnProperty.call(target, name) ? target[name] : undefined)===this.origin;
     }, this);
   }
-  DeleteProperty.prototype = new Write("", {}, {});
+  DeleteProperty.prototype = Object.create(Write.prototype);
+  DeleteProperty.prototype.toString = function() {
+    return "(" + this.date.getTime() + ")"+" "+this.cmd;
+  }
 
   /** target -> boolean
   */
@@ -299,15 +426,26 @@ var Effect = (function() {
     if(!(this instanceof Freeze)) return new Freeze(target, scope);
     else Write.call(this, "freeze", target, scope);
 
+    Object.defineProperties(this, {
+      "origin": {
+        value: Object.isFrozen(target)
+      },
+      "snapshot": {
+        value: Object.isFrozen(scope)
+      }  
+    });
+
+
+
     // define origin
-    __define("origin", Object.isFrozen(target), this);
+    //__define("origin", Object.isFrozen(target), this);
     // define commit
     __define("commit", function() {
       return Object.freeze(target);
     }, this);
 
     // define snapshot
-    __define("snapshot", Object.isFrozen(scope), this);
+    //__define("snapshot", Object.isFrozen(scope), this);
     // define rollback
     __define("rollback", function() {
       throw new Error("Rollback not possible");
@@ -319,7 +457,10 @@ var Effect = (function() {
       return (Object.isFrozen(target)===this.origin);
     }, this);
   }
-  Freeze.prototype = new Write("", {}, {});
+  Freeze.prototype = Object.create(Write.prototype);
+  Freeze.prototype.toString = function() {
+    return "(" + this.date.getTime() + ")"+" "+this.cmd;
+  }
 
   /** target -> boolean
   */
@@ -327,15 +468,26 @@ var Effect = (function() {
     if(!(this instanceof Seal)) return new Seal(target, scope);
     else Write.call(this, "seal", target, scope);
 
+    Object.defineProperties(this, {
+      "origin": {
+        value: Object.isSealed(target)
+      },
+      "snapshot": {
+        value: Object.isSealed(scope)
+      }  
+    });
+
+
+
     // define origin
-    __define("origin", Object.isSealed(target), this);
+    //__define("origin", Object.isSealed(target), this);
     // define commit
     __define("commit", function() {
       return Object.seal(target);
     }, this);
 
     // define snapshot
-    __define("snapshot", Object.isSealed(scope), this);
+    //__define("snapshot", Object.isSealed(scope), this);
     // define rollback
     __define("rollback", function() {
       throw new Error("Rollback not possible");
@@ -346,7 +498,10 @@ var Effect = (function() {
       return (Object.isSealed(target)===this.origin);
     }, this);
   }
-  Seal.prototype = new Write("", {}, {});
+  Seal.prototype = Object.create(Write.prototype);
+  Seal.prototype.toString = function() {
+    return "(" + this.date.getTime() + ")"+" "+this.cmd;
+  }
 
   /** target -> boolean
   */
@@ -354,15 +509,25 @@ var Effect = (function() {
     if(!(this instanceof PreventExtensions)) return new PreventExtensions(target, scope);
     else Write.call(this, "preventExtensions", target, scope);
 
+    Object.defineProperties(this, {
+      "origin": {
+        value: Object.isExtensible(target)
+      },
+      "snapshot": {
+        value: Object.isExtensible(scope)
+      }  
+    });
+
+
     // define origin
-    __define("origin", Object.isExtensible(target), this);
+    //__define("origin", Object.isExtensible(target), this);
     // define commit
     __define("commit", function() {
       return Object.preventExtensions(target);
     }, this);
 
     // define snapshot
-    __define("snapshot", Object.isExtensible(scope), this);
+    //__define("snapshot", Object.isExtensible(scope), this);
     // define rollback
     __define("rollback", function() {
       throw new Error("Rollback not possible");
@@ -373,7 +538,10 @@ var Effect = (function() {
       return (Object.isExtensible(target)===this.origin);
     }, this);
   }
-  PreventExtensions.prototype = new Write("", {}, {});
+  PreventExtensions.prototype = Object.create(Write.prototype);
+  PreventExtensions.prototype.toString = function() {
+    return "(" + this.date.getTime() + ")"+" "+this.cmd;
+  }
 
   //  ___           __ _ _    _   
   // / __|___ _ _  / _| (_)__| |_ 
@@ -390,7 +558,7 @@ var Effect = (function() {
     if(!(effectA instanceof Effect))
       throw new TypeError("No effect object.");
     if(!(effectB instanceof Effect))
-       throw new TypeError("No effect object.");
+      throw new TypeError("No effect object.");
 
     // define sbxA
     __define("sbxA", sbxA, this);
@@ -417,7 +585,7 @@ var Effect = (function() {
 
   function Difference(sbx, effect) {
 
-    
+
     if(!(sbx instanceof Sandbox))
       throw new TypeError("No sandbox object.");
 
@@ -449,6 +617,7 @@ var Effect = (function() {
   // Core Effects
   __define("Read", Read, Effects);
   __define("Write", Write, Effects);
+  __define("Apply", Apply, Effects);
 
   // Read Effects
   __define("Get", Get, Effects);

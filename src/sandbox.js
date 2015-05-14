@@ -842,6 +842,12 @@ function Sandbox(global, params) {
   var writetargets = [];
   var targets = [];
 
+  var test = new WeakMap();
+
+  // todo, testing code
+
+  var keys = [];
+
   /** saves an sandbox effect
    * @param effect Effect
    */
@@ -856,19 +862,62 @@ function Sandbox(global, params) {
       throw new Error("No effect object.");
 
     if(effect instanceof Effect.Read) {
-      update(readset, effect.target, effect);
-      update(effectset, effect.target, effect);
-      readeffects.push(effect);
-      effects.push(effect);
-      readtargets.push(effect.target);
-      targets.push(effect.target);
+      //update(readset, effect.target, effect);
+      //update(effectset, effect.target, effect);
+      //readeffects.push(effect);
+      //effects.push(effect);
+      //readtargets.push(effect.target);
+      //targets.push(effect.target);
+
+      //testX = new Linked(effect, testX);
+//print(effect);
+
+      function Effectx(cmd, target) {
+        if(!(this instanceof Effectx)) return new Effectx(cmd, target);
+
+        if(!(target instanceof Object))
+          throw new TypeError("No traget object.");
+
+        this.x = 4711;
+        //this.y = 4711;
+        //this.z = 4711;
+//sdfg
+        //this.cmd = cmd;
+       // this.date = new Date();
+
+
+        // define timestamp
+        //__define("date", new Date(), this);
+        // define command
+        //__define("cmd", cmd, this);
+        // define target    
+        //__define("target", target, this); // TODO
+      }
+      //Effectx.prototype = {};
+      //Effectx.prototype.toString = function() {
+      //  return "[[Effect]]";
+      //}
+
+
+
+      //if(effect instanceof Effect.Read) test.set(effect.date, new Effectx());
+      keys.push(new Effectx("test", {}));
+      //keys.push(effect);
+      //test2.add(effect);
+
     } else if(effect instanceof Effect.Write) {
-      update(writeset, effect.target, effect);
-      update(effectset, effect.target, effect);
-      writeeffects.push(effect);
-      effects.push(effect);
-      writetargets.push(effect.target);
-      targets.push(effect.target);
+      //update(writeset, effect.target, effect);
+      //update(effectset, effect.target, effect);
+      //writeeffects.push(effect);
+      //effects.push(effect);
+      //writetargets.push(effect.target);
+      //targets.push(effect.target);
+      
+      //testX = new Linked(effect, testX);
+       
+      //test.set(effect.date, effect);
+      //keys.push(new Effectx());
+      //test2.add(effect);
     }
 
     function update(set, target, effect) {

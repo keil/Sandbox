@@ -62,6 +62,7 @@ function __dump(value) {
 //|___/\___|_| |_|_||_\___|
 
 function __define(name, property, target) {
+  throw new Error("__define is deprecated");
   Object.defineProperty(target, name, {
     get: function () { return property; },
   enumerable: true
@@ -69,6 +70,7 @@ function __define(name, property, target) {
 }
 
 function __getter(name, getter, target) {
+  throw new Error("__getter is deprecated");
   Object.defineProperty(target, name, {
     get: getter,
   enumerable: true
