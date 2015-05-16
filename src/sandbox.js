@@ -868,18 +868,18 @@ function Sandbox(global, params) {
       update(effectset, effect.target, effect);
       readeffects.push(effect);
 
-      effects.push(effect);
+      //effects.push(effect);
       readtargets.push(effect.target);
-      targets.push(effect.target);
+      //targets.push(effect.target);
 
     } else if(effect instanceof Effect.Write) {
       update(writeset, effect.target, effect);
       update(effectset, effect.target, effect);
       writeeffects.push(effect);
 
-      effects.push(effect);
+      //effects.push(effect);
       writetargets.push(effect.target);
-      targets.push(effect.target);
+      //targets.push(effect.target);
     }
 
     function update(set, target, effect) {
