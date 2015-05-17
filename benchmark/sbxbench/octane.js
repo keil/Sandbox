@@ -23,8 +23,8 @@ var benchmarks = [];
 //benchmarks.push(base_dir + 'richards.js');
 //benchmarks.push(base_dir + 'deltablue.js');
 //benchmarks.push(base_dir + 'crypto.js');
-//benchmarks.push(base_dir + 'raytrace.js');
-benchmarks.push(base_dir + 'earley-boyer.js'); // TODO
+benchmarks.push(base_dir + 'raytrace.js');
+//benchmarks.push(base_dir + 'earley-boyer.js'); // TODO
 //benchmarks.push(base_dir + 'regexp.js');
 //benchmarks.push(base_dir + 'splay.js'); 
 //benchmarks.push(base_dir + 'navier-stokes.js');

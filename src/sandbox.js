@@ -842,14 +842,6 @@ function Sandbox(global, params) {
   var writetargets = [];
   var targets = [];
 
-  var test = new WeakMap();
-
-  // todo, testing code
-
-  var keys = [];
-  var keys2 = [];
-  var i = 0;
-
   /** saves an sandbox effect
    * @param effect Effect
    */
@@ -864,28 +856,31 @@ function Sandbox(global, params) {
       throw new Error("No effect object.");
 
     if(effect instanceof Effect.Read) {
-      update(readset, effect.target, effect);
-      update(effectset, effect.target, effect);
-      readeffects.push(effect);
+      
+
+      
+      update(readset, effect.target, {date:(new Date()).toString()});
+      //update(effectset, effect.target, effect);
+      //readeffects.push(effect);
 
       //effects.push(effect);
-      readtargets.push(effect.target);
+      //readtargets.push(effect.target);
       //targets.push(effect.target);
 
     } else if(effect instanceof Effect.Write) {
-      update(writeset, effect.target, effect);
-      update(effectset, effect.target, effect);
-      writeeffects.push(effect);
+      update(writeset, effect.target, {});
+      //update(effectset, effect.target, effect);
+      //writeeffects.push(effect);
 
       //effects.push(effect);
-      writetargets.push(effect.target);
+      //writetargets.push(effect.target);
       //targets.push(effect.target);
     }
 
+
     function update(set, target, effect) {
-      if(!set.has(target))
-        set.set(target, []);
-      return set.get(target).push(effect);
+      if(!set.has(target)) set.set(target, new Set());
+      return set.get(target).add(effect);
     }
   }
 
