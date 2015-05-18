@@ -1,0 +1,140 @@
+*** Include benchmark/sbxbench/richards.js ***
+Richards: 4270
+----
+Score (version 9): 4270
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/deltablue.js ***
+DeltaBlue: 333
+----
+Score (version 9): 333
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/crypto.js ***
+Crypto: 1917
+----
+Score (version 9): 1917
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/raytrace.js ***
+RayTrace: 211
+----
+Score (version 9): 211
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/earley-boyer.js ***
+EarleyBoyer: 677
+----
+Score (version 9): 677
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/regexp.js ***
+RegExp: 900
+----
+Score (version 9): 900
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/splay.js ***
+Splay: 774
+SplayLatency: 2567
+----
+Score (version 9): 1410
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/navier-stokes.js ***
+NavierStokes: 865
+----
+Score (version 9): 865
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/pdfjs.js ***
+PdfJS: 121
+----
+Score (version 9): 121
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/mandreel.js ***
+Mandreel: 122
+MandreelLatency: 621
+----
+Score (version 9): 275
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/gbemu-part1.js,benchmark/sbxbench/gbemu-part2.js ***
+65538
+Gameboy: 5081
+----
+Score (version 9): 5081
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/code-load.js ***
+CodeLoad: Error: eval not supported
+wrap@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:243:7
+doGet@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:417:7
+Membrane/this.get@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:576:7
+setupCodeLoad@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 678 > eval:484:3
+RunNextSetup@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 678 > eval:356:9
+BenchmarkSuite.prototype.RunStep@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 678 > eval:389:3
+RunStep@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 678 > eval:157:11
+BenchmarkSuite.RunSuites@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 678 > eval:173:3
+@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 678 > eval:2025:28
+evaluate@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:701:9
+Sandbox/<@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:769:3
+runBenchmark@benchmark/sbxbench/octane.js:88:7
+@benchmark/sbxbench/octane.js:100:1
+
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/box2d.js ***
+Box2D: 58.1
+----
+Score (version 9): 58.1
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/zlib.js,benchmark/sbxbench/zlib-data.js ***
+Error: eval not supported
+
+
+wrap@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:243:7
+doGet@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:417:7
+Membrane/this.get@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:576:7
+@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 678 > eval:424:5
+evaluate@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:701:9
+Sandbox/<@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:769:3
+runBenchmark@benchmark/sbxbench/octane.js:88:7
+@benchmark/sbxbench/octane.js:100:1
+
+
+
+
+*** Include benchmark/sbxbench/typescript-input.js,benchmark/sbxbench/typescript-compiler.js,benchmark/sbxbench/typescript.js ***
+Typescript: 886
+----
+Score (version 9): 886
+Statistic: 
