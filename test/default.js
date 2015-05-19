@@ -1,3 +1,82 @@
+
+var x = 0;
+
+var d = new Date();
+var dd = Date.now();
+for (i=0; i<10000; i++) x+=1;
+var e = new Date();
+var ee = Date.now();
+
+print(d.toString());
+print(e.toString());
+print(d<e);
+
+print(dd.toString());
+print(ee.toString());
+print(dd<ee);
+
+
+//print(Date.now());
+
+
+
+print((new Date()));
+
+
+
+
+
+
+quit();
+
+
+
+var x = 4711;
+this.y = 4712;
+
+
+var sbx = new Sandbox(this, __params__);
+sbx.apply(function() {
+  x="1";
+
+  eval("y=1; var z = 111111111111111111; print(z)");
+
+  print("SBX$x: " + x);
+  print("SBX$y: " + y);
+  print("SBX$z: " + z);
+
+});
+
+
+
+print("GLOBAL$x: " + x);
+print("GLOBAL$y: " + y);
+print("GLOBAL$z: " + z);
+
+
+
+
+quit();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 var x = 4711;
 
 var sbx = new Sandbox({}, __params__);

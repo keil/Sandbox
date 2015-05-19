@@ -1,5 +1,5 @@
 default:
-	./js -f bootstrap.js
+	./js -f bootstrap.js -f test/default.js
 
 .PHONY: test
 test :

@@ -240,6 +240,12 @@ function Sandbox(global, params) {
       return target;
 
     if(isEval(target)) {
+     // TODO, eval is not dangerous 
+      return target;
+
+      // return function (string) 
+      
+      
       throw new Error("eval not supported");
     }
 
@@ -386,7 +392,14 @@ function Sandbox(global, params) {
     */
     function doHas(scope, name) {
       var has = (affected(name)) ? (name in scope) : (name in origin);
+      
+      //print("§§§§§§§§§§§§3 " + has);
+      
       if(has===false) violation(name);
+
+      //print('adsfasdfasdfasdfa');
+      //TODO, global has always to return true. other as susual
+      return true;
 
       // TODO, Bug? volation should only be thrown if scope/origin is not the global ?
 
