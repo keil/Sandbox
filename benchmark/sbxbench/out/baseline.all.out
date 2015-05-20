@@ -104,9 +104,9 @@ Score (version 9): 13853
 
 
 *** Include benchmark/sbxbench/zlib.js,benchmark/sbxbench/zlib-data.js ***
-zlib: 28800
+zlib: 28970
 ----
-Score (version 9): 28800
+Score (version 9): 28970
 
 
 
