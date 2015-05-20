@@ -102,7 +102,9 @@ Statistic:
 
 
 *** Include benchmark/sbxbench/zlib.js,benchmark/sbxbench/zlib-data.js ***
-Error: eval not supported
+zlib: 28992
+----
+Score (version 9): 28992
 
 
 

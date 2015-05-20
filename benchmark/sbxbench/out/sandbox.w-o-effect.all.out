@@ -118,18 +118,9 @@ Statistic:
 
 
 *** Include benchmark/sbxbench/zlib.js,benchmark/sbxbench/zlib-data.js ***
-Error: eval not supported
-
-
-wrap@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:243:7
-doGet@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:417:7
-Membrane/this.get@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:576:7
-@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 678 > eval:424:5
-evaluate@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:701:9
-Sandbox/<@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:769:3
-runBenchmark@benchmark/sbxbench/octane.js:88:7
-@benchmark/sbxbench/octane.js:100:1
-
+zlib: 28948
+----
+Score (version 9): 28948
 
 
 
