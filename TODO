@@ -1,49 +1,28 @@
-- defien a diff function that checks recursiflt if differences exist, based on the write effects that are inside of teh sandbox, 
-value that are not writte are guaranteed to be idetnical.
+*** Bugs ***
 
-- why is differences not a getter?
+*** Minor Features *** 
 
-- wenn eine sandbox commited, read effects muessen geloescht werden, oder bei der berechnung von conflickten beachtet werden
+- Define a diff-function that checks (recursively) for modifications from the outside (based on effects) and modifications from inside.
 
-- can conflics compare values
-(maybe introduce a raw mode, that compares the values recursifly-- based on effect informations)?
+- Why is differences not a getter?
 
-make sbx.conflicts(sbx2);
-to sbx.conflictsWith(sbx2);
+- If a sandbox commits, read effects have to be removed or considered when calculating conflicts.
 
-warum hat xsbx.wrap kein this argument .. sbx.wrap(sbxroot)
-anstatt sbx.wrap(sbxroot, this)
+- Conflicts may compare values
+(maybe introduce a raw mode, that compares the values recursively -- based on effects)?
+
+- Make sbx.conflicts(sbx2); -- to -- sbx.conflictsWith(sbx2);
+
+- Add an event observer, for example ACP/TratJS to protext ressources
+
+- Merge from TreatJS/ degubber/ out
 
 
-* Reature, add an event observer, for example ACP to protext ressources ..
-
-* merge from TreatJS/ degubber/ out
-* bring new version
-
-*BUG*
-
-Side Effects possible when using getter or setter function,
-detect getter with 
-
-var desc = Object.getOwnPropertyDescriptor(target, 'a');
-print(desc.value);
-print(desc.writable);
-print(desc.get);
-print(desc.set);
-print(desc.configurable);
-print(desc.enumerable);
-
-and call in sandbox;
-
-*Extend Prototype*
-
-- extend function prototype
-
-*Reset*
+*** Reset *** 
  - But this is similar to the use of new Sandbox?
  - Partial reset of a value
 
-*Carbon Copy*
+*** Carbon Copy/ Transparent ***
 
  - scope and target are identical
  - but the effect system can restore values
@@ -55,14 +34,8 @@ and call in sandbox;
  - Effect e on x,
    = set x to the state before e
 
- - Sandbox,
+ - Sandbox (pre state snapshot),
    = set a sandbox value to the outside value
-
-
-*Benchmark*
-
-- Ocaten Benchmark
-- JS Bench
 
 
 *Effects*
@@ -80,10 +53,6 @@ and call in sandbox;
 
 *Behavior*
 
- - What to do of (name in target)===false?
-   Because of access chains prevent break out or return undefined.
-   Test this.
-
  - Wrap/Decompile functions
    ~ no return wrap
    ~ decompile in proxy required because of an external value
@@ -97,13 +66,6 @@ and call in sandbox;
    ~ seal
    ~ isExtensible
    ~ typeof/instanceof in combination with Object.GetPrototypeOf and A.prototype
-
-*Eval*
-
-js> print(Function.prototype.toString.apply(eval));
- function eval() {
-     [native code]
- }
 
 
 *Rollback*

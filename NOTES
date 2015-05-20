@@ -3,6 +3,7 @@
 * Limitations*
 
 a) getOwnPropertyDescriptor
+b) function.bind
 
 
 *Strict Mode*

@@ -842,16 +842,17 @@ function Sandbox(global, params) {
 
   var readset = new WeakMap();
   var writeset = new WeakMap();
+  // TODO, 3th type missing
 
-  var effectset = new WeakMap();
+  //var effectset = new WeakMap();
 
-  var readeffects = [];
-  var writeeffects = [];
-  var effects = [];
+  //var readeffects = [];
+  //var writeeffects = [];
+  //var effects = [];
 
-  var readtargets = [];
-  var writetargets = [];
-  var targets = [];
+  //var readtargets = [];
+  //var writetargets = [];
+  //var targets = [];
 
   /** saves an sandbox effect
    * @param effect Effect
@@ -867,10 +868,10 @@ function Sandbox(global, params) {
       throw new Error("No effect object.");
 
     if(effect instanceof Effect.Read) {
+      if(!readset.has(effect.target)) readset.set(effect.target, []);
+      return readset.get(effect.target).push(effect);
 
-
-
-      update(readset, effect.target, {date:(new Date()).toString()});
+      //update(readset, effect.target, {date:(new Date()).toString()});
       //update(effectset, effect.target, effect);
       //readeffects.push(effect);
 
@@ -879,7 +880,10 @@ function Sandbox(global, params) {
       //targets.push(effect.target);
 
     } else if(effect instanceof Effect.Write) {
-      update(writeset, effect.target, {});
+      if(!writeset.has(effect.target)) writeset.set(effect.target, []);
+      return writeset.get(effect.target).push(effect);
+
+      //update(writeset, effect.target, {});
       //update(effectset, effect.target, effect);
       //writeeffects.push(effect);
 
@@ -888,10 +892,13 @@ function Sandbox(global, params) {
       //targets.push(effect.target);
     }
 
+    // TODO, reimplement lookup methods
 
     function update(set, target, effect) {
-      if(!set.has(target)) set.set(target, new Set());
-      return set.get(target).add(effect);
+      if(!set.has(target)) set.set(target, []);
+      return set.get(target).push(effect);
+
+      // TODO, try to call gc(); every mission entries .. 
     }
   }
 
