@@ -1,7 +1,3 @@
-./js -f bootstrap.js -f benchmark/sbxbench/octane.js
-
-
-
 *** Include benchmark/sbxbench/crypto.js ***
 Crypto: 1959
 ----
@@ -40,31 +36,6 @@ NavierStokes: 934
 ----
 Score (version 9): 934
 Statistic: 
-
-
-
-*** Include benchmark/sbxbench/gbemu-part1.js,benchmark/sbxbench/gbemu-part2.js ***
-[[--end-of-text--]]
-
-Process 38010 terminated (error 002).
-Task completed after 7 min, 16 sec.
-Charging 442s processor usage (15.76 Euro).
-
-Resource usage:
-Average processor load: 101%
-
-Processor idle time: 42804 sec
-Total execution time: 437 sec
-Total processing time: 442 sec
-Kernel mode time: 4 sec
-User mode time: 438 sec
-
-Virtual memory size: 451 MByte
-Resident set size: 401 MByte
-Text/Data segment size: 434 MByte
-Shared memory segment: 5 MByte
-
-./js -f bootstrap.js -f benchmark/sbxbench/octane.js
 
 
 
@@ -118,23 +89,3 @@ Typescript: 884
 ----
 Score (version 9): 884
 Statistic: 
-[[--end-of-text--]]
-
-Process 41187 terminated (ok).
-Task completed after 5 min, 17 sec.
-Charging 319s processor usage (11.38 Euro).
-
-Resource usage:
-Average processor load: 101%
-
-Processor idle time: 31002 sec
-Total execution time: 316 sec
-Total processing time: 319 sec
-Kernel mode time: 7 sec
-User mode time: 312 sec
-
-Virtual memory size: 328 MByte
-Resident set size: 269 MByte
-Text/Data segment size: 311 MByte
-Shared memory segment: 5 MByte
-

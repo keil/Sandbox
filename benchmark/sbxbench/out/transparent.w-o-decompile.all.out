@@ -1,7 +1,3 @@
-./js -f bootstrap.js -f benchmark/sbxbench/octane.js
-
-
-
 *** Include benchmark/sbxbench/richards.js ***
 Richards: 6429
 ----
@@ -85,31 +81,6 @@ Statistic:
 
 
 *** Include benchmark/sbxbench/gbemu-part1.js,benchmark/sbxbench/gbemu-part2.js ***
-[[--end-of-text--]]
-
-Process 41797 terminated (error 002).
-Task completed after 2 min, 52 sec.
-Charging 174s processor usage (6.21 Euro).
-
-Resource usage:
-Average processor load: 101%
-
-Processor idle time: 16883 sec
-Total execution time: 172 sec
-Total processing time: 174 sec
-Kernel mode time: 1 sec
-User mode time: 173 sec
-
-Virtual memory size: 405 MByte
-Resident set size: 342 MByte
-Text/Data segment size: 388 MByte
-Shared memory segment: 5 MByte
-
-./js -f bootstrap.js -f benchmark/sbxbench/octane.js
-
-
-
-*** Include benchmark/sbxbench/gbemu-part1.js,benchmark/sbxbench/gbemu-part2.js ***
 65538
 Gameboy: 23399
 ----
@@ -160,23 +131,3 @@ Typescript: 11962
 ----
 Score (version 9): 11962
 Statistic: 
-[[--end-of-text--]]
-
-Process 43305 terminated (ok).
-Task completed after 51 sec.
-Charging 52.9s processor usage (1.89 Euro).
-
-Resource usage:
-Average processor load: 104%
-
-Processor idle time: 4992 sec
-Total execution time: 51 sec
-Total processing time: 53 sec
-Kernel mode time: 1 sec
-User mode time: 52 sec
-
-Virtual memory size: 476 MByte
-Resident set size: 295 MByte
-Text/Data segment size: 459 MByte
-Shared memory segment: 6 MByte
-
