@@ -239,14 +239,11 @@ function Sandbox(global, params) {
     if(!(__membrane__))
       return target;
 
-    if(isEval(target)) {
-     // TODO, eval is not dangerous 
+    if(isEval(target) && __nativepassthrough__) { 
+      // Matthias Keil
+      //eval of strict mode is credible
+      //throw new Error("eval not supported");
       return target;
-
-      // return function (string) 
-      
-      
-      throw new Error("eval not supported");
     }
 
     // Native Function pass-through
@@ -392,48 +389,49 @@ function Sandbox(global, params) {
     */
     function doHas(scope, name) {
       var has = (affected(name)) ? (name in scope) : (name in origin);
-      
-      //print("§§§§§§§§§§§§3 " + has);
-      
-      if(has===false) violation(name);
 
-      //print('adsfasdfasdfasdfa');
-      //TODO, global has always to return true. other as susual
-      return true;
-
-      // TODO, Bug? volation should only be thrown if scope/origin is not the global ?
-
-      return (affected(name)) ? (name in scope) : (name in origin);
+      if(origin===global && has===false) {
+        // Note: Matthias Keil
+        // If target is global, then return true
+        violation(name);
+        return true;
+      } else {
+        return (affected(name)) ? (name in scope) : (name in origin);
+      }
     }
     /** target, name -> boolean
     */
     function doHasOwn(scope, name) {
-      return (affected(name)) ? Object.prototype.hasOwnProperty.call(scope, name) : Object.prototype.hasOwnProperty.call(origin, name);
+      return (affected(name)) ? 
+        Object.prototype.hasOwnProperty.call(scope, name): 
+        Object.prototype.hasOwnProperty.call(origin, name);
     }
     /** target, name, receiver -> any
     */
     function doGet(scope, name) {
-      // TODO, testin code
-      var desc =  (affected(name)) ? Object.getOwnPropertyDescriptor(scope, name) : 
+      var desc =  (affected(name)) ? 
+        Object.getOwnPropertyDescriptor(scope, name): 
         Object.getOwnPropertyDescriptor(origin, name);
 
       var getter = desc ? desc.get : undefined;
 
-      //print("access to: " + name);
-      //print("@@@"+getter);
-
-      if(getter) return evaluate(
-          ((affected(name)) ? Object.getOwnPropertyDescriptor(scope, name).get : Object.getOwnPropertyDescriptor(origin, name).get),
-          ((affected(name)) ? scope : origin),
-          []);
-
-      return (affected(name)) ? scope[name] : wrap(origin[name]);
+      if(getter) return evaluate(getter,((affected(name)) ? scope : origin), []);
+      else return (affected(name)) ? scope[name] : wrap(origin[name]);
     }
     /** target, name, val, receiver -> boolean
     */
     function doSet(scope, name, value) {
-      touch(scope, name); 
-      return (scope[name]=value);
+      var desc =  (affected(name)) ? 
+        Object.getOwnPropertyDescriptor(scope, name): 
+        Object.getOwnPropertyDescriptor(origin, name);
+
+      var setter = desc ? desc.set : undefined;
+
+      if(setter) return evaluate(setter,((affected(name)) ? scope : origin), [value]);
+      else {
+        touch(scope, name); 
+        return (scope[name]=value);
+      }  
     }
     /** target, name, propertyDescriptor -> any
     */
@@ -869,9 +867,9 @@ function Sandbox(global, params) {
       throw new Error("No effect object.");
 
     if(effect instanceof Effect.Read) {
-      
 
-      
+
+
       update(readset, effect.target, {date:(new Date()).toString()});
       //update(effectset, effect.target, effect);
       //readeffects.push(effect);
@@ -1293,9 +1291,112 @@ Object.defineProperty(Sandbox.prototype, "toString", {
 // \_/\___|_| /__/_\___/_||_|
 
 Object.defineProperty(Sandbox, "version", {
-  value: "TreatJS Sandbox 0.3.0 (PoC)"
+  value: "TreatJS Sandbox 0.3.3 (PoC)"
 });
 
 Object.defineProperty(Sandbox.prototype, "version", {
   value: Sandbox.version
 });
+
+//              __ _      
+// __ ___ _ _  / _(_)__ _ 
+/// _/ _ \ ' \|  _| / _` |
+//\__\___/_||_|_| |_\__, |
+//                  |___/ 
+
+Object.defineProperty(Sandbox, "DEFAULT", {
+  value: {
+    /** Verbose Mode
+     * (default: false)
+     */ verbose:false,
+    /** Enable Statistic
+     * (default: false)
+     */ statistic:true,
+    /** Decompile
+     * (default: true)
+     */ decompile:true,
+    /** Membrane
+     * (default: true)
+     */ membrane:true,
+    /** Effect
+     * (default: true)
+     */ effect:true,
+    /** Transparent Mode
+     * (default: false)
+     */ transparent:false,
+    /** MetaHandler
+     * (default: true)
+     */ metahandler:false,
+    /** Native Function pass-through
+     * (default: true)
+     */ nativepassthrough:true,
+    /** Output handler
+     * (default: ShellOut)
+     */ out:ShellOut()
+  }
+});
+
+Object.defineProperty(Sandbox, "TRANSPARENT", {
+  value: {
+    /** Verbose Mode
+     * (default: false)
+     */ verbose:false,
+    /** Enable Statistic
+     * (default: false)
+     */ statistic:false,
+    /** Decompile
+     * (default: true)
+     */ decompile:true,
+    /** Membrane
+     * (default: true)
+     */ membrane:true,
+    /** Effect
+     * (default: true)
+     */ effect:true,
+    /** Transparent Mode
+     * (default: false)
+     */ transparent:true,
+    /** MetaHandler
+     * (default: true)
+     */ metahandler:false,
+    /** Native Function pass-through
+     * (default: true)
+     */ nativepassthrough:true,
+    /** Output handler
+     * (default: ShellOut)
+     */ out:ShellOut()
+  }
+});
+
+Object.defineProperty(Sandbox, "DEBUG", {
+  value: {
+    /** Verbose Mode
+     * (default: false)
+     */ verbose:true,
+    /** Enable Statistic
+     * (default: false)
+     */ statistic:true,
+    /** Decompile
+     * (default: true)
+     */ decompile:true,
+    /** Membrane
+     * (default: true)
+     */ membrane:true,
+    /** Effect
+     * (default: true)
+     */ effect:true,
+    /** Transparent Mode
+     * (default: false)
+     */ transparent:false,
+    /** MetaHandler
+     * (default: true)
+     */ metahandler:false,
+    /** Native Function pass-through
+     * (default: true)
+     */ nativepassthrough:true,
+    /** Output handler
+     * (default: ShellOut)
+     */ out:ShellOut()
+  }
+});
+

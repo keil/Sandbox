@@ -1,4 +1,4 @@
-
+/*
 var x = 0;
 
 var d = new Date();
@@ -15,61 +15,11 @@ print(dd.toString());
 print(ee.toString());
 print(dd<ee);
 
-
 //print(Date.now());
-
-
-
 print((new Date()));
 
-
-
-
-
-
 quit();
-
-
-
-var x = 4711;
-this.y = 4712;
-
-
-var sbx = new Sandbox(this, __params__);
-sbx.apply(function() {
-  x="1";
-
-  eval("y=1; var z = 111111111111111111; print(z)");
-
-  print("SBX$x: " + x);
-  print("SBX$y: " + y);
-  print("SBX$z: " + z);
-
-});
-
-
-
-print("GLOBAL$x: " + x);
-print("GLOBAL$y: " + y);
-print("GLOBAL$z: " + z);
-
-
-
-
-quit();
-
-
-
-
-
-
-
-
-
-
-
-
-
+*/
 
 
 
@@ -79,19 +29,23 @@ quit();
 
 var x = 4711;
 
-var sbx = new Sandbox({}, __params__);
-var obj = sbx.wrap({a:4711, b:4712});
-print(obj.c);
+var sbx = new Sandbox({x:1}, Sandbox.DEBUG);
+
+//var obj = sbx.wrap({a:4711, b:4712});
+//print(obj.x);
 
 var fun = sbx.wrap(function(y) {
- return x+y;
+  x= x+y;
+  return x;
 });
+
 print(fun(1));
+print("x : " + x);
 
 
 /*
  * BUG, is need two different sandbox handler objects,
- * ine for the glo9bal, that returns always true for a has requiest, 
+ * one for the glo9bal, that returns always true for a has requiest, 
  * and one for notmal objects
  *
  */
