@@ -1,3 +1,19 @@
+*** Include benchmark/sbxbench/richards.js ***
+Richards: 4078
+----
+Score (version 9): 4078
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/deltablue.js ***
+DeltaBlue: 333
+----
+Score (version 9): 333
+Statistic: 
+
+
+
 *** Include benchmark/sbxbench/crypto.js ***
 Crypto: 1959
 ----
