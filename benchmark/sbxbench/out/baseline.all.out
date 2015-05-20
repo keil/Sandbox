@@ -56,13 +56,9 @@ Score (version 9): 11835
 
 
 *** Include benchmark/sbxbench/pdfjs.js ***
-TypeError: this is not an object or null
-
-
-@benchmark/sbxbench/octane.js line 76 > eval:501:5
-runBenchmark@benchmark/sbxbench/octane.js:90:10
-@benchmark/sbxbench/octane.js:99:1
-
+PdfJS: 9229
+----
+Score (version 9): 9229
 
 
 
@@ -121,3 +117,4 @@ TypeError: this is undefined
 @benchmark/sbxbench/octane.js line 76 > eval:1138:5
 runBenchmark@benchmark/sbxbench/octane.js:90:10
 @benchmark/sbxbench/octane.js:99:1
+./js -f bootstrap.js -f benchmark/sbxbench/octane.js
