@@ -414,7 +414,7 @@ function Sandbox(global, params) {
         Object.getOwnPropertyDescriptor(origin, name);
 
       var getter = desc ? desc.get : undefined;
-
+      
       if(getter) return evaluate(getter,((affected(name)) ? scope : origin), []);
       else return (affected(name)) ? scope[name] : wrap(origin[name]);
     }
@@ -430,8 +430,9 @@ function Sandbox(global, params) {
       if(setter) return evaluate(setter,((affected(name)) ? scope : origin), [value]);
       else {
         touch(scope, name); 
-        return (scope[name]=value);
-      }  
+        (scope[name]=value);
+      } 
+      return true;
     }
     /** target, name, propertyDescriptor -> any
     */
@@ -868,9 +869,16 @@ function Sandbox(global, params) {
       throw new Error("No effect object.");
 
     if(effect instanceof Effect.Read) {
+
+     if(readset.has(effect.target) && readset.get(effect.target).length%10000===0) {
+        print("READ" + readset.get(effect.target).length) ;
+        gc();
+      }
+
       if(!readset.has(effect.target)) readset.set(effect.target, []);
       return readset.get(effect.target).push(effect);
 
+      
       //update(readset, effect.target, {date:(new Date()).toString()});
       //update(effectset, effect.target, effect);
       //readeffects.push(effect);
@@ -880,8 +888,20 @@ function Sandbox(global, params) {
       //targets.push(effect.target);
 
     } else if(effect instanceof Effect.Write) {
+      
+      if(writeset.has(effect.target) && writeset.get(effect.target).length%10000===0) {
+        print("WRITE" + writeset.get(effect.target).length) ;
+        gc();
+      }
+
+      
+      
       if(!writeset.has(effect.target)) writeset.set(effect.target, []);
       return writeset.get(effect.target).push(effect);
+
+     // if(writeset.size%100000===0) {
+     //   print(writeset.size) ;
+     // }
 
       //update(writeset, effect.target, {});
       //update(effectset, effect.target, effect);

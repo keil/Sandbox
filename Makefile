@@ -9,7 +9,7 @@ octane :
 	./js -f bootstrap.js -f benchmark/octane/octane.js -f benchmark/octane/run.js
 
 sbxbench :
-	./js -f bootstrap.js -f benchmark/sbxbench/octane.js
+	./jsx  -f bootstrap.js -f benchmark/sbxbench/octane.js
 
 baseline :
 	./js -f bootstrap.js -f benchmark/baseline/trunk/run.js
