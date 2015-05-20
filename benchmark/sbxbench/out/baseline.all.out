@@ -111,10 +111,6 @@ Score (version 9): 28800
 
 
 *** Include benchmark/sbxbench/typescript-input.js,benchmark/sbxbench/typescript-compiler.js,benchmark/sbxbench/typescript.js ***
-TypeError: this is undefined
-
-
-@benchmark/sbxbench/octane.js line 76 > eval:1138:5
-runBenchmark@benchmark/sbxbench/octane.js:90:10
-@benchmark/sbxbench/octane.js:99:1
-./js -f bootstrap.js -f benchmark/sbxbench/octane.js
+Typescript: 11813
+----
+Score (version 9): 11813
