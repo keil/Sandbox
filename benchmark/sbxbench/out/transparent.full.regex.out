@@ -1,0 +1,29 @@
+./js -f bootstrap.js -f benchmark/sbxbench/octane.js
+
+
+
+*** Include benchmark/sbxbench/regexp.js ***
+RegExp: 823
+----
+Score (version 9): 823
+Statistic: 
+[[--end-of-text--]]
+
+Process 32560 terminated (ok).
+Task completed after 15 sec.
+Charging 14.0s processor usage (0.50 Euro).
+
+Resource usage:
+Average processor load: 90.9%
+
+Processor idle time: 1508.3 sec
+Total execution time: 15.4 sec
+Total processing time: 14.0 sec
+Kernel mode time: 0.2 sec
+User mode time: 13.7 sec
+
+Virtual memory size: 225 MByte
+Resident set size: 163 MByte
+Text/Data segment size: 208 MByte
+Shared memory segment: 5 MByte
+

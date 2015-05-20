@@ -1,0 +1,33 @@
+./js -f bootstrap.js -f benchmark/sbxbench/octane.js
+
+
+
+*** Include benchmark/sbxbench/richards.js ***
+Richards: 0.879
+----
+Score (version 9): 0.879
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/deltablue.js ***
+[[--end-of-text--]]
+
+Process 62520 terminated (Interrupt).
+Task completed after 19 hours, 13 min, 21 sec.
+Charging 73455s processor usage (2622.33 Euro).
+
+Resource usage:
+Average processor load: 106%
+
+Processor idle time: 6777370 sec
+Total execution time: 69200 sec
+Total processing time: 73455 sec
+Kernel mode time: 308 sec
+User mode time: 73147 sec
+
+Virtual memory size: 2700 MByte
+Resident set size: 2628 MByte
+Text/Data segment size: 2683 MByte
+Shared memory segment: 5 MByte
+

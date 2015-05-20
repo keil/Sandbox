@@ -1,0 +1,194 @@
+./js -f bootstrap.js -f benchmark/sbxbench/octane.js
+
+
+
+*** Include benchmark/sbxbench/richards.js ***
+Richards: 4070
+----
+Score (version 9): 4070
+Statistic: 
+[[--end-of-text--]]
+
+Process 34256 terminated (ok).
+Task completed after 16 sec.
+Charging 14.2s processor usage (0.51 Euro).
+
+Resource usage:
+Average processor load: 88.9%
+
+Processor idle time: 1570.9 sec
+Total execution time: 16.0 sec
+Total processing time: 14.2 sec
+Kernel mode time: 0.1 sec
+User mode time: 14.1 sec
+
+Virtual memory size: 167 MByte
+Resident set size: 101 MByte
+Text/Data segment size: 150 MByte
+Shared memory segment: 5 MByte
+
+./js -f bootstrap.js -f benchmark/sbxbench/octane.js
+
+
+
+*** Include benchmark/sbxbench/deltablue.js ***
+DeltaBlue: 225
+----
+Score (version 9): 225
+Statistic: 
+[[--end-of-text--]]
+
+Process 34331 terminated (ok).
+Task completed after 3 min, 57 sec.
+Charging 245s processor usage (8.75 Euro).
+
+Resource usage:
+Average processor load: 103%
+
+Processor idle time: 23293 sec
+Total execution time: 238 sec
+Total processing time: 245 sec
+Kernel mode time: 5 sec
+User mode time: 240 sec
+
+Virtual memory size: 2691 MByte
+Resident set size: 2588 MByte
+Text/Data segment size: 2674 MByte
+Shared memory segment: 5 MByte
+
+./js -f bootstrap.js -f benchmark/sbxbench/octane.js
+
+
+
+*** Include benchmark/sbxbench/crypto.js ***
+Crypto: 1666
+----
+Score (version 9): 1666
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/earley-boyer.js ***
+EarleyBoyer: 618
+----
+Score (version 9): 618
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/regexp.js ***
+RegExp: 887
+----
+Score (version 9): 887
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/splay.js ***
+Splay: 669
+SplayLatency: 563
+----
+Score (version 9): 613
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/navier-stokes.js ***
+NavierStokes: 938
+----
+Score (version 9): 938
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/gbemu-part1.js,benchmark/sbxbench/gbemu-part2.js ***
+[[--end-of-text--]]
+
+Process 34475 terminated (error 002).
+Task completed after 7 min, 53 sec.
+Charging 480s processor usage (17.15 Euro).
+
+Resource usage:
+Average processor load: 102%
+
+Processor idle time: 46347 sec
+Total execution time: 473 sec
+Total processing time: 480 sec
+Kernel mode time: 4 sec
+User mode time: 476 sec
+
+Virtual memory size: 2505 MByte
+Resident set size: 2411 MByte
+Text/Data segment size: 2488 MByte
+Shared memory segment: 5 MByte
+
+./js -f bootstrap.js -f benchmark/sbxbench/octane.js
+
+
+
+*** Include benchmark/sbxbench/gbemu-part1.js,benchmark/sbxbench/gbemu-part2.js ***
+65538
+Gameboy: 4577
+----
+Score (version 9): 4577
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/code-load.js ***
+CodeLoad: Error: eval not supported
+wrap@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:243:7
+doGet@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:417:7
+Membrane/this.get@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:576:7
+setupCodeLoad@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 678 > eval:484:3
+RunNextSetup@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 678 > eval:356:9
+BenchmarkSuite.prototype.RunStep@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 678 > eval:389:3
+RunStep@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 678 > eval:157:11
+BenchmarkSuite.RunSuites@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 678 > eval:173:3
+@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 678 > eval:2025:28
+evaluate@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:701:9
+Sandbox/<@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:769:3
+runBenchmark@benchmark/sbxbench/octane.js:87:7
+@benchmark/sbxbench/octane.js:99:1
+
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/zlib.js,benchmark/sbxbench/zlib-data.js ***
+Error: eval not supported
+
+
+wrap@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:243:7
+doGet@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:417:7
+Membrane/this.get@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:576:7
+@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 678 > eval:424:5
+evaluate@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:701:9
+Sandbox/<@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:769:3
+runBenchmark@benchmark/sbxbench/octane.js:87:7
+@benchmark/sbxbench/octane.js:99:1
+
+
+
+
+*** Include benchmark/sbxbench/typescript-input.js,benchmark/sbxbench/typescript-compiler.js,benchmark/sbxbench/typescript.js ***
+[[--end-of-text--]]
+
+Process 37819 terminated (error 002).
+Task completed after 3 min, 53 sec.
+Charging 236s processor usage (8.44 Euro).
+
+Resource usage:
+Average processor load: 102%
+
+Processor idle time: 22787 sec
+Total execution time: 233 sec
+Total processing time: 236 sec
+Kernel mode time: 6 sec
+User mode time: 231 sec
+
+Virtual memory size: 3107 MByte
+Resident set size: 3027 MByte
+Text/Data segment size: 3090 MByte
+Shared memory segment: 5 MByte
+

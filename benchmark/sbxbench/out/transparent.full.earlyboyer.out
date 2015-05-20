@@ -1,0 +1,29 @@
+./js -f bootstrap.js -f benchmark/sbxbench/octane.js
+
+
+
+*** Include benchmark/sbxbench/earley-boyer.js ***
+EarleyBoyer: 633
+----
+Score (version 9): 633
+Statistic: 
+[[--end-of-text--]]
+
+Process 32297 terminated (ok).
+Task completed after 4 min, 59 sec.
+Charging 301s processor usage (10.75 Euro).
+
+Resource usage:
+Average processor load: 101%
+
+Processor idle time: 29227 sec
+Total execution time: 298 sec
+Total processing time: 301 sec
+Kernel mode time: 2 sec
+User mode time: 299 sec
+
+Virtual memory size: 1351 MByte
+Resident set size: 1295 MByte
+Text/Data segment size: 1334 MByte
+Shared memory segment: 5 MByte
+

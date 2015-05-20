@@ -1,0 +1,25 @@
+./js -f bootstrap.js -f benchmark/sbxbench/octane.js
+
+
+
+*** Include benchmark/sbxbench/typescript-input.js,benchmark/sbxbench/typescript-compiler.js,benchmark/sbxbench/typescript.js ***
+[[--end-of-text--]]
+
+Process 34023 terminated (error 002).
+Task completed after 3 min, 25 sec.
+Charging 208s processor usage (7.44 Euro).
+
+Resource usage:
+Average processor load: 102%
+
+Processor idle time: 20057 sec
+Total execution time: 205 sec
+Total processing time: 208 sec
+Kernel mode time: 5 sec
+User mode time: 203 sec
+
+Virtual memory size: 2893 MByte
+Resident set size: 2814 MByte
+Text/Data segment size: 2876 MByte
+Shared memory segment: 5 MByte
+

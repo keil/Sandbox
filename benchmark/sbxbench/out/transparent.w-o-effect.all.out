@@ -1,0 +1,140 @@
+./js -f bootstrap.js -f benchmark/sbxbench/octane.js
+
+
+
+*** Include benchmark/sbxbench/crypto.js ***
+Crypto: 1959
+----
+Score (version 9): 1959
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/earley-boyer.js ***
+EarleyBoyer: 663
+----
+Score (version 9): 663
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/regexp.js ***
+RegExp: 903
+----
+Score (version 9): 903
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/splay.js ***
+Splay: 776
+SplayLatency: 2276
+----
+Score (version 9): 1329
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/navier-stokes.js ***
+NavierStokes: 934
+----
+Score (version 9): 934
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/gbemu-part1.js,benchmark/sbxbench/gbemu-part2.js ***
+[[--end-of-text--]]
+
+Process 38010 terminated (error 002).
+Task completed after 7 min, 16 sec.
+Charging 442s processor usage (15.76 Euro).
+
+Resource usage:
+Average processor load: 101%
+
+Processor idle time: 42804 sec
+Total execution time: 437 sec
+Total processing time: 442 sec
+Kernel mode time: 4 sec
+User mode time: 438 sec
+
+Virtual memory size: 451 MByte
+Resident set size: 401 MByte
+Text/Data segment size: 434 MByte
+Shared memory segment: 5 MByte
+
+./js -f bootstrap.js -f benchmark/sbxbench/octane.js
+
+
+
+*** Include benchmark/sbxbench/gbemu-part1.js,benchmark/sbxbench/gbemu-part2.js ***
+65538
+Gameboy: 5027
+----
+Score (version 9): 5027
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/code-load.js ***
+CodeLoad: Error: eval not supported
+wrap@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:243:7
+doGet@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:417:7
+Membrane/this.get@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:576:7
+setupCodeLoad@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 678 > eval:484:3
+RunNextSetup@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 678 > eval:356:9
+BenchmarkSuite.prototype.RunStep@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 678 > eval:389:3
+RunStep@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 678 > eval:157:11
+BenchmarkSuite.RunSuites@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 678 > eval:173:3
+@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 678 > eval:2025:28
+evaluate@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:701:9
+Sandbox/<@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:769:3
+runBenchmark@benchmark/sbxbench/octane.js:87:7
+@benchmark/sbxbench/octane.js:99:1
+
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/zlib.js,benchmark/sbxbench/zlib-data.js ***
+Error: eval not supported
+
+
+wrap@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:243:7
+doGet@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:417:7
+Membrane/this.get@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:576:7
+@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 678 > eval:424:5
+evaluate@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:701:9
+Sandbox/<@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:769:3
+runBenchmark@benchmark/sbxbench/octane.js:87:7
+@benchmark/sbxbench/octane.js:99:1
+
+
+
+
+*** Include benchmark/sbxbench/typescript-input.js,benchmark/sbxbench/typescript-compiler.js,benchmark/sbxbench/typescript.js ***
+Typescript: 884
+----
+Score (version 9): 884
+Statistic: 
+[[--end-of-text--]]
+
+Process 41187 terminated (ok).
+Task completed after 5 min, 17 sec.
+Charging 319s processor usage (11.38 Euro).
+
+Resource usage:
+Average processor load: 101%
+
+Processor idle time: 31002 sec
+Total execution time: 316 sec
+Total processing time: 319 sec
+Kernel mode time: 7 sec
+User mode time: 312 sec
+
+Virtual memory size: 328 MByte
+Resident set size: 269 MByte
+Text/Data segment size: 311 MByte
+Shared memory segment: 5 MByte
+

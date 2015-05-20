@@ -1,0 +1,37 @@
+./js -f bootstrap.js -f benchmark/sbxbench/octane.js
+
+
+
+*** Include benchmark/sbxbench/zlib.js,benchmark/sbxbench/zlib-data.js ***
+Error: eval not supported
+
+
+wrap@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:243:7
+doGet@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:417:7
+Membrane/this.get@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:576:7
+@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 678 > eval:424:5
+evaluate@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:701:9
+Sandbox/<@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:769:3
+runBenchmark@benchmark/sbxbench/octane.js:87:7
+@benchmark/sbxbench/octane.js:99:1
+
+[[--end-of-text--]]
+
+Process 33830 terminated (ok).
+Task completed after 0 sec.
+Charging 0.040s processor usage (0.00 Euro).
+
+Resource usage:
+Average processor load: 24.5%
+
+Processor idle time: 16.1 sec
+Total execution time: 0.2 sec
+Total processing time: 0.0 sec
+Kernel mode time: 0.0 sec
+User mode time: 0.0 sec
+
+Virtual memory size: 76 MByte
+Resident set size: 11 MByte
+Text/Data segment size: 59 MByte
+Shared memory segment: 4 MByte
+

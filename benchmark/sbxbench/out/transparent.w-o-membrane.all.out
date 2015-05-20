@@ -1,0 +1,182 @@
+./js -f bootstrap.js -f benchmark/sbxbench/octane.js
+
+
+
+*** Include benchmark/sbxbench/richards.js ***
+Richards: 6561
+----
+Score (version 9): 6561
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/deltablue.js ***
+DeltaBlue: 4676
+----
+Score (version 9): 4676
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/crypto.js ***
+Crypto: 11097
+----
+Score (version 9): 11097
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/raytrace.js ***
+RayTrace: 3937
+----
+Score (version 9): 3937
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/earley-boyer.js ***
+EarleyBoyer: 2751
+----
+Score (version 9): 2751
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/regexp.js ***
+RegExp: 1194
+----
+Score (version 9): 1194
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/splay.js ***
+Splay: 1394
+SplayLatency: 1322
+----
+Score (version 9): 1358
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/navier-stokes.js ***
+NavierStokes: 12220
+----
+Score (version 9): 12220
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/pdfjs.js ***
+PdfJS: 8716
+----
+Score (version 9): 8716
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/mandreel.js ***
+Mandreel: 8360
+MandreelLatency: 16729
+----
+Score (version 9): 11826
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/gbemu-part1.js,benchmark/sbxbench/gbemu-part2.js ***
+[[--end-of-text--]]
+
+Process 46545 terminated (error 002).
+Task completed after 2 min, 53 sec.
+Charging 175s processor usage (6.26 Euro).
+
+Resource usage:
+Average processor load: 101%
+
+Processor idle time: 17037 sec
+Total execution time: 174 sec
+Total processing time: 175 sec
+Kernel mode time: 1 sec
+User mode time: 174 sec
+
+Virtual memory size: 404 MByte
+Resident set size: 340 MByte
+Text/Data segment size: 387 MByte
+Shared memory segment: 5 MByte
+
+./js -f bootstrap.js -f benchmark/sbxbench/octane.js
+
+
+
+*** Include benchmark/sbxbench/gbemu-part1.js,benchmark/sbxbench/gbemu-part2.js ***
+65538
+Gameboy: 23694
+----
+Score (version 9): 23694
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/code-load.js ***
+CodeLoad: ReferenceError: MockElement is not defined
+@benchmark/sbxbench/octane.js line 76 > eval line 1939 > eval:1:189
+runJQuery/<@benchmark/sbxbench/octane.js line 76 > eval:1939:9
+runJQuery@benchmark/sbxbench/octane.js line 76 > eval:1931:4
+runCodeLoadJQuery@benchmark/sbxbench/octane.js line 76 > eval:498:3
+Measure@benchmark/sbxbench/octane.js line 76 > eval:307:7
+BenchmarkSuite.prototype.RunSingleBenchmark@benchmark/sbxbench/octane.js line 76 > eval:322:5
+RunNextBenchmark@benchmark/sbxbench/octane.js line 76 > eval:369:7
+RunStep@benchmark/sbxbench/octane.js line 76 > eval:150:9
+BenchmarkSuite.RunSuites@benchmark/sbxbench/octane.js line 76 > eval:173:3
+@benchmark/sbxbench/octane.js line 76 > eval:2025:28
+evaluate@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:701:9
+Sandbox/<@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:769:3
+runBenchmark@benchmark/sbxbench/octane.js:87:7
+@benchmark/sbxbench/octane.js:99:1
+
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/box2d.js ***
+Box2D: 13912
+----
+Score (version 9): 13912
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/zlib.js,benchmark/sbxbench/zlib-data.js ***
+zlib: 28909
+----
+Score (version 9): 28909
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/typescript-input.js,benchmark/sbxbench/typescript-compiler.js,benchmark/sbxbench/typescript.js ***
+Typescript: 11189
+----
+Score (version 9): 11189
+Statistic: 
+[[--end-of-text--]]
+
+Process 12816 terminated (ok).
+Task completed after 50 sec.
+Charging 53.0s processor usage (1.89 Euro).
+
+Resource usage:
+Average processor load: 107%
+
+Processor idle time: 4834 sec
+Total execution time: 49 sec
+Total processing time: 53 sec
+Kernel mode time: 0 sec
+User mode time: 53 sec
+
+Virtual memory size: 490 MByte
+Resident set size: 303 MByte
+Text/Data segment size: 473 MByte
+Shared memory segment: 6 MByte
+
