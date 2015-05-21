@@ -1,3 +1,82 @@
+this.objA = {};
+
+var sbx = new Sandbox(this, Sandbox.DEBUG);
+
+sbx.apply(function(y) {
+  this.objB = objA;
+}, this);
+
+
+print("---");
+print(sbx.readeffectsOf(this));
+print(sbx.writeeffectsOf(this));
+print("---");
+print(sbx.readeffectsOf(objA));
+print(sbx.writeeffectsOf(objA));
+
+print('objA' in this);
+print('objB' in this);
+
+sbx.writeeffectsOf(this)[0].commit();
+
+print('objA' in this);
+print('objB' in this);
+
+objA.x;
+objB.x;
+
+objA.y=1;
+objB.y=1;
+
+print(sbx.readeffectsOf(objA));
+print(sbx.writeeffectsOf(objA));
+
+
+
+quit();
+
+this.obj = {};
+
+var sbx = new Sandbox(this, Sandbox.DEBUG);
+
+sbx.apply(function(y) {
+  obj.x;
+  obj.y = 1;
+  obj.y;obj.y;obj.y;
+  obj.y;obj.y;obj.y;
+}, this);
+
+
+//print("---");
+//print(sbx.readeffectsOf(this));
+//print(sbx.writeeffectsOf(this));
+print("---");
+print(sbx.readeffectsOf(obj));
+print(sbx.writeeffectsOf(obj));
+
+
+/*
+ * BUG, is need two different sandbox handler objects,
+ * one for the glo9bal, that returns always true for a has requiest, 
+ * and one for notmal objects
+ *
+ */
+
+quit();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
 var x = 0;
 

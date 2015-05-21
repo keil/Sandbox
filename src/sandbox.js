@@ -211,6 +211,7 @@ function Sandbox(global, params) {
   //                |_|   
 
   var cache = new WeakMap();
+  var reverse = new WeakMap();
   var pool = new Set();
 
   /** 
@@ -233,6 +234,8 @@ function Sandbox(global, params) {
     if(target===undefined)
       throw new ReferenceError("Target is undefined.");
 
+    // TODO
+    // avooids re-wrapping
     if(pool.has(target)) return target;
 
     // Membrane ? 
@@ -290,10 +293,25 @@ function Sandbox(global, params) {
       var handler = make(new Membrane(target));
       var proxy = new Proxy(scope, handler);
       cache.set(target, proxy);
+      reverse.set(proxy, target); // TODO
       pool.add(proxy);
       return proxy;
     }
   }
+
+  // TODO, unwrap
+   function unwrap(value) {
+     print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+     if (value !== Object(value)) return value;
+     print("%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+
+     // TODO
+     //print("### call upwrap");
+     if(!reverse.has(value)) return value;
+     print("UNWRAP ''''''''''''''''''''''''''");
+     //print("### unwrap " + contractOf(origin));
+     return unwrap(reverse.get(value));
+   }
 
   /**
    * cloneObject(target)
@@ -315,6 +333,7 @@ function Sandbox(global, params) {
 
     var clone = Object.create(Object.getPrototypeOf(target));
 
+    print(target);
     for (var property in target) {
       if (target.hasOwnProperty(property)) {
         var descriptor = Object.getOwnPropertyDescriptor(target, property);
@@ -600,7 +619,8 @@ function Sandbox(global, params) {
     */
     this.set = function(scope, name, value, receiver) {
       logc("set", name);
-      trace(new Effect.Set(origin, scope, name, value, receiver));
+      // TODO
+      trace(new Effect.Set(origin, scope, name, unwrap(value), receiver));
 
       return doSet(scope, name, value);
     };
