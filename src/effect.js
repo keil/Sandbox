@@ -34,7 +34,7 @@ var Effect = (function() {
 
     Object.defineProperties(this, {
       "date": {
-        value: new Date() 
+        value: Date.now() 
       },
       "target": {
         value: target
@@ -125,7 +125,7 @@ var Effect = (function() {
   }
   Get.prototype = Object.create(Read.prototype);
   Get.prototype.toString = function() {
-    return "(" + this.date.getTime() + ")"+" "+"get [name="+this.name+"]"; 
+    return "(" + this.date + ")"+" "+"get [name="+this.name+"]"; 
   }
 
   /** target, name -> PropertyDescriptor | undefined
@@ -142,7 +142,7 @@ var Effect = (function() {
   }
   GetOwnPropertyDescriptor.prototype = Object.create(Read.prototype);
   GetOwnPropertyDescriptor.prototype.toString = function() {
-    return "(" + this.date.getTime() + ")"+" "+"getOwnPropertyDescriptor [name="+this.name+"]"; 
+    return "(" + this.date + ")"+" "+"getOwnPropertyDescriptor [name="+this.name+"]"; 
   }
 
   /** target -> [String]
@@ -153,7 +153,7 @@ var Effect = (function() {
   }
   GetOwnPropertyNames.prototype = Object.create(Read.prototype);
   GetOwnPropertyNames.prototype.toString = function() {
-    return "(" + this.date.getTime() + ")"+" "+"getOwnPropertyNames"; 
+    return "(" + this.date + ")"+" "+"getOwnPropertyNames"; 
   }
 
   /** target, name -> boolean
@@ -170,7 +170,7 @@ var Effect = (function() {
   }
   Has.prototype = Object.create(Read.prototype);
   Has.prototype.toString = function() {
-    return "(" + this.date.getTime() + ")"+" "+"has [name="+this.name+"]"; 
+    return "(" + this.date + ")"+" "+"has [name="+this.name+"]"; 
   }
 
   /** target, name -> boolean
@@ -187,7 +187,7 @@ var Effect = (function() {
   }
   HasOwn.prototype = Object.create(Read.prototype);
   HasOwn.prototype.toString = function() {
-    return "(" + this.date.getTime() + ")"+" "+"hasOwn [name="+this.name+"]"; 
+    return "(" + this.date + ")"+" "+"hasOwn [name="+this.name+"]"; 
   }
 
   /** target -> [String]
@@ -198,7 +198,7 @@ var Effect = (function() {
   }
   Enumerate.prototype = Object.create(Read.prototype);
   Enumerate.prototype.toString = function() {
-    return "(" + this.date.getTime() + ")"+" "+"enumerate"; 
+    return "(" + this.date + ")"+" "+"enumerate"; 
   }
 
   /** target -> iterator
@@ -209,7 +209,7 @@ var Effect = (function() {
   }
   Iterate.prototype = Object.create(Read.prototype);
   Iterate.prototype.toString = function() {
-    return "(" + this.date.getTime() + ")"+" "+"iterate"; 
+    return "(" + this.date + ")"+" "+"iterate"; 
   }
 
   /** target -> [String]
@@ -220,7 +220,7 @@ var Effect = (function() {
   }
   Keys.prototype = Object.create(Read.prototype);
   Keys.prototype.toString = function() {
-    return "(" + this.date.getTime() + ")"+" "+"keys"; 
+    return "(" + this.date + ")"+" "+"keys"; 
   }
 
   /** target -> boolean
@@ -232,7 +232,7 @@ var Effect = (function() {
   }
   IsExtensible.prototype = Object.create(Read.prototype);
   IsExtensible.prototype.toString = function() {
-    return "(" + this.date.getTime() + ")"+" "+"isExtensible";
+    return "(" + this.date + ")"+" "+"isExtensible";
   }
 
   //  ___      _ _   ___  __  __        _      
@@ -257,7 +257,7 @@ var Effect = (function() {
   }
   Apply.prototype = Object.create(Call.prototype);
   Apply.prototype.toString = function() {
-    return "(" + this.date.getTime() + ")"+" "+"apply"; 
+    return "(" + this.date + ")"+" "+"apply"; 
   }
 
   /** target, thisArg, argsArray -> obejct
@@ -277,7 +277,7 @@ var Effect = (function() {
   }
   Construct.prototype = Object.create(Call.prototype);
   Construct.prototype.toString = function() {
-    return "(" + this.date.getTime() + ")"+" "+"construct"; 
+    return "(" + this.date + ")"+" "+"construct"; 
   }
 
   //__      __   _ _         ___  __  __        _      
@@ -320,7 +320,7 @@ var Effect = (function() {
   }
   Set.prototype = Object.create(Write.prototype);
   Set.prototype.toString = function() {
-    return "(" + this.date.getTime() + ")"+" "+"set [name="+this.name+"]";
+    return "(" + this.date + ")"+" "+"set [name="+this.name+"]";
   }
 
   /** target, name, propertyDescriptor -> any
@@ -359,7 +359,7 @@ var Effect = (function() {
   }
   DefineProperty.prototype = Object.create(Write.prototype);
   DefineProperty.prototype.toString = function() {
-    return "(" + this.date.getTime() + ")"+" "+"defineProperty [name="+this.name+"]";
+    return "(" + this.date + ")"+" "+"defineProperty [name="+this.name+"]";
   }
 
   /** target, name -> boolean
@@ -396,7 +396,7 @@ var Effect = (function() {
   }
   DeleteProperty.prototype = Object.create(Write.prototype);
   DeleteProperty.prototype.toString = function() {
-    return "(" + this.date.getTime() + ")"+" "+"deleteProperty [name="+this.name+"]";
+    return "(" + this.date + ")"+" "+"deleteProperty [name="+this.name+"]";
   }
 
   /** target -> boolean
@@ -429,7 +429,7 @@ var Effect = (function() {
   }
   Freeze.prototype = Object.create(Write.prototype);
   Freeze.prototype.toString = function() {
-    return "(" + this.date.getTime() + ")"+" "+"freeze";
+    return "(" + this.date + ")"+" "+"freeze";
   }
 
   /** target -> boolean
@@ -463,7 +463,7 @@ var Effect = (function() {
   }
   Seal.prototype = Object.create(Write.prototype);
   Seal.prototype.toString = function() {
-    return "(" + this.date.getTime() + ")"+" "+"seal";
+    return "(" + this.date + ")"+" "+"seal";
   }
 
   /** target -> boolean
@@ -496,7 +496,7 @@ var Effect = (function() {
   }
   PreventExtensions.prototype = Object.create(Write.prototype);
   PreventExtensions.prototype.toString = function() {
-    return "(" + this.date.getTime() + ")"+" "+"preventExtensions";
+    return "(" + this.date + ")"+" "+"preventExtensions";
   }
 
   //  ___           __ _ _    _   
