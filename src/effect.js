@@ -25,12 +25,6 @@ var Effect = (function() {
 
     if(!(target instanceof Object))
       throw new TypeError("No traget object.");
-/*
-    print("BEGIN TIME");
-    var timestamp = Date.now();
-    print("@@@" + timestamp);
-    print("END TIME");
-*/
 
     Object.defineProperties(this, {
       "date": {
