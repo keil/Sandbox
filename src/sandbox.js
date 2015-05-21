@@ -566,6 +566,11 @@ function Sandbox(global, params) {
     /** target, name -> boolean
     */
     this.has = function(scope, name) {
+
+      // TODO, BUG, accesst to undefined;
+      if(origin===global && name==='undefined') return true;
+
+
       logc("has", name);
       trace(new Effect.Has(origin, name));
 
@@ -582,6 +587,10 @@ function Sandbox(global, params) {
     /** target, name, receiver -> any
     */
     this.get = function(scope, name, receiver) {
+
+      // TODO, BUG, accesst to undefined;
+      if(origin===global && name==='undefined') return undefined;
+
       logc("get", name);
       trace(new Effect.Get(origin, name, receiver));
 
@@ -851,6 +860,10 @@ function Sandbox(global, params) {
   //var writeeffects = [];
   //var effects = [];
 
+   var ri = 0;
+    var wi = 0;
+
+
   //var readtargets = [];
   //var writetargets = [];
   //var targets = [];
@@ -868,16 +881,25 @@ function Sandbox(global, params) {
     if(!(effect instanceof Effect.Effect))
       throw new Error("No effect object.");
 
+   
     if(effect instanceof Effect.Read) {
 
-     if(readset.has(effect.target) && readset.get(effect.target).length%10000===0) {
+     /*if(readset.has(effect.target) && readset.get(effect.target).length%10000===0) {
         print("READ" + readset.get(effect.target).length) ;
         gc();
-      }
+      }*/
+
+      ri++;
+      //=++ri;
+      //print(ri);
+      if(ri%1000000===0) print(ri);
+
+      //print(effect); /// >TODO
 
       if(!readset.has(effect.target)) readset.set(effect.target, []);
       return readset.get(effect.target).push(effect);
 
+      
       
       //update(readset, effect.target, {date:(new Date()).toString()});
       //update(effectset, effect.target, effect);
@@ -889,16 +911,19 @@ function Sandbox(global, params) {
 
     } else if(effect instanceof Effect.Write) {
       
-      if(writeset.has(effect.target) && writeset.get(effect.target).length%10000===0) {
+      /*if(writeset.has(effect.target) && writeset.get(effect.target).length%10000===0) {
         print("WRITE" + writeset.get(effect.target).length) ;
         gc();
-      }
+      }*/
+      
 
-      
-      
+   //   
+   //   wi++;//wi;
+   //   if(wi%1000000===0) print(wi);
+
+
       if(!writeset.has(effect.target)) writeset.set(effect.target, []);
       return writeset.get(effect.target).push(effect);
-
      // if(writeset.size%100000===0) {
      //   print(writeset.size) ;
      // }
