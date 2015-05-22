@@ -24,7 +24,10 @@ Statistic:
 
 
 *** Include benchmark/sbxbench/raytrace.js ***
-
+RayTrace: 158
+----
+Score (version 9): 158
+Statistic: 
 
 
 ** Include benchmark/sbxbench/earley-boyer.js ***
@@ -60,11 +63,20 @@ Statistic:
 
 
 
-*** Include benchmark/sbxbench/pdfjs.js ***
+**** Include benchmark/sbxbench/pdfjs.js ***
+PdfJS: 84.4
+----
+Score (version 9): 84.4
+Statistic: 
 
 
 
 *** Include benchmark/sbxbench/mandreel.js ***
+Mandreel: 94.9
+MandreelLatency: 455
+----
+Score (version 9): 208
+Statistic: 
 
 
 
@@ -98,7 +110,9 @@ Statistic:
 
 
 *** Include benchmark/sbxbench/box2d.js ***
-
+Box2D: 84.3
+----
+Score (version 9): 84.3
 
 
 *** Include benchmark/sbxbench/zlib.js,benchmark/sbxbench/zlib-data.js ***

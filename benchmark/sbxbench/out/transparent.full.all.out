@@ -22,6 +22,14 @@ Statistic:
 
 
 
+*** Include benchmark/sbxbench/raytrace.js ***
+RayTrace: 157
+----
+Score (version 9): 157
+Statistic: 
+
+
+
 *** Include benchmark/sbxbench/earley-boyer.js ***
 EarleyBoyer: 618
 ----
@@ -55,6 +63,23 @@ Statistic:
 
 
 
+*** Include benchmark/sbxbench/pdfjs.js ***
+PdfJS: 85.4
+----
+Score (version 9): 85.4
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/mandreel.js ***
+Mandreel: 95.5
+MandreelLatency: 437
+----
+Score (version 9): 204
+Statistic: 
+
+
+
 *** Include benchmark/sbxbench/gbemu-part1.js,benchmark/sbxbench/gbemu-part2.js ***
 65538
 Gameboy: 4577
@@ -80,6 +105,14 @@ Sandbox/<@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:7
 runBenchmark@benchmark/sbxbench/octane.js:87:7
 @benchmark/sbxbench/octane.js:99:1
 
+Statistic: 
+
+
+
+*** Include benchmark/sbxbench/box2d.js ***
+Box2D: 82.4
+----
+Score (version 9): 82.4
 Statistic: 
 
 
