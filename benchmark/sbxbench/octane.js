@@ -31,9 +31,9 @@ var benchmarks = [];
 //benchmarks.push(base_dir + 'pdfjs.js');
 //benchmarks.push(base_dir + 'mandreel.js');
 //benchmarks.push([base_dir + 'gbemu-part1.js', base_dir + 'gbemu-part2.js']);
-//benchmarks.push(base_dir + 'code-load.js'); //Error: eval not supported
+benchmarks.push(base_dir + 'code-load.js'); //Error: eval not supported
 //benchmarks.push(base_dir + 'box2d.js');
-benchmarks.push([base_dir + 'zlib.js', base_dir + 'zlib-data.js']); //Error: eval not supported
+//benchmarks.push([base_dir + 'zlib.js', base_dir + 'zlib-data.js']); //Error: eval not supported
 //benchmarks.push([base_dir + 'typescript-input.js', base_dir + 'typescript-compiler.js', base_dir + 'typescript.js']);
 
 //for(var i in benchmarks) print("$$$" + benchmarks[i]);

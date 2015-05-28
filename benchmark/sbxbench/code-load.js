@@ -1524,19 +1524,6 @@ function runClosure() {
   })();
 }
 
-function MockElement() {
-  this.appendChild = function(a) {};
-  this.createComment = function(a) {};
-  this.createDocumentFragment = function() { return new MockElement(); };
-  this.createElement = function(a) { return new MockElement(); };
-  this.documentElement = this;
-  this.getElementById = function(a) { return 0; };
-  this.getElementsByTagName = function(a) {return [0];};
-  this.insertBefore = function(a, b) {};
-  this.removeChild = function(a) {};
-  this.setAttribute = function(a, b) {};
-}
-
 function runJQuery() {
   (function() {
     var src = "var windowmock = {'document':new MockElement(),\
@@ -1546,7 +1533,7 @@ function runJQuery() {
               "(function(){return windowmock.jQuery.grep([jQuerySalt],\
               function(a,b){return true;})[0];})();";
     src = cacheBust(src, "jQuery");
-    var result = indirectEval(src);
+    var result = eval(src); //indirectEval(src); no indirect eval possible
     if (result != salt) throw(new Error("Incorrect result: " + result));
   })();
 }

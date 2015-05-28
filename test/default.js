@@ -1,3 +1,31 @@
+var x = "L";
+
+function XTest() {
+}
+
+
+function f() {
+
+  var Test = function() {
+  }
+
+    var e = eval;
+
+  //eval("x=new Test()");
+  e("x=new Test()");
+
+};
+
+f();
+
+var sbx = new Sandbox(this, Sandbox.DEBUG);
+//sbx.apply(f);
+
+print("XXXXX" + x);
+
+
+quit();
+
 this.objA = {};
 
 var sbx = new Sandbox(this, Sandbox.DEBUG);
