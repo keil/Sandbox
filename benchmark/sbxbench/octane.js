@@ -53,16 +53,16 @@ function getNewSandbox() {
      */ statistic:false,
     /** Decompile
      * (default: true)
-     */ decompile:true,
+     */ decompile:false,
     /** Membrane
      * (default: true)
-     */ membrane:true,
+     */ membrane:false,
     /** Effect
      * (default: true)
-     */ effect:true,
+     */ effect:false,
     /** Transparent Mode
      * (default: false)
-     */ transparent:false,
+     */ transparent:true,
     /** MetaHandler
      * (default: true)
      */ metahandler:false,
@@ -114,4 +114,4 @@ function runBenchmark(inSandbox) {
   }
 }
 
-runBenchmark(true);
+runBenchmark(false);
