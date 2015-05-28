@@ -293,7 +293,7 @@ function Sandbox(global, params) {
       var handler = make(new Membrane(target));
       var proxy = new Proxy(scope, handler);
       cache.set(target, proxy);
-      reverse.set(proxy, target); // TODO
+      //reverse.set(proxy, target); // TODO
       pool.add(proxy);
       return proxy;
     }
@@ -301,16 +301,11 @@ function Sandbox(global, params) {
 
   // TODO, unwrap
    function unwrap(value) {
-     print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-     if (value !== Object(value)) return value;
-     print("%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+     return value;
 
-     // TODO
-     //print("### call upwrap");
+     /*if (value !== Object(value)) return value;
      if(!reverse.has(value)) return value;
-     print("UNWRAP ''''''''''''''''''''''''''");
-     //print("### unwrap " + contractOf(origin));
-     return unwrap(reverse.get(value));
+     return unwrap(reverse.get(value));*/
    }
 
   /**
@@ -333,7 +328,7 @@ function Sandbox(global, params) {
 
     var clone = Object.create(Object.getPrototypeOf(target));
 
-    print(target);
+    //print(target);
     for (var property in target) {
       if (target.hasOwnProperty(property)) {
         var descriptor = Object.getOwnPropertyDescriptor(target, property);
@@ -904,22 +899,8 @@ function Sandbox(global, params) {
    
     if(effect instanceof Effect.Read) {
 
-     /*if(readset.has(effect.target) && readset.get(effect.target).length%10000===0) {
-        print("READ" + readset.get(effect.target).length) ;
-        gc();
-      }*/
-
-      ri++;
-      //=++ri;
-      //print(ri);
-      if(ri%1000000===0) print(ri);
-
-      //print(effect); /// >TODO
-
       if(!readset.has(effect.target)) readset.set(effect.target, []);
       return readset.get(effect.target).push(effect);
-
-      
       
       //update(readset, effect.target, {date:(new Date()).toString()});
       //update(effectset, effect.target, effect);
@@ -931,23 +912,9 @@ function Sandbox(global, params) {
 
     } else if(effect instanceof Effect.Write) {
       
-      /*if(writeset.has(effect.target) && writeset.get(effect.target).length%10000===0) {
-        print("WRITE" + writeset.get(effect.target).length) ;
-        gc();
-      }*/
-      
-
-   //   
-   //   wi++;//wi;
-   //   if(wi%1000000===0) print(wi);
-
-
       if(!writeset.has(effect.target)) writeset.set(effect.target, []);
       return writeset.get(effect.target).push(effect);
-     // if(writeset.size%100000===0) {
-     //   print(writeset.size) ;
-     // }
-
+     
       //update(writeset, effect.target, {});
       //update(effectset, effect.target, effect);
       //writeeffects.push(effect);
@@ -958,12 +925,9 @@ function Sandbox(global, params) {
     }
 
     // TODO, reimplement lookup methods
-
     function update(set, target, effect) {
       if(!set.has(target)) set.set(target, []);
       return set.get(target).push(effect);
-
-      // TODO, try to call gc(); every mission entries .. 
     }
   }
 

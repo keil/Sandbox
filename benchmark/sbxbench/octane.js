@@ -90,6 +90,7 @@ function makeBenchmark(benchmark) {
   }
 
   var str = "(function() { \"use strict\";\n " + basestr + benchmarkstr + runstr + "})";
+  //print(str);
   var fun = eval(str);
   return fun;
 }
