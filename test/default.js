@@ -1,3 +1,98 @@
+
+
+
+
+for(var p in Date) print(p);
+print(Math.abs);
+
+
+
+
+
+
+
+
+
+
+
+//quit();
+
+
+// Indirect eval will break the encapsulation
+// eval.bind ist not equals to eval, and thus not filterewd
+
+// --> implement whitelisting
+// --> eval as function call
+
+var x = "L";
+
+function testx (f) {
+  "use strict";
+
+  var e = eval;
+  //print(Function.prototype.toString.apply(f));
+
+//f("x = 'oIo'; y=2; var z=3;");
+
+
+/*
+  eval("x = 'oIo'; y=2; var z=3;");
+  print(y);
+  print(z);
+  */
+
+}
+
+var sbx = new Sandbox(this, Sandbox.DEBUG);
+sbx.apply(testx, this, [eval.bind(this)]);
+
+
+print(x);
+print(y);
+print(z);
+
+
+
+
+
+
+
+
+
+
+
+quit();
+
+var x = "L";
+
+function test () {
+  "use strict";
+
+  var e = eval; 
+
+  e("x = 'oIo'; /*y=2;*/ var z=3;");
+  print(z);
+
+}
+
+test();
+
+
+print(x);
+//print(y);
+//print(z);
+
+
+
+
+
+
+
+
+
+
+
+/*
 var x = "L";
 
 function XTest() {
@@ -23,7 +118,7 @@ var sbx = new Sandbox(this, Sandbox.DEBUG);
 
 print("XXXXX" + x);
 
-
+*/
 quit();
 
 this.objA = {};

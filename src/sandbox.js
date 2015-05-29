@@ -242,11 +242,17 @@ function Sandbox(global, params) {
     if(!(__membrane__))
       return target;
 
-    if(isEval(target) && __nativepassthrough__) { 
-      // Matthias Keil
-      //eval of strict mode is credible
-      //throw new Error("eval not supported");
-      return target;
+    if(isEval(target) && __nativepassthrough__) {
+      return eval
+      //return eval.bind(global);
+      
+      function sbxeval(str) {
+        
+        return eval.call(global, '"use strict"; ' + str);
+      }
+
+      sbxeval.toString = eval.toString.bind(eval);
+      return sbxeval;
     }
 
     // Native Function pass-through
@@ -329,12 +335,12 @@ function Sandbox(global, params) {
     var clone = Object.create(Object.getPrototypeOf(target));
 
     //print(target);
-    for (var property in target) {
+    /*for (var property in target) {
       if (target.hasOwnProperty(property)) {
         var descriptor = Object.getOwnPropertyDescriptor(target, property);
         Object.defineProperty(clone, property, descriptor);
-      }   
-    }
+      }  
+    }*/
     return clone;
   }
 
@@ -1327,7 +1333,7 @@ Object.defineProperty(Sandbox.prototype, "toString", {
 // \_/\___|_| /__/_\___/_||_|
 
 Object.defineProperty(Sandbox, "version", {
-  value: "TreatJS Sandbox 0.3.3 (PoC)"
+  value: "TreatJS Sandbox 0.3.4 (PoC)"
 });
 
 Object.defineProperty(Sandbox.prototype, "version", {

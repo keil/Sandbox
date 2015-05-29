@@ -62,6 +62,8 @@ format_80col("function InitializeZlibBenchmark() {" +
 # ----------------------- END GENERATOR SCRIPT ---------------------
 */
 
+var Module;
+
 function InitializeZlibBenchmark() {zlibEval('function j(a){throw a;}var k=\
 void 0,n=!0,r=null,t=!1;function u(){return function(){}}try{this.Module=Module\
 ,Module.test}catch(aa){this.Module=Module={}}var ba="object"===typeof process&&\
