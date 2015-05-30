@@ -2,21 +2,12 @@
 
 
 
-for(var p in Date) print(p);
-print(Math.abs);
-
-
-
-
-
-
-
-
 
 
 
 //quit();
 
+// test new engine
 
 // Indirect eval will break the encapsulation
 // eval.bind ist not equals to eval, and thus not filterewd
@@ -30,10 +21,11 @@ function testx (f) {
   "use strict";
 
   var e = eval;
-  //print(Function.prototype.toString.apply(f));
+  print(Function.prototype.toString.apply(f));
 
 //f("x = 'oIo'; y=2; var z=3;");
 
+  eval("x = 'oIo'; y=2; var z=3;");
 
 /*
   eval("x = 'oIo'; y=2; var z=3;");

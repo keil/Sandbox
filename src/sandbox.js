@@ -243,7 +243,27 @@ function Sandbox(global, params) {
       return target;
 
     if(isEval(target) && __nativepassthrough__) {
-      return eval
+      
+      
+      var evalhandler = {
+        apply: function(target, thisArg, argumentsList) {
+          print("********* " + argumentsList[0]);
+          argumentsList[0] = '"use strict"; ' + argumentsList[0];
+          print("********* " + argumentsList[0]);
+          target.apply(thisArg, argumentsList);
+        }
+      }
+     
+      //return eval;
+      //return new Proxy(eval, {});
+      return new Proxy(eval, evalhandler);
+      
+      
+      
+      
+      
+      
+      //return eval
       //return eval.bind(global);
       
       function sbxeval(str) {
