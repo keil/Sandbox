@@ -44,11 +44,6 @@ Shared memory segment: 5 MByte
 
 
 
-*** Include benchmark/sbxbench/code-load.js ***
-CodeLoad: 5123
-----
-Score (version 9): 5123
-Statistic: 
 [[--end-of-text--]]
 
 Process 37536 terminated (ok).
@@ -73,11 +68,6 @@ Shared memory segment: 5 MByte
 
 
 
-*** Include benchmark/sbxbench/code-load.js ***
-CodeLoad: 5264
-----
-Score (version 9): 5264
-Statistic: 
 [[--end-of-text--]]
 
 Process 37574 terminated (ok).
@@ -102,11 +92,6 @@ Shared memory segment: 5 MByte
 
 
 
-*** Include benchmark/sbxbench/code-load.js ***
-CodeLoad: 5597
-----
-Score (version 9): 5597
-Statistic: 
 [[--end-of-text--]]
 
 Process 37612 terminated (ok).
@@ -160,11 +145,6 @@ Shared memory segment: 5 MByte
 
 
 
-*** Include benchmark/sbxbench/code-load.js ***
-CodeLoad: 6715
-----
-Score (version 9): 6715
-Statistic: 
 [[--end-of-text--]]
 
 Process 37685 terminated (ok).
@@ -305,10 +285,7 @@ Shared memory segment: 5 MByte
 
 
 
-*** Include benchmark/sbxbench/code-load.js ***
-CodeLoad: 6732
-----
-Score (version 9): 6732
+
 Statistic: 
 [[--end-of-text--]]
 
@@ -334,10 +311,6 @@ Shared memory segment: 5 MByte
 
 
 
-*** Include benchmark/sbxbench/code-load.js ***
-CodeLoad: 6761
-----
-Score (version 9): 6761
 [[--end-of-text--]]
 
 Process 37901 terminated (ok).

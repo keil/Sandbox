@@ -90,21 +90,9 @@ Statistic:
 
 
 *** Include benchmark/sbxbench/code-load.js ***
-CodeLoad: Error: eval not supported
-wrap@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:243:7
-doGet@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:417:7
-Membrane/this.get@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:576:7
-setupCodeLoad@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 678 > eval:484:3
-RunNextSetup@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 678 > eval:356:9
-BenchmarkSuite.prototype.RunStep@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 678 > eval:389:3
-RunStep@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 678 > eval:157:11
-BenchmarkSuite.RunSuites@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 678 > eval:173:3
-@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 678 > eval:2025:28
-evaluate@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:701:9
-Sandbox/<@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:769:3
-runBenchmark@benchmark/sbxbench/octane.js:88:7
-@benchmark/sbxbench/octane.js:100:1
-
+CodeLoad: 5264
+----
+Score (version 9): 5264
 Statistic: 
 
 

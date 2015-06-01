@@ -301,39 +301,30 @@ Shared memory segment: 5 MByte
 
 
 
-*** Include benchmark/sbxbench/code-load.js ***
-CodeLoad: ReferenceError: MockElement is not defined
-@benchmark/sbxbench/octane.js line 94 > eval line 1939 > eval:1:189
-runJQuery/<@benchmark/sbxbench/octane.js line 94 > eval:1939:9
-runJQuery@benchmark/sbxbench/octane.js line 94 > eval:1931:4
-runCodeLoadJQuery@benchmark/sbxbench/octane.js line 94 > eval:498:3
-Measure@benchmark/sbxbench/octane.js line 94 > eval:307:7
-BenchmarkSuite.prototype.RunSingleBenchmark@benchmark/sbxbench/octane.js line 94 > eval:322:5
-RunNextBenchmark@benchmark/sbxbench/octane.js line 94 > eval:369:7
-RunStep@benchmark/sbxbench/octane.js line 94 > eval:150:9
-BenchmarkSuite.RunSuites@benchmark/sbxbench/octane.js line 94 > eval:173:3
-@benchmark/sbxbench/octane.js line 94 > eval:2025:28
-runBenchmark@benchmark/sbxbench/octane.js:108:12
-@benchmark/sbxbench/octane.js:117:1
 
+*** Include benchmark/sbxbench/code-load.js ***
+CodeLoad: 5123
+----
+Score (version 9): 5123
+Statistic: 
 [[--end-of-text--]]
 
-Process 18854 terminated (ok).
-Task completed after 5 sec.
-Charging 5.000s processor usage (0.18 Euro).
+Process 37536 terminated (ok).
+Task completed after 14 sec.
+Charging 14.0s processor usage (0.50 Euro).
 
 Resource usage:
-Average processor load: 95.0%
+Average processor load: 103%
 
-Processor idle time: 516.1 sec
-Total execution time: 5.3 sec
-Total processing time: 5.0 sec
-Kernel mode time: 0.1 sec
-User mode time: 4.9 sec
+Processor idle time: 1331 sec
+Total execution time: 14 sec
+Total processing time: 14 sec
+Kernel mode time: 0 sec
+User mode time: 14 sec
 
-Virtual memory size: 170 MByte
-Resident set size: 101 MByte
-Text/Data segment size: 153 MByte
+Virtual memory size: 187 MByte
+Resident set size: 119 MByte
+Text/Data segment size: 170 MByte
 Shared memory segment: 5 MByte
 
 ./js --available-memory=6000 -f bootstrap.js -f benchmark/sbxbench/octane.js

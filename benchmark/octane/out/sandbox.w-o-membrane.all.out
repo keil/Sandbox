@@ -90,22 +90,9 @@ Statistic:
 
 
 *** Include benchmark/sbxbench/code-load.js ***
-CodeLoad: ReferenceError: MockElement is not defined
-@benchmark/sbxbench/octane.js line 77 > eval line 1939 > eval:1:189
-runJQuery/<@benchmark/sbxbench/octane.js line 77 > eval:1939:9
-runJQuery@benchmark/sbxbench/octane.js line 77 > eval:1931:4
-runCodeLoadJQuery@benchmark/sbxbench/octane.js line 77 > eval:498:3
-Measure@benchmark/sbxbench/octane.js line 77 > eval:307:7
-BenchmarkSuite.prototype.RunSingleBenchmark@benchmark/sbxbench/octane.js line 77 > eval:322:5
-RunNextBenchmark@benchmark/sbxbench/octane.js line 77 > eval:369:7
-RunStep@benchmark/sbxbench/octane.js line 77 > eval:150:9
-BenchmarkSuite.RunSuites@benchmark/sbxbench/octane.js line 77 > eval:173:3
-@benchmark/sbxbench/octane.js line 77 > eval:2025:28
-evaluate@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:701:9
-Sandbox/<@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:769:3
-runBenchmark@benchmark/sbxbench/octane.js:88:7
-@benchmark/sbxbench/octane.js:100:1
-
+CodeLoad: 6715
+----
+Score (version 9): 6715
 Statistic: 
 
 

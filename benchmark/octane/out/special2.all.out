@@ -1,7 +1,3 @@
-./js --available-memory=6000 -f bootstrap.js -f benchmark/sbxbench/octane.js
-
-
-
 *** Include benchmark/sbxbench/richards.js ***
 Richards: 5834
 ----
@@ -119,22 +115,9 @@ Statistic:
 
 
 *** Include benchmark/sbxbench/code-load.js ***
-CodeLoad: ReferenceError: MockElement is not defined
-@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 714 > eval line 1939 > eval:1:189
-runJQuery/<@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 714 > eval:1939:9
-runJQuery@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 714 > eval:1931:4
-runCodeLoadJQuery@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 714 > eval:498:3
-Measure@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 714 > eval:307:7
-BenchmarkSuite.prototype.RunSingleBenchmark@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 714 > eval:322:5
-RunNextBenchmark@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 714 > eval:369:7
-RunStep@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 714 > eval:150:9
-BenchmarkSuite.RunSuites@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 714 > eval:173:3
-@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 714 > eval:2025:28
-evaluate@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:737:9
-Sandbox/<@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:805:3
-runBenchmark@benchmark/sbxbench/octane.js:105:9
-@benchmark/sbxbench/octane.js:117:1
-
+CodeLoad: 5637 
+----
+Score (version 9): 5637
 Statistic: 
 
 

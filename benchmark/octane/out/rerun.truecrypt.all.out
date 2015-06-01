@@ -2,11 +2,6 @@
 
 
 
-*** Include benchmark/sbxbench/typescript-input.js,benchmark/sbxbench/typescript-compiler.js,benchmark/sbxbench/typescript.js ***
-Typescript: 3006
-----
-Score (version 9): 3006
-Statistic: 
 [[--end-of-text--]]
 
 Process 17868 terminated (ok).

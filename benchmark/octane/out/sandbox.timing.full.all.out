@@ -370,41 +370,28 @@ Shared memory segment: 5 MByte
 
 
 *** Include benchmark/sbxbench/code-load.js ***
-CodeLoad: ReferenceError: MockElement is not defined
-@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 714 > eval line 1939 > eval:1:189
-runJQuery/<@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 714 > eval:1939:9
-runJQuery@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 714 > eval:1931:4
-runCodeLoadJQuery@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 714 > eval:498:3
-Measure@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 714 > eval:307:7
-BenchmarkSuite.prototype.RunSingleBenchmark@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 714 > eval:322:5
-RunNextBenchmark@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 714 > eval:369:7
-RunStep@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 714 > eval:150:9
-BenchmarkSuite.RunSuites@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 714 > eval:173:3
-@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js line 714 > eval:2025:28
-evaluate@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:737:9
-Sandbox/<@/home/keilr/workspace/JSProxy/branches/TreatJSSandbox/src/sandbox.js:805:3
-runBenchmark@benchmark/sbxbench/octane.js:105:9
-@benchmark/sbxbench/octane.js:117:1
-
+CodeLoad: 5148
+----
+Score (version 9): 5148
 Statistic: 
 [[--end-of-text--]]
 
-Process 3256 terminated (ok).
-Task completed after 15 sec.
-Charging 5.700s processor usage (0.20 Euro).
+Process 37724 terminated (ok).
+Task completed after 14 sec.
+Charging 14.0s processor usage (0.50 Euro).
 
 Resource usage:
-Average processor load: 37.3%
+Average processor load: 102%
 
-Processor idle time: 1505.8 sec
-Total execution time: 15.3 sec
-Total processing time: 5.7 sec
-Kernel mode time: 0.1 sec
-User mode time: 5.6 sec
+Processor idle time: 1336 sec
+Total execution time: 14 sec
+Total processing time: 14 sec
+Kernel mode time: 0 sec
+User mode time: 14 sec
 
-Virtual memory size: 173 MByte
-Resident set size: 104 MByte
-Text/Data segment size: 156 MByte
+Virtual memory size: 187 MByte
+Resident set size: 117 MByte
+Text/Data segment size: 170 MByte
 Shared memory segment: 5 MByte
 
 ./js --available-memory=6000 -f bootstrap.js -f benchmark/sbxbench/octane.js
