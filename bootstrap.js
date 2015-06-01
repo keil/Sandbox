@@ -13,7 +13,7 @@
  * http://www.informatik.uni-freiburg.de/~keilr/
  */
 
-load("lib/padding.js")
+load("lib/padding.js");
 
 load("src/misc.js");
 load("src/out.js");
@@ -51,9 +51,9 @@ var sbxArgs = {
   /** MetaHandler
    * (default: true)
    */ metahandler:false,
-  /** Native Function pass-through
-   * (default: true)
-   */ nativepassthrough:true,
+  /** Function pass-through
+   * (default: [])
+   */ passthrough:[print, Function.prototype.call, Function.prototype.apply],
   /** Output handler
    * (default: ShellOut)
    */ out:ShellOut()

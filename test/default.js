@@ -1,7 +1,26 @@
+var values = [{}, {}, {}];
+var map = new WeakMap(values);
+map.set(values[0],values[0]);
+print(map.has(values[0]));
 
 
+quit();
+
+var array = [1, 2, "test", {a: 10}];
+var set = new WeakSet(array);
 
 
+print(set.has.apply(set, [array[3]]));
+
+quit();
+
+print(set.has(1));
+
+for(var x in Date.prototype) print(x);
+
+Object.getOwnPropertyNames(Array.prototype);
+
+quit();
 
 
 

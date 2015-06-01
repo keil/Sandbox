@@ -41,8 +41,8 @@
  * - metahandler
  *   Implements a proxy meta handler. (default: true)
  *
- * - nativepassthrough
- *   Tells the sandbox to do not decompile natice functins. (default: true)
+ * - passthrough
+ *   Tells the sandbox to do not decompile functions. (default: [])
  *
  * - out
  *   Instance for the output. (default: new Out())
@@ -97,10 +97,10 @@ function Sandbox(global, params) {
   var __metahandler__ = configure("metahandler", true);
 
   /*
-   * Native Function pass-through
-   * (default: true)
+   * Function pass-through
+   * (default: {})
    */
-  var __nativepassthrough__ = configure("nativepassthrough", true);
+  var __passthrough__ = configure("passthrough", []);
 
   /*
    * Output
@@ -175,16 +175,24 @@ function Sandbox(global, params) {
   //|_/__/_|\_\__,_|\__|_|\_/\___|_| \_,_|_||_\__|\__|_\___/_||_|
 
   var FunctionPrototypeToString = Function.prototype.toString;
+  var passthrough = new Set((__passthrough__ instanceof Array) ? __passthrough__ : []);
 
-  /** isNative(fun)
-   * Checks whether the given function is a native function or not.
+  /** isPassThrough(fun)
+   * Checks whether the given function is a pass-through function or not.
    *
    * @param fuc Function Object
-   * @return true, if fun is a native function, false otherwise
+   * @return true, if fun is a pass-through function, false otherwise
    */
-  function isNative(fun) {
+  function isPassThrough(fun) {
     if(!(fun instanceof Function)) return false;
-    else return (FunctionPrototypeToString.apply(fun).indexOf('[native code]') > -1);
+    else {
+      return passthrough.has(fun);
+    }
+    
+    // Note: Matthias Keil
+    // deprecated, Function.bind makes all functions to a native function
+    // this, this check will not work as expected
+    // return (FunctionPrototypeToString.apply(fun).indexOf('[native code]') > -1);
   }
 
   // _    ___          _ 
@@ -231,20 +239,21 @@ function Sandbox(global, params) {
 
     increment("wrap");
 
+    // If target is undefined, then throw an exception
+    // Matthias Keil: should never occur because of Object(target)
     if(target===undefined)
       throw new ReferenceError("Target is undefined.");
 
-    // TODO
-    // avooids re-wrapping
+    // avoids re-wrapping
     if(pool.has(target)) return target;
 
     // Membrane ? 
     if(!(__membrane__))
       return target;
 
-    if(isEval(target) && __nativepassthrough__) {
-      
-      
+    // Eval
+    if(isEval(target)) {
+      /*
       var evalhandler = {
         apply: function(target, thisArg, argumentsList) {
           print("********* " + argumentsList[0]);
@@ -253,33 +262,30 @@ function Sandbox(global, params) {
           target.apply(thisArg, argumentsList);
         }
       }
-     
+
       //return eval;
       //return new Proxy(eval, {});
       return new Proxy(eval, evalhandler);
-      
-      
-      
-      
-      
-      
+
       //return eval
       //return eval.bind(global);
-      
+
       function sbxeval(str) {
-        
+
         return eval.call(global, '"use strict"; ' + str);
       }
 
       sbxeval.toString = eval.toString.bind(eval);
       return sbxeval;
+      */
+      // TODO
+      return undefined;
     }
 
-    // Native Function pass-through
-    if((target instanceof Function) && __nativepassthrough__) {
-      if(isNative(target)) {
-        return target;
-      }
+    // Function pass throught
+    if((target instanceof Function) && isPassThrough(target)) {
+      log("target pass-throught");
+      return target;
     }
 
     // If target already wrapped, return cached proxy
@@ -290,6 +296,8 @@ function Sandbox(global, params) {
     } else {
       log("Cache miss.");
       increment("Cache miss");
+
+      // TODO, check if already required
 
       // decompiles function or clones object
       // to preserve typeof/ instanceof
@@ -319,20 +327,25 @@ function Sandbox(global, params) {
       var handler = make(new Membrane(target));
       var proxy = new Proxy(scope, handler);
       cache.set(target, proxy);
-      //reverse.set(proxy, target); // TODO
+      reverse.set(proxy, target);
       pool.add(proxy);
       return proxy;
     }
   }
 
-  // TODO, unwrap
-   function unwrap(value) {
-     return value;
-
-     /*if (value !== Object(value)) return value;
-     if(!reverse.has(value)) return value;
-     return unwrap(reverse.get(value));*/
-   }
+  /**
+   * unwrap(value)
+   * unwraps a sandbox value
+   *
+   * @param value JavaScript Object
+   * @return JavaScript Object
+   */
+  // TODO
+  function unwrap(value) {
+    if (value !== Object(value)) return value;
+    if(!reverse.has(value)) return value;
+    return unwrap(reverse.get(value));
+  }
 
   /**
    * cloneObject(target)
@@ -348,19 +361,19 @@ function Sandbox(global, params) {
     if(__transparent__)
       return target;
 
-
     if(!(target instanceof Object))
       throw new Error("No JavaScript Object.");
 
     var clone = Object.create(Object.getPrototypeOf(target));
 
+    // TODO
     //print(target);
-    /*for (var property in target) {
+    for (var property in target) {
       if (target.hasOwnProperty(property)) {
         var descriptor = Object.getOwnPropertyDescriptor(target, property);
         Object.defineProperty(clone, property, descriptor);
       }  
-    }*/
+    }
     return clone;
   }
 
@@ -736,10 +749,13 @@ function Sandbox(global, params) {
     // var body = "(" + fun.toString() + ")"; 
     // var sbxed = eval("(function() { with(env) { return " + body + " }})();");
 
-    var body = "(function() {'use strict'; return " + ("(" + fun.toString() + ")") + "})();";
-    var sbxed = eval("(function() { with(env) { return " + body + " }})();");
-
-    return sbxed;
+    try {
+      var body = "(function() {'use strict'; return " + ("(" + fun.toString() + ")") + "})();";
+      var sbxed = eval("(function() { with(env) { return " + body + " }})();");
+      return sbxed;
+    } catch(error) {
+      throw new SyntaxError("Incompatible function object." + "\n" + fun);
+    } 
   }
 
   /** evaluate
@@ -920,7 +936,7 @@ function Sandbox(global, params) {
     if(!__effect__) return true;
 
     if(!(effect instanceof Effect.Effect))
-      throw new Error("No effect object.");
+      throw new TypeError("No effect object.");
 
    
     if(effect instanceof Effect.Read) {
@@ -1353,7 +1369,7 @@ Object.defineProperty(Sandbox.prototype, "toString", {
 // \_/\___|_| /__/_\___/_||_|
 
 Object.defineProperty(Sandbox, "version", {
-  value: "TreatJS Sandbox 0.3.4 (PoC)"
+  value: "TreatJS Sandbox 0.4.0 (PoC)"
 });
 
 Object.defineProperty(Sandbox.prototype, "version", {
@@ -1388,10 +1404,10 @@ Object.defineProperty(Sandbox, "DEFAULT", {
      */ transparent:false,
     /** MetaHandler
      * (default: true)
-     */ metahandler:false,
-    /** Native Function pass-through
-     * (default: true)
-     */ nativepassthrough:true,
+     */ metahandler:true,
+    /** Function pass-through
+     * (default: [])
+     */ passthrough:[],
     /** Output handler
      * (default: ShellOut)
      */ out:ShellOut()
@@ -1420,10 +1436,10 @@ Object.defineProperty(Sandbox, "TRANSPARENT", {
      */ transparent:true,
     /** MetaHandler
      * (default: true)
-     */ metahandler:false,
-    /** Native Function pass-through
-     * (default: true)
-     */ nativepassthrough:true,
+     */ metahandler:true,
+    /** Function pass-through
+     * (default: [])
+     */ passthrough:[],
     /** Output handler
      * (default: ShellOut)
      */ out:ShellOut()
@@ -1452,13 +1468,12 @@ Object.defineProperty(Sandbox, "DEBUG", {
      */ transparent:false,
     /** MetaHandler
      * (default: true)
-     */ metahandler:false,
-    /** Native Function pass-through
-     * (default: true)
-     */ nativepassthrough:true,
+     */ metahandler:true,
+    /** Function pass-through
+     * (default: [])
+     */ passthrough:[print],
     /** Output handler
      * (default: ShellOut)
      */ out:ShellOut()
   }
 });
-

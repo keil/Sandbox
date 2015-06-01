@@ -1,0 +1,17 @@
+
+*** TreatJS Sandbox 0.4.0 (PoC)
+
+
+*** TreatJS Sandbox 0.4.0 (PoC)
+
+
+*** TreatJS Sandbox 0.4.0 (PoC)
+
+- Deprecated: nativePassThrought
+- New: Function pass-throught
+
+
+- clone?
+- eval
+- New: fine-graned effect selection
+

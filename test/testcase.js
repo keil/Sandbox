@@ -21,6 +21,18 @@ function Testcase(fun, globalArg, thisArg, argsArray, name, quitOnExit) {
 
   var params = {
     verbose: true,
+    passthrough:[
+      print, 
+      valueOf,
+      Function, 
+      Function.prototype.call, 
+      Function.prototype.apply,
+      Function.prototype.toString, 
+      Object, 
+      Object.prototype.keys, 
+      Object.prototype.getPrototypeOf,
+      Object.prototype.toString
+    ],
     out: out
   }
 
