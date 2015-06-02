@@ -1,5 +1,5 @@
 var values = [{}, {}, {}];
-var map = new WeakMap(values);
+var map = new WeakMap();
 map.set(values[0],values[0]);
 print(map.has(values[0]));
 
