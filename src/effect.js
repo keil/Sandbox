@@ -574,7 +574,7 @@ var Effect = (function() {
   // Core Effects
   Package.export("Read", Read, Effects);
   Package.export("Write", Write, Effects);
-  Package.export("Apply", Apply, Effects);
+  Package.export("Call", Call, Effects);
 
   // Read Effects
   Package.export("Get", Get, Effects);

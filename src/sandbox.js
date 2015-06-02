@@ -2,7 +2,7 @@
  * TreatJS: Sandbox 
  * http://proglang.informatik.uni-freiburg.de/treatjs/
  *
- * Copyright (c) 2014, Proglang, University of Freiburg.
+ * Copyright (c) 2014-2015, Proglang, University of Freiburg.
  * http://proglang.informatik.uni-freiburg.de/treatjs/
  * All rights reserved.
  *
@@ -188,7 +188,7 @@ function Sandbox(global, params) {
     else {
       return passthrough.has(fun);
     }
-    
+
     // Note: Matthias Keil
     // deprecated, Function.bind makes all functions to a native function
     // this, this check will not work as expected
@@ -254,14 +254,14 @@ function Sandbox(global, params) {
     // Eval
     if(isEval(target)) {
       /*
-      var evalhandler = {
-        apply: function(target, thisArg, argumentsList) {
-          print("********* " + argumentsList[0]);
-          argumentsList[0] = '"use strict"; ' + argumentsList[0];
-          print("********* " + argumentsList[0]);
-          target.apply(thisArg, argumentsList);
-        }
-      }
+         var evalhandler = {
+         apply: function(target, thisArg, argumentsList) {
+         print("********* " + argumentsList[0]);
+         argumentsList[0] = '"use strict"; ' + argumentsList[0];
+         print("********* " + argumentsList[0]);
+         target.apply(thisArg, argumentsList);
+         }
+         }
 
       //return eval;
       //return new Proxy(eval, {});
@@ -272,7 +272,7 @@ function Sandbox(global, params) {
 
       function sbxeval(str) {
 
-        return eval.call(global, '"use strict"; ' + str);
+      return eval.call(global, '"use strict"; ' + str);
       }
 
       sbxeval.toString = eval.toString.bind(eval);
@@ -391,7 +391,13 @@ function Sandbox(global, params) {
       throw new Error("No JavaScript Function.");
 
     var clone = decompile(target, wrap(global));
-    clone.prototype = wrap(target.prototype);
+    // TODO XXX
+    //clone.prototype = target.prototype;
+    print("@@@@ " + target.prototype);
+    var xxx = wrap(target.prototype);
+    print("#### " + wrap(target.prototype));
+    clone.prototype = wrap(target.prototype); //wrap(target.prototype);
+    print("$$$$ " + clone.prototype);
     return clone;
   }
 
@@ -467,7 +473,7 @@ function Sandbox(global, params) {
         Object.getOwnPropertyDescriptor(origin, name);
 
       var getter = desc ? desc.get : undefined;
-      
+
       if(getter) return evaluate(getter,((affected(name)) ? scope : origin), []);
       else return (affected(name)) ? scope[name] : wrap(origin[name]);
     }
@@ -484,7 +490,7 @@ function Sandbox(global, params) {
       else {
         touch(scope, name); 
         (scope[name]=value);
-      } 
+      }
       return true;
     }
     /** target, name, propertyDescriptor -> any
@@ -705,10 +711,22 @@ function Sandbox(global, params) {
       logc("construct");
       trace(new Effect.Construct(origin, thisArg, argsArray));
 
-      var thisArg = Object.create(scope.prototype);
-      var val = scope.apply(thisArg, wrap(argsArray));
+      return new scope(wrap(argsArray));
+
+
+      print("=============> " + scope.prototype);
+
+      var newThis = Object.create(scope.prototype);
+
+      print("=============> " + newThis.toString());
+
+
+      var val = scope.apply(newThis, wrap(argsArray));
+
+      print("=============> " + val);
+
       // return thisArg | val
-      return (val instanceof Object) ? val : thisArg;
+      return (val instanceof Object) ? val : newThis;
     };
   };
 
@@ -909,21 +927,11 @@ function Sandbox(global, params) {
 
   var readset = new WeakMap();
   var writeset = new WeakMap();
-  // TODO, 3th type missing
+  var callset = new WeakMap();
 
-  //var effectset = new WeakMap();
-
-  //var readeffects = [];
-  //var writeeffects = [];
-  //var effects = [];
-
-   var ri = 0;
-    var wi = 0;
-
-
-  //var readtargets = [];
-  //var writetargets = [];
-  //var targets = [];
+  var readeffects = [];
+  var writeeffects = [];
+  var calleffects = [];
 
   /** saves an sandbox effect
    * @param effect Effect
@@ -938,38 +946,27 @@ function Sandbox(global, params) {
     if(!(effect instanceof Effect.Effect))
       throw new TypeError("No effect object.");
 
-   
     if(effect instanceof Effect.Read) {
-
+      // introduce new target
       if(!readset.has(effect.target)) readset.set(effect.target, []);
-      return readset.get(effect.target).push(effect);
-      
-      //update(readset, effect.target, {date:(new Date()).toString()});
-      //update(effectset, effect.target, effect);
-      //readeffects.push(effect);
 
-      //effects.push(effect);
-      //readtargets.push(effect.target);
-      //targets.push(effect.target);
+      readset.get(effect.target).push(effect);      
+      readeffects.push(effect);
 
     } else if(effect instanceof Effect.Write) {
-      
+      // introduce new target
       if(!writeset.has(effect.target)) writeset.set(effect.target, []);
-      return writeset.get(effect.target).push(effect);
-     
-      //update(writeset, effect.target, {});
-      //update(effectset, effect.target, effect);
-      //writeeffects.push(effect);
 
-      //effects.push(effect);
-      //writetargets.push(effect.target);
-      //targets.push(effect.target);
-    }
+      writeset.get(effect.target).push(effect);
+      writeeffects.push(effect);
 
-    // TODO, reimplement lookup methods
-    function update(set, target, effect) {
-      if(!set.has(target)) set.set(target, []);
-      return set.get(target).push(effect);
+    } else if(effect instanceof Effect.Call) {
+      // introduce new target
+      if(!callset.has(effect.target)) callset.set(effect.target, []);
+
+      callset.get(effect.target).push(effect);
+      calleffects.push(effect);
+
     }
   }
 
@@ -988,6 +985,15 @@ function Sandbox(global, params) {
    */
   define("writeeffectsOf", function(target) {
     if(writeset.has(target)) return writeset.get(target);
+    else return [];
+  }, this);
+
+  /** Get Call Effects
+   * @param target JavaScript Obejct
+   * @return JavaScript Array [Effect]
+   */
+  define("calleffectsOf", function(target) {
+    if(callset.has(target)) return callset.get(target);
     else return [];
   }, this);
 
@@ -1012,6 +1018,13 @@ function Sandbox(global, params) {
    */
   getter("writeeffects", function() {
     return writeeffects;
+  }, this);
+
+  /** Get All Call Effects
+   * @return JavaScript Array [Effect]
+   */
+  getter("calleffects", function() {
+    return calleffects;
   }, this);
 
   /** Get All Effects
@@ -1369,7 +1382,7 @@ Object.defineProperty(Sandbox.prototype, "toString", {
 // \_/\___|_| /__/_\___/_||_|
 
 Object.defineProperty(Sandbox, "version", {
-  value: "TreatJS Sandbox 0.4.0 (PoC)"
+  value: "TreatJS Sandbox 0.4.1 (PoC)"
 });
 
 Object.defineProperty(Sandbox.prototype, "version", {

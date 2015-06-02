@@ -96,3 +96,59 @@ Final Name:
 * Decent JS
 * Sandbox JS
 * JS TM (JS Transactional Memory/SDandbo
+
+
+
+*Features*
+
+- wrap
+- call/apply/bind
+
+- Effects
+  - Read Effects
+  - Write Effects
+  - Call Effects
+
+
+### Features of Sabdbox ###
+
+A) 
+
+readeffectsOf(target)
+writeeffectsOf(target)
+calleffectsOf(target)
+
+effectsOf(target)
+
+B) 
+
+readeffects
+writeeffects
+calleffects
+
+effects
+
+c)
+
+rollbackOf(target)
+rollback()
+
+hasDifferenceWith(target) --> true
+hasDifference()
+
+differencesOf(target)
+differences()
+
+inConflictWith(sbx, traget)
+inConflict(sbx)
+
+conflictsOf(dbx, traget)
+conflicts(sbx)
+
+commit()
+commitOf(target)
+
+### Features of Effect ###
+
+### Features of Transaction ###
+

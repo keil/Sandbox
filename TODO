@@ -1,5 +1,10 @@
 *** Bugs ***
 
+- eval?
+- clone?
+- new engine mode?
+- unwrap on return
+
 *** Minor Features *** 
 
 - Define a diff-function that checks (recursively) for modifications from the outside (based on effects) and modifications from inside.

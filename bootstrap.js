@@ -50,7 +50,7 @@ var sbxArgs = {
    */ transparent:false,
   /** MetaHandler
    * (default: true)
-   */ metahandler:false,
+   */ metahandler:true,
   /** Function pass-through
    * (default: [])
    */ passthrough:[print, Function.prototype.call, Function.prototype.apply],

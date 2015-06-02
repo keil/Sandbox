@@ -1,17 +1,9 @@
+*** TreatJS Sandbox 0.4.1 (PoC)
 
-*** TreatJS Sandbox 0.4.0 (PoC)
-
-
-*** TreatJS Sandbox 0.4.0 (PoC)
-
+- New: fine-graned effect selection
+- New Call-effects in seperation to Read/Write-effects
 
 *** TreatJS Sandbox 0.4.0 (PoC)
 
 - Deprecated: nativePassThrought
 - New: Function pass-throught
-
-
-- clone?
-- eval
-- New: fine-graned effect selection
-

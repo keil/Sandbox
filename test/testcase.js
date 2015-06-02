@@ -29,6 +29,7 @@ function Testcase(fun, globalArg, thisArg, argsArray, name, quitOnExit) {
       Function.prototype.apply,
       Function.prototype.toString, 
       Object, 
+      Object.hasOwnProperty,
       Object.prototype.keys, 
       Object.prototype.getPrototypeOf,
       Object.prototype.toString
