@@ -1,0 +1,19 @@
+site_name: TreatJS
+site_url: http://proglang.informatik.uni-freiburg.de/treatjs/
+site_description: TreatJS/Sandbox Documentation.
+
+repo_name: GitHub
+repo_url: https://github.com/keil/Sandbox
+
+site_author: Matthias Keil
+
+copyright: Copyright &copy; 2015, <a href="http://proglang.informatik.uni-freiburg.de/">Proglang, Institute for Computer Science, University of Freiburg</a>.
+
+pages:
+- ['index.md', 'Home']
+- ['introduction.md', 'Introduction']
+- ['requirements.md', 'Requirements']
+- ['installation.md', 'Installation']
+- ['configuration.md', 'Configuration']
+- ['authors.md', 'Authors']
+- ['license.md', 'License']
