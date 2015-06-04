@@ -2,7 +2,7 @@
  * TreatJS: Sandbox 
  * http://proglang.informatik.uni-freiburg.de/treatjs/
  *
- * Copyright (c) 2014, Proglang, University of Freiburg.
+ * Copyright (c) 2014-2015, Proglang, University of Freiburg.
  * http://proglang.informatik.uni-freiburg.de/treatjs/
  * All rights reserved.
  *
@@ -72,22 +72,6 @@ function getter(name, getter, target) {
     get: getter, enumerable: true
   });
 }
-
-/*function __define(name, property, target) {
-  throw new Error("__define is deprecated");
-  Object.defineProperty(target, name, {
-    get: function () { return property; },
-  enumerable: true
-  });
-}
-
-function __getter(name, getter, target) {
-  throw new Error("__getter is deprecated");
-  Object.defineProperty(target, name, {
-    get: getter,
-  enumerable: true
-  });
-}*/
 
 // ___         _                 
 //| _ \__ _ __| |____ _ __ _ ___ 

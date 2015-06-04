@@ -1,6 +1,5 @@
 *** ToDos ***
 
-- check rollback in transparent mode
 - search for todo's
 
 
@@ -8,9 +7,12 @@
 
 - new egnine/ changes in proxy API
 
+- To many conflicts in test case. Is this a bug?
 
 
 *** Minor Features *** 
+
+- rebase, override the the sandbox value with the internal value
 
 - Better pre-state snapshot mode
 

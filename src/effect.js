@@ -2,7 +2,7 @@
  * TreatJS: Sandbox 
  * http://proglang.informatik.uni-freiburg.de/treatjs/
  *
- * Copyright (c) 2014, Proglang, University of Freiburg.
+ * Copyright (c) 2014-2015, Proglang, University of Freiburg.
  * http://proglang.informatik.uni-freiburg.de/treatjs/
  * All rights reserved.
  *
@@ -242,13 +242,14 @@ var Effect = (function() {
 
     Object.defineProperties(this, {
       "origin": {
-        value: target[name] // TODO
+        value: Object.getOwnPropertyNames(target)
+//      target[name] // TODO
       }
     });
 
     // define diff
     Object.defineProperty(this, "diff", {get:function() {
-      return (target.hasOwnProperty(name)!==this.origin); // TODO
+      return false // TODO
     }});
   }
   Enumerate.prototype = Object.create(Read.prototype);

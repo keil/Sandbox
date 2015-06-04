@@ -264,34 +264,10 @@ function Sandbox(global, params, prestate) {
     if(!(__membrane__))
       return target;
 
+    // Note: Matthias Keil
+    // deprecated, use passthrough
     // Eval
     if(isEval(target)) {
-      /*
-         var evalhandler = {
-         apply: function(target, thisArg, argumentsList) {
-         print("********* " + argumentsList[0]);
-         argumentsList[0] = '"use strict"; ' + argumentsList[0];
-         print("********* " + argumentsList[0]);
-         target.apply(thisArg, argumentsList);
-         }
-         }
-
-      //return eval;
-      //return new Proxy(eval, {});
-      return new Proxy(eval, evalhandler);
-
-      //return eval
-      //return eval.bind(global);
-
-      function sbxeval(str) {
-
-      return eval.call(global, '"use strict"; ' + str);
-      }
-
-      sbxeval.toString = eval.toString.bind(eval);
-      return sbxeval;
-      */
-      // TODO
       return undefined;
     }
 
@@ -303,7 +279,7 @@ function Sandbox(global, params, prestate) {
 
     // Pre-state snapshot
     if(snapshot.has(target)) {
-      return snapshot.get(target); // TODO, 
+      return snapshot.get(target); // TODO, new semantics 
     }
 
     // If target already wrapped, return cached proxy
@@ -315,7 +291,7 @@ function Sandbox(global, params, prestate) {
       log("Cache miss.");
       increment("Cache miss");
 
-      // TODO, check if already required
+      // TODO, check if  required
 
       // decompiles function or clones object
       // to preserve typeof/ instanceof
@@ -337,7 +313,7 @@ function Sandbox(global, params, prestate) {
             log("Call Trap: "+name);
             // TODO
             if(name in handler) return target[name];
-            //else throw new ReferenceError("Trap "+name+" not implemented.");
+            else throw new ReferenceError("Trap "+name+" not implemented.");
           }
         };
         return new Proxy(handler, metahandler)
@@ -595,14 +571,30 @@ function Sandbox(global, params, prestate) {
     //  |_||_| \__,_| .__/__/
     //              |_|      
 
+    // TODO, new trap in ES6
+    /**
+     * A trap for Object.getPrototypeOf.
+     */
+    this.getPrototypeOf = function() {
+    }
+
+    // TODO, new trap in ES6
+    /**
+     * A trap for Object.setPrototypeOf.
+     */
+    this.setPrototypeOf = function() {}
+
     /** target, name -> PropertyDescriptor | undefined
-    */
+     * A trap for Object.getOwnPropertyDescriptor.
+     */
     this.getOwnPropertyDescriptor = function(scope, name) {
       logc("getOwnPropertyDescriptor", name);
       trace(new Effect.GetOwnPropertyDescriptor(origin, name));
 
       return doGetOwnPropertyDescriptor(scope, name);
     };
+
+    // TODO, deprecated
     /** target -> [String]
     */
     this.getOwnPropertyNames = function(scope) {
@@ -611,22 +603,28 @@ function Sandbox(global, params, prestate) {
 
       return doGetOwnPropertyNames(scope);
     };
+
     /** target, name, propertyDescriptor -> any
-    */
+     * A trap for Object.defineProperty.
+     */
     this.defineProperty = function(scope, name, desc) {
       logc("defineProperty", name);
       trace(new Effect.DefineProperty(origin, scope, name, desc));
 
       return doDefineProperty(scope, name, desc);
     };
+
     /** target, name -> boolean
-    */
+     * A trap for the delete operator.
+     */
     this.deleteProperty = function(scope, name) {
       logc("deleteProperty", name);
       trace(new Effect.DeleteProperty(origin, scope, name));
 
       return doDelete(scope, name);
     };
+
+    // TODO, deprecated
     /** target -> boolean
     */
     this.freeze = function(scope) {
@@ -635,6 +633,8 @@ function Sandbox(global, params, prestate) {
 
       return Object.freeze(scope);
     };
+
+    // TODO, deprecated
     /** target -> boolean
     */
     this.seal = function(scope) {
@@ -643,24 +643,30 @@ function Sandbox(global, params, prestate) {
 
       return Object.seal(scope);
     };
+
     /** target -> boolean
-    */
+     * A trap for Object.preventExtensions.
+     */
     this.preventExtensions = function(scope) {
       logc("preventExtensions");
       trace(new Effect.PreventExtensions(origin, scope));
 
       return Object.preventExtensions(scope);
     };
+
     /** target -> boolean
-    */
+     * A trap for Object.isExtensible
+     */
     this.isExtensible = function(scope) {
       logc("isExtensible");
       trace(new Effect.IsExtensible(origin));
 
       return Object.isExtensible(scope);
     };
+
     /** target, name -> boolean
-    */
+     * A trap for the in operator.
+     */
     this.has = function(scope, name) {
 
       // TODO, BUG, accesst to undefined;
@@ -672,6 +678,8 @@ function Sandbox(global, params, prestate) {
 
       return doHas(scope, name);
     };
+
+    // TODO, deprecated
     /** target, name -> boolean
     */
     this.hasOwn = function(scope, name) {
@@ -680,8 +688,11 @@ function Sandbox(global, params, prestate) {
 
       return doHasOwn(scope, name);
     };
+
+
     /** target, name, receiver -> any
-    */
+     * A trap for getting property values.
+     */
     this.get = function(scope, name, receiver) {
 
       // TODO, BUG, accesst to undefined;
@@ -692,8 +703,10 @@ function Sandbox(global, params, prestate) {
 
       return doGet(scope, name);
     };
+
     /** target, name, val, receiver -> boolean
-    */
+     * A trap for setting property values.
+     */
     this.set = function(scope, name, value, receiver) {
       logc("set", name);
       // TODO
@@ -701,16 +714,24 @@ function Sandbox(global, params, prestate) {
 
       return doSet(scope, name, value);
     };
+
+    // TODO, new trap in ES6
     /** target -> [String]
-    */
-    this.__enumerate__ = function(scope) {
+     * A trap for for...in statements.
+     */
+    this.enumerate = function(scope) {
       logc("enumerate");
       trace(new Effect.Enumerate(origin));
+
+      return Object.getOwnPropertyNames(origin);
+
       // TODO
       // NOTE: Trap is never called
       // return doEnumnerate(scope);
       throw new Error("Unimplemented Trap enumerate.");
     };
+
+    // TODO, deprecated
     /** target -> iterator
     */
     this.__iterate__ = function(scope) {
@@ -721,6 +742,19 @@ function Sandbox(global, params, prestate) {
       // return doIterate(scope);
       throw new Error("Unimplemented Trap iterate.");
     };
+
+    // TODO, new in ES6
+    /** target) -> [String]
+     * A trap for Object.getOwnPropertyNames.
+     */
+    this.ownKeys = function(scope) {
+      logc("keys");
+      trace(new Effect.Keys(origin));
+
+      return doKeys(scope);
+    };
+
+    // TODO, deprecated
     /** target) -> [String]
     */
     this.keys = function(scope) {
@@ -729,8 +763,10 @@ function Sandbox(global, params, prestate) {
 
       return doKeys(scope);
     };
+
     /** target, thisValue, args -> any
-    */
+     * A trap for a function call.
+     */
     this.apply = function(scope, thisArg, argsArray) {
       logc("apply", scope);
       trace(new Effect.Apply(origin, thisArg, argsArray));
@@ -742,8 +778,11 @@ function Sandbox(global, params, prestate) {
       // The function in scope is already decompiled.
       return scope.apply(wrap(thisArg), wrap(argsArray));
     };
+
+
     /** target, args -> object
-    */
+     * A trap for the new operator. 
+     */
     this.construct = function(scope, thisArg, argsArray) {
       logc("construct");
       trace(new Effect.Construct(origin, thisArg, argsArray));
@@ -1207,7 +1246,7 @@ function Sandbox(global, params, prestate) {
    */
   define("hasChangesOn", function(target) {
     var es = this.writeeffectsOf(target);
-    
+
     var changes = false;
     for(var e in es) {
       var result =  es[e].stat;
