@@ -17,6 +17,7 @@
  *
  * @param global The Snadbox Global Object
  * @param params Object
+ * @pprestate snapshow objects
  *
  * Sandbox Optione
  *
@@ -48,7 +49,7 @@
  *   Instance for the output. (default: new Out())
  *
  */
-function Sandbox(global, params) {
+function Sandbox(global, params, prestate) {
   if(!(this instanceof Sandbox)) return new Sandbox(global, params);
 
   if(!(global instanceof Object))
@@ -116,6 +117,18 @@ function Sandbox(global, params) {
   function configure(param, value) {
     return (param in (params===undefined ? {} : params)) ? params[param] : value;
   };
+
+  //                 _        _                              _        _   
+  // _ __ _ _ ___ __| |_ __ _| |_ ___   ____ _  __ _ _ __ __| |_  ___| |_ 
+  //| '_ \ '_/ -_|_-<  _/ _` |  _/ -_) (_-< ' \/ _` | '_ (_-< ' \/ _ \  _|
+  //| .__/_| \___/__/\__\__,_|\__\___| /__/_||_\__,_| .__/__/_||_\___/\__|
+  //|_|                                             |_|                   
+
+  var snapshot = new WeakMap();
+
+  if(prestate instanceof Array) for(var i in prestate) {
+    snapshot.push(prestate[i], clone(prestate[i])); // TODO, CLONE object and function obejcts
+  }
 
   // _           
   //| |___  __ _ 
@@ -288,6 +301,11 @@ function Sandbox(global, params) {
       return target;
     }
 
+    // Pre-state snapshot
+    if(snapshot.has(target)) {
+      return snapshot.get(target); // TODO, 
+    }
+
     // If target already wrapped, return cached proxy
     if(cache.has(target)) {
       log("Cache hit.");
@@ -341,11 +359,22 @@ function Sandbox(global, params) {
    * @param value JavaScript Object
    * @return JavaScript Object
    */
-  // TODO
   function unwrap(value) {
     if (value !== Object(value)) return value;
     if(!reverse.has(value)) return value;
     return unwrap(reverse.get(value));
+  }
+
+  /**
+   * clone(target)
+   * clones a JavaScript Object
+   *
+   * @param target JavaScript Object
+   * @return JavaScript Object
+   */
+  function clone(target) {
+    if(target instanceof Function) return cloneFunction(target); 
+    else return cloneObject(target);
   }
 
   /**
@@ -407,6 +436,13 @@ function Sandbox(global, params) {
   //| |\/| / -_) '  \| '_ \ '_/ _` | ' \/ -_)
   //|_|  |_\___|_|_|_|_.__/_| \__,_|_||_\___|
 
+  var switches = new WeakMap();
+
+  function getSwitchFor(target) {
+    if(!switches.has(target)) switches.set(target, new Set());
+    return switches.get(target);
+  }
+
   /** Membrabe(global)
    * Implements a sandbox membrane.
    *
@@ -419,7 +455,7 @@ function Sandbox(global, params) {
     /*
      * List of effected properties
      */
-    var properties = new Set();
+    var properties = getSwitchFor(origin);
 
     /** Returns true if the property was touched by the sandbox, false otherwise
     */
@@ -863,7 +899,7 @@ function Sandbox(global, params) {
   thisArg = (thisArg!==undefined) ? thisArg : global;
   argsArray = (argsArray!==undefined) ? argsArray : new Array();
 
-  return evaluate(fun, thisArg, argsArray);
+  return unwrap(evaluate(fun, thisArg, argsArray));
   }, this);
 
   //  ___      _ _ 
@@ -886,7 +922,7 @@ function Sandbox(global, params) {
   // pop thisArg
   argsArray.shift();
 
-  return evaluate(fun, thisArg, argsArray);
+  return unwrap(evaluate(fun, thisArg, argsArray));
   }, this);
 
   // ___ _         _ 
@@ -1357,7 +1393,7 @@ function Sandbox(global, params) {
   define("inConflict", function(sbx) {
     if(!(sbx instanceof Sandbox)) throw new TypeError("No Sandbox.");
 
-    var conflict = false; // TODO
+    var conflict = false; 
     for(var i in targets) {
       conflict = (this.inConflictWith(sbx, targets[i])) ? true : conflict;
     }
@@ -1385,6 +1421,27 @@ function Sandbox(global, params) {
       es[e].rollback();
     }
   }, this);
+
+
+
+  /** Revert Of
+   * @param target JavaScript Object
+   */
+  define("revertOf", function(target) {
+    var sw = switches.get(target);
+    // TODO, clear
+    sw.clear();
+  }, this);
+
+  /** Rrevert
+  */
+  define("revert", function() {
+    for(var i in targets) {
+      this.revertOf(targets[i]);
+    }
+  }, this);
+
+
 
   /** Commit All Effects
    * @return JavaScript Array [Effect]
@@ -1463,7 +1520,7 @@ Object.defineProperty(Sandbox.prototype, "toString", {
 // \_/\___|_| /__/_\___/_||_|
 
 Object.defineProperty(Sandbox, "version", {
-  value: "TreatJS Sandbox 0.4.2 (PoC)"
+  value: "TreatJS Sandbox 0.5.0 (PoC)"
 });
 
 Object.defineProperty(Sandbox.prototype, "version", {

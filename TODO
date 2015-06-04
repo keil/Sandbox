@@ -1,23 +1,22 @@
+*** ToDos ***
+
+- check rollback in transparent mode
+- search for todo's
+
+
 *** Bugs ***
 
- - revert
- - prestate snapüshot
- - trap enimerate
- - check rollback in transparent mode
+- new egnine/ changes in proxy API
 
-- eval?
-- clone?
-- new engine mode?
-- unwrap on return
 
-- trabsaction
-- tollback muss effect liste zurücksetzen
 
 *** Minor Features *** 
 
-- Define a diff-function that checks (recursively) for modifications from the outside (based on effects) and modifications from inside.
+- Better pre-state snapshot mode
 
-- Why is differences not a getter?
+- Transaction Handling
+
+- Clear Effects/Tragets when revert
 
 - If a sandbox commits, read effects have to be removed or considered when calculating conflicts.
 
@@ -31,61 +30,5 @@
 - Merge from TreatJS/ degubber/ out
 
 
-*** Reset *** 
- - But this is similar to the use of new Sandbox?
- - Partial reset of a value
 
-*** Carbon Copy/ Transparent ***
-
- - scope and target are identical
- - but the effect system can restore values
- - TEST THIS
-
-
-*Rollback*
-
- - Effect e on x,
-   = set x to the state before e
-
- - Sandbox (pre state snapshot),
-   = set a sandbox value to the outside value
-
-
-*Effects*
-
-- Conflict detection
-
-
-*Test
-
- - seal, freeze
-
- - Test function which is called twice and which writes values
-   (e.g. a counter)
-
-
-*Behavior*
-
- - Wrap/Decompile functions
-   ~ no return wrap
-   ~ decompile in proxy required because of an external value
-
-
-*Demo*
-
- - Demo with confusing behavior
-   ~ for..in (enumerate/iterate)
-   ~ freeze
-   ~ seal
-   ~ isExtensible
-   ~ typeof/instanceof in combination with Object.GetPrototypeOf and A.prototype
-
-
-*Rollback*
-
- - Implement the possibility to be transparent with respect to the normal execution and to rollback effects.
-
-
-*valueOf*
-
- - Use valueOf to wrap primitive values.
+*** Majpr Features *** 
