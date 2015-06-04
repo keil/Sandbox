@@ -317,8 +317,9 @@ function Sandbox(global, params) {
         var metahandler = {
           get: function(target, name) {
             log("Call Trap: "+name);
+            // TODO
             if(name in handler) return target[name];
-            else throw new ReferenceError("Trap "+name+" not implemented.");
+            //else throw new ReferenceError("Trap "+name+" not implemented.");
           }
         };
         return new Proxy(handler, metahandler)
@@ -929,9 +930,19 @@ function Sandbox(global, params) {
   var writeset = new WeakMap();
   var callset = new WeakMap();
 
+  var effectset = new WeakMap();
+
   var readeffects = [];
   var writeeffects = [];
   var calleffects = [];
+
+  var effects = [];
+
+  var readtargets = [];
+  var writetargets = [];
+  var calltargets = [];
+
+  var targets = [];
 
   /** saves an sandbox effect
    * @param effect Effect
@@ -946,12 +957,19 @@ function Sandbox(global, params) {
     if(!(effect instanceof Effect.Effect))
       throw new TypeError("No effect object.");
 
+    if(!effectset.has(effect.target)) effectset.set(effect.target, []);
+
+    effectset.get(effect.target).push(effect);      
+    effects.push(effect);
+    targets.push(effect.target);
+
     if(effect instanceof Effect.Read) {
       // introduce new target
       if(!readset.has(effect.target)) readset.set(effect.target, []);
 
       readset.get(effect.target).push(effect);      
       readeffects.push(effect);
+      readtargets.push(effect.target);
 
     } else if(effect instanceof Effect.Write) {
       // introduce new target
@@ -959,6 +977,7 @@ function Sandbox(global, params) {
 
       writeset.get(effect.target).push(effect);
       writeeffects.push(effect);
+      writetargets.push(effect.target);
 
     } else if(effect instanceof Effect.Call) {
       // introduce new target
@@ -966,6 +985,7 @@ function Sandbox(global, params) {
 
       callset.get(effect.target).push(effect);
       calleffects.push(effect);
+      calltargets.push(effect.target);
 
     }
   }
@@ -1060,7 +1080,7 @@ function Sandbox(global, params) {
           case (read instanceof Effect.Has):
           case (read instanceof Effect.HasOwn):
             // property specific read effects
-            return (read.name===write.name);
+            return (read.name===write.name) && (read.date>write.date);
             break;
           case (read instanceof Effect.GetOwnPropertyNames):
           case (read instanceof Effect.Enumerate):
@@ -1145,25 +1165,65 @@ function Sandbox(global, params) {
       return false;
   }
 
-  /** Rollback Of
+  /** Has Changes With
    * @param target JavaScript Object
+   * return true|false
    */
-  define("rollbackOf", function(target) {
+  define("hasChangesOn", function(target) {
     var es = this.writeeffectsOf(target);
-
+    
+    var changes = false;
     for(var e in es) {
-      es[e].rollback();
+      var result =  es[e].stat;
+      log("check " + es[e] + " = " + result);
+      changes = (result) ? true : changes;
     }
+    return changes;
   }, this);
 
-  /** Rollback
-  */
-  define("rollback", function(target) {
+  /** Has Changes
+   * return true|false
+   */
+  getter("hasChanges", function() {
+    var changes = false;
+    for(var i in writetargets) {
+      changes = (this.hasChangesOn(writetargets[i])) ? true : changes;
+    }
+    return changes;
+
+  }, this);
+
+  /** Changes Of
+   * @param target JavaScript Object
+   * return [Differences]
+   */
+  define("changesOf", function(target) {
+    var sbxA = this;
+    var es = this.effectsOf(target);
+
+    var changes = [];
+    for(var e in es) {
+      var result =  es[e].stat;
+      log("check " + es[e] + " = " + result);
+      if(result) changes.push(new Effect.Change(sbxA, es[e]));
+    }
+    return changes;
+  }, this);
+
+  /** Changes 
+   * return [Changes]
+   */
+  getter("changes", function() {
+    var sbxA = this;
     var es = writeeffects;
 
+    var changes = [];
     for(var e in es) {
-      es[e].rollback();
+      var result =  es[e].stat;
+      log("check " + es[e] + " = " + result);
+      if(result) changes.push(new Effect.Change(sbxA, es[e]));
     }
+    return changes;
   }, this);
 
   /** Has Difference With
@@ -1171,7 +1231,7 @@ function Sandbox(global, params) {
    * return true|false
    */
   define("hasDifferenceWith", function(target) {
-    var es = this.writeeffectsOf(target);
+    var es = this.effectsOf(target);
 
     var difference = false;
     for(var e in es) {
@@ -1185,7 +1245,7 @@ function Sandbox(global, params) {
   /** Has Difference
    * return true|false
    */
-  define("hasDifference", function() {
+  getter("hasDifference", function() {
     var difference = false;
     for(var i in targets) {
       difference = (this.hasDifferenceWith(targets[i])) ? true : difference;
@@ -1214,9 +1274,9 @@ function Sandbox(global, params) {
   /** Differences 
    * return [Differences]
    */
-  define("differences", function() {
+  getter("differences", function() {
     var sbxA = this;
-    var es = writeeffects;
+    var es = this.effects;
 
     var differences = [];
     for(var e in es) {
@@ -1297,12 +1357,33 @@ function Sandbox(global, params) {
   define("inConflict", function(sbx) {
     if(!(sbx instanceof Sandbox)) throw new TypeError("No Sandbox.");
 
-    var conflict = false;
+    var conflict = false; // TODO
     for(var i in targets) {
       conflict = (this.inConflictWith(sbx, targets[i])) ? true : conflict;
     }
     return conflict;
 
+  }, this);
+
+  /** Rollback Of
+   * @param target JavaScript Object
+   */
+  define("rollbackOf", function(target) {
+    var es = this.writeeffectsOf(target);
+
+    for(var e in es) {
+      es[e].rollback();
+    }
+  }, this);
+
+  /** Rollback
+  */
+  define("rollback", function(target) {
+    var es = writeeffects;
+
+    for(var e in es) {
+      es[e].rollback();
+    }
   }, this);
 
   /** Commit All Effects
@@ -1382,7 +1463,7 @@ Object.defineProperty(Sandbox.prototype, "toString", {
 // \_/\___|_| /__/_\___/_||_|
 
 Object.defineProperty(Sandbox, "version", {
-  value: "TreatJS Sandbox 0.4.1 (PoC)"
+  value: "TreatJS Sandbox 0.4.2 (PoC)"
 });
 
 Object.defineProperty(Sandbox.prototype, "version", {

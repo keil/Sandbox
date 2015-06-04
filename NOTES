@@ -46,8 +46,12 @@ b) function.bind
        rollback the commit/operation if possible
        (not possible for Object.freeze/ Object.seal/ Object.preventExtensions)
 
-     - diff
+     - stat 
        returns true if a difference between target* and origin exists
+       (target or target[name], depending on the effect)
+
+     - diff 
+       returns true if the outside value changed
        (target or target[name], depending on the effect)
 
      - origin
@@ -132,6 +136,12 @@ c)
 
 rollbackOf(target)
 rollback()
+
+hasChangesOn(target) --> true
+hasChanges()
+
+changesOf(target)
+changes()
 
 hasDifferenceWith(target) --> true
 hasDifference()

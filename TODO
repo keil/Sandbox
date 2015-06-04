@@ -1,9 +1,17 @@
 *** Bugs ***
 
+ - revert
+ - prestate snapüshot
+ - trap enimerate
+ - check rollback in transparent mode
+
 - eval?
 - clone?
 - new engine mode?
 - unwrap on return
+
+- trabsaction
+- tollback muss effect liste zurücksetzen
 
 *** Minor Features *** 
 
