@@ -5,14 +5,19 @@
 
 *** Bugs ***
 
-- new egnine/ changes in proxy API
+- clone needs to preserve object identity
+
+- new engine/ changes in proxy API
 
 - To many conflicts in test case. Is this a bug?
 
 
 *** Minor Features *** 
 
-- rebase, override the the sandbox value with the internal value
+- recursive rollback, 
+
+- rebase, (different semantics to revert) reset only the snapshot values
+  (requires that the clone is a target --> revert/rebase do the same)
 
 - Better pre-state snapshot mode
 
