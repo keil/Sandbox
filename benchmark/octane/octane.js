@@ -13,7 +13,7 @@
  * http://www.informatik.uni-freiburg.de/~keilr/
  */
 
-var base_dir = 'benchmark/sbxbench/';
+var base_dir = 'benchmark/octane/';
 
 var basefile = (base_dir + 'base.js');
 var runfile  = (base_dir + 'run.js');
