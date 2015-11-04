@@ -81,18 +81,3 @@ BenchmarkSuite.config.doDeterministic = true;
 BenchmarkSuite.RunSuites({ NotifyResult: PrintResult,
                            NotifyError: PrintError,
                            NotifyScore: PrintScore });
-
-
-/*
-// TEST BLOCK
-// tests date caluclation
-
-var start = new Date();
-print(start);
-
-for (var i = 0; i<1000000000; i++) {}
-var end = new Date();
-print(end);
-
-print(end-start);
-*/
